@@ -1,0 +1,387 @@
+---
+title: "Draft ST plots"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.width=8, fig.height=6) 
+```
+
+# Data preparation
+
+Call to libraries
+
+```{r message = FALSE, warning = FALSE}
+library(here)
+library(dplyr)
+library(tidyr)
+library(tidytext)
+library(ggplot2)
+library(r2dii.plot)
+library(r2dii.colours)
+library(patchwork)
+library(forcats)
+library(lubridate)
+library(scales)
+```
+
+Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
+
+```{r}
+st_output_path <- here("data")
+
+expected_loss_file <- here(st_output_path, "loans_company_expected_loss_standard.csv")
+data_expected_loss <- read.csv(expected_loss_file)
+
+pd_file <- here(st_output_path, "loans_sector_pd_changes_overall_standard.csv")
+data_pd <- read.csv(pd_file)
+
+pd_annual_file <- here(st_output_path, "loans_sector_pd_changes_annual_standard.csv")
+data_pd_annual <- read.csv(pd_annual_file)
+```
+
+Expected loss data preparation. Initial filtering and assigning variables to plot. The values are turned into millions.
+
+```{r}
+data_plot <- data_expected_loss %>%
+  filter(
+    scenario_name == "Carbon balance 2030",
+    scenario_geography == "Global",
+    investor_name == "Meta Investor",
+    portfolio_name == "Meta Investor"
+  ) %>%
+  mutate(
+    value_to_plot = .data$exposure_at_default,
+    group_variable = .data$ald_sector
+    ) %>%
+  mutate(
+    value_to_plot = .data$value_to_plot / 10^6
+  ) %>%
+  group_by(.data$group_variable) %>%
+  mutate(
+    group_mean = mean(.data$value_to_plot, na.rm = TRUE),
+    group_sum = sum(.data$value_to_plot, na.rm = TRUE),
+    group_max = max(.data$value_to_plot, na.rm = TRUE)
+  )
+
+data_summary <- data_plot %>%
+  group_by(.data$group_variable) %>%
+  summarise(
+    group_sum = sum(.data$value_to_plot, na.rm = TRUE),
+    group_n = n()
+  ) %>%
+  pivot_longer(cols = c("group_sum", "group_n")) %>%
+  mutate(
+    label = case_when(
+      .data$name == "group_sum" ~ "Total exposure per sector (Millions)",
+      .data$name == "group_n" ~ "Number of companies per sector"
+    )
+  ) %>%
+  group_by(name) %>%
+  mutate(
+    perc_of_total = .data$value / sum(.data$value)
+  )
+```
+
+PD data preparation.
+
+```{r}
+data_pd <- data_pd %>%
+  filter(
+    scenario_geography == "Global",
+    investor_name == "Meta Investor",
+    portfolio_name == "Meta Investor"
+  )
+
+data_pd_annual <- data_pd_annual %>%
+  filter(
+    scenario_geography == "Global",
+    investor_name == "Meta Investor",
+    portfolio_name == "Meta Investor"
+  ) %>% 
+  select(ald_sector, year, shock_year_arg, pd_change_shock) %>%
+  mutate(
+    year_date = ymd(year, truncated = 2L)
+  )
+```
+
+# Exposure plots
+
+## Summary exposures per sector
+
+Pie chart of exposures summary
+
+```{r}
+ggplot(data_summary, aes(x = "", y = .data$perc_of_total, fill = .data$group_variable)) +
+  geom_bar(stat = "identity", width = 1) +
+  scale_fill_2dii("pacta", colour_groups = data_summary$group_variable) +
+  coord_polar("y", start = 0) +
+  theme_2dii() +
+  theme(
+    axis.title = element_blank(),
+    axis.line = element_blank(),
+    axis.text = element_blank()
+  ) +
+  facet_wrap(~label) +
+  
+  geom_text(aes(x = 1.6, label = round(.data$value)), position = position_stack(vjust = .5)) +
+  
+  labs(
+    title = "Portfolio composition"
+  )
+```
+
+## Risk-driving companies (based on exposure)
+
+10 worst performers - coloured by sector
+
+```{r fig2, fig.width = 8, fig.height=8}
+data_worst_performers <- data_plot %>%
+  group_by(.data$group_variable) %>%
+  slice_max(order_by = .data$value_to_plot, n = 10) %>%
+  ungroup() %>%
+  mutate(
+    company_name = reorder_within(.data$company_name, .data$value_to_plot, .data$group_variable)
+    )
+
+ggplot(data_worst_performers, aes(x = .data$company_name, y = .data$value_to_plot, fill = .data$group_variable)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = round(.data$value_to_plot, 1)), hjust = -0.2) +
+  scale_x_reordered() +
+  scale_y_continuous(expand = expansion(mult = c(0, .1))) +
+  scale_fill_2dii("pacta", colour_groups = data_worst_performers$group_variable) +
+  coord_flip() +
+  theme_2dii() +
+  theme(
+    axis.title.y = element_blank(),
+    legend.position = "none"
+  ) +
+  facet_wrap(~fct_reorder(.data$group_variable, .data$value_to_plot, .fun = max, .desc = TRUE), scales = "free_y", ncol = 1) +
+  labs(
+    title = "Companies with the highest exposure within sector",
+    y = "Exposure (Millions)"
+  )
+```
+
+## Distributions
+
+### Histograms and densities per sector
+
+```{r}
+phist <- ggplot(data_plot, aes(x = .data$value_to_plot, fill = .data$group_mean)) +
+  geom_histogram(bins = 15) +
+  scale_y_continuous(expand = expansion(mult = c(0, .1))) +
+  scale_fill_gradient(
+    low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
+    high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+    name = "Average exposure\n per sector (millions)"
+  ) +
+  theme_2dii() +
+  theme(
+    legend.title = element_text(),
+    axis.title.x = element_blank()
+  ) +
+  labs(
+    title = "Distributions of exposures per sector",
+    subtitle = "Demonstrated using histograms and density plots.\n The colours represent the average size of the exposure within a data set.",
+    x = "Exposure (millions)",
+    y = "Number of companies"
+  ) +
+  facet_wrap(~.data$group_variable, scales = "free")
+
+pdens <- ggplot(data_plot, aes(x = .data$value_to_plot, fill = .data$group_mean)) +
+  geom_density(aes(y = ..scaled..)) +
+  scale_y_continuous(expand = expansion(mult = c(0, .1))) +
+  scale_fill_gradient(
+    low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
+    high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+    name = "Average exposure\n per sector (millions)"
+  ) +
+  theme_2dii() +
+  theme(
+    legend.title = element_text(),
+    strip.text = element_blank()
+  ) +
+  labs(
+    x = "Exposure (millions)",
+    y = "Density"
+  ) +
+  facet_wrap(~.data$group_variable, scales = "free")
+
+(phist / pdens + plot_layout(guides = "collect")) 
+```
+
+
+### Boxplots and violin plots
+
+Outliers removal
+
+```{r}
+data_plot <- data_plot %>%
+        group_by(.data$group_variable) %>%
+        mutate(
+          is_outlier = (abs(.data$value_to_plot - median(.data$value_to_plot)) > 2 * sd(.data$value_to_plot, na.rm = TRUE))
+          ) 
+
+data_plot %>% summarise(is_outlier = sum(is_outlier)) %>%
+  glue::glue_data("{is_outlier} outliers are removed from {group_variable} sector data.")
+
+data_plot <- data_plot %>%
+  filter(!is_outlier) %>%
+  select(-is_outlier)
+```
+
+Boxplots
+
+```{r}
+ggplot(data_plot, aes(x = .data$group_variable, y = .data$value_to_plot, fill = .data$group_mean)) +
+  geom_boxplot() +
+  scale_fill_gradient(
+    low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
+    high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+    name = "Average exposure\n per sector (millions)"
+  ) +
+  theme_2dii() +
+  theme(
+    legend.title = element_text(),
+    strip.text = element_blank()
+  ) +
+  labs(
+    title = "Distributions of exposures per sector",
+    subtitle = "Demonstrated using boxplots. The box shows the Interquartile range\n with black thick line showing the median. Black dots represent the outliers.\n The colours represent the average size of the exposure within a data set.",
+    x = "Sector",
+    y = "Exposure (millions)"
+  ) +
+  facet_wrap(~.data$group_variable, scales = "free") 
+```
+
+Points distribution with violin
+
+```{r}
+ggplot(data_plot, aes(x = .data$group_variable, y = .data$value_to_plot, colour = .data$value_to_plot)) +
+  geom_violin() +
+  geom_jitter(alpha = 0.5) + 
+  scale_colour_gradient(
+    low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
+    high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+    name = "Exposure (millions)"
+  ) +
+  theme_2dii() +
+  theme(
+    legend.title = element_text(),
+    strip.text = element_blank()
+  ) +
+  labs(
+    title = "Distributions of exposures per sector",
+    subtitle = "Points represent a company. Position on the y-axis and colour represent\nthe size of the exposure. Curved lines approximate the shape of the distribution.",
+    x = "Sector",
+    y = "Exposure (millions)"
+  ) +
+  facet_wrap(~.data$group_variable, scales = "free")
+```
+
+## PD changes
+
+### Overall
+
+Faceted - joint y-axis (easier to compare between sectors)
+
+```{r}
+ggplot(data_pd, aes(x = term, y = pd_change_shock, fill = pd_change_shock)) +
+  geom_bar(stat = "identity") +
+  scale_y_continuous(expand = expansion(mult = c(0, .1))) +
+  scale_fill_gradient(
+      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      name = "PD change (% points)"
+    ) +
+  theme_2dii() +
+  theme(
+    legend.title = element_text()
+  ) +
+  facet_grid(shock_year_arg ~  ald_sector, scales = "free") +
+  labs(
+    title = "Overall PD change by sector and shock year",
+    x = "Maturity (years)",
+    y = "PD change (% points)"
+    ) 
+```
+
+Faceted - separate y-axis (easier to see the PD change within sector)
+
+```{r}
+ggplot(data_pd, aes(x = term, y = pd_change_shock, fill = pd_change_shock)) +
+  geom_bar(stat = "identity") +
+  scale_y_continuous(expand = expansion(mult = c(0, .1))) +
+  scale_fill_gradient(
+      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      name = "PD change (% points)"
+    ) +
+  theme_2dii() +
+  theme(
+    legend.title = element_text()
+  ) +
+  facet_wrap(ald_sector ~ shock_year_arg, scales = "free") +
+  labs(
+    title = "Overall PD change by sector and shock year",
+    x = "Maturity (years)",
+    y = "PD change (% points)"
+    ) 
+```
+
+### Annual
+
+Faceted - joint y-axis (easier to compare between sectors)
+
+```{r}
+ggplot(data_pd_annual, aes(x = year_date, y = pd_change_shock, fill = pd_change_shock)) +
+  geom_bar(stat = "identity") +
+  scale_x_date() +
+  scale_y_continuous(expand = expansion(mult = c(0, .1)), labels = comma) +
+  scale_fill_gradient(
+      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      name = "PD change\n(% points)"
+    ) +
+  theme_2dii() +
+  theme(
+    legend.title = element_text()
+  ) +
+  facet_grid(shock_year_arg ~ ald_sector, scales = "free") +
+  labs(
+    title = "Annual PD changes per sector and shock year",
+    x = "Year",
+    y = "PD change (% points)"
+    ) 
+```
+
+Faceted - separate y-axis (easier to see the PD change within sector)
+
+```{r}
+ggplot(data_pd_annual, aes(x = year_date, y = pd_change_shock, fill = pd_change_shock)) +
+  geom_bar(stat = "identity") +
+  scale_x_date() +
+  scale_y_continuous(expand = expansion(mult = c(0, .1)), labels = comma) +
+  scale_fill_gradient(
+      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      name = "PD change\n(% points)"
+    ) +
+  theme_2dii() +
+  theme(
+    legend.title = element_text()
+  ) +
+  facet_wrap(ald_sector ~ shock_year_arg, scales = "free") +
+  labs(
+    title = "Annual PD changes per sector and shock year",
+    x = "Year",
+    y = "PD change (% points)"
+    ) 
+```
+
+## EL changes - TODO
+
