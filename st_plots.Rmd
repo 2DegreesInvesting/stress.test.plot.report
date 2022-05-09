@@ -41,6 +41,9 @@ data_pd <- read.csv(pd_file)
 
 pd_annual_file <- here(st_output_path, "loans_sector_pd_changes_annual_standard.csv")
 data_pd_annual <- read.csv(pd_annual_file)
+
+value_changes_file <- here(st_output_path, "loans_portfolio_value_changes_standard.csv")
+data_val_change <- read.csv(value_changes_file)
 ```
 
 Expected loss data preparation. Initial filtering and assigning variables to plot. The values are turned into millions.
@@ -106,6 +109,43 @@ data_pd_annual <- data_pd_annual %>%
   mutate(
     year_date = ymd(year, truncated = 2L)
   )
+```
+
+EL data preparation
+```{r}
+data_el <- data_expected_loss %>%
+  filter(
+    scenario_geography == "Global",
+    investor_name == "Meta Investor",
+    portfolio_name == "Meta Investor"
+  ) %>%
+  group_by(ald_sector) %>%
+  summarise(
+    expected_loss_baseline = sum(expected_loss_baseline, na.rm = TRUE),
+    expected_loss_shock = sum(expected_loss_shock, na.rm = TRUE),
+    value_change = expected_loss_shock - expected_loss_baseline,
+    negative_change = if_else(value_change < 0, TRUE, FALSE),
+    expected_loss_after = if_else(negative_change, expected_loss_shock, expected_loss_baseline),
+    value_change = abs(value_change)
+  ) %>%
+  select(-expected_loss_shock) %>%
+  pivot_longer(
+    cols = c(expected_loss_baseline, value_change, expected_loss_after)
+  ) %>%
+  mutate(
+    state = if_else(name == "expected_loss_baseline", "before", "after"),
+    name = if_else(name == "expected_loss_after", "expected_loss_baseline", name)
+  ) %>%
+  mutate(
+    state = factor(state, levels = c("before", "after")),
+    name = factor(name, levels = c("value_change", "expected_loss_baseline"))
+  )
+```
+
+Value change data preparation
+
+```{r}
+#data_val_change
 ```
 
 # Exposure plots
@@ -383,5 +423,182 @@ ggplot(data_pd_annual, aes(x = year_date, y = pd_change_shock, fill = pd_change_
     ) 
 ```
 
-## EL changes - TODO
+## EL changes
 
+```{r}
+ggplot(data_el, aes(x = state, y = value, fill = name)) +
+  geom_bar(stat = "identity") +
+  geom_text(data = data_el %>% filter(state == "after"), aes(x = state, y = value, label = value)) +
+  scale_y_continuous(expand = expansion(mult = c(0, .1)), labels = comma) +
+  facet_wrap(~ ald_sector, scales = "free") +
+  theme_2dii() +
+  theme(
+    legend.position = "none",
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.title.x = element_blank()
+  )
+```
+
+## Equity Value changes
+
+Total percentage
+
+```{r}
+
+data_plt <- data_val_change %>%
+  group_by(portfolio_name) %>%
+  select(portfolio_name, analysed_portfolio_percent_value_change) %>%
+  distinct()
+
+p_perc <- ggplot(data_plt, aes(x = portfolio_name, y = analysed_portfolio_percent_value_change)) +
+  geom_bar(stat = "identity") +
+  geom_hline(yintercept = 0) +
+  theme_2dii() +
+  theme(
+    legend.position = "none",
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.title.x = element_blank()
+  ) +
+  labs(
+    title = "Analysed portfolio percentage value change",
+    y = "Value change (% points)"
+  )
+
+data_plt <- data_val_change %>%
+  group_by(portfolio_name) %>%
+  select(portfolio_name, analysed_portfolio_absolute_value_change) %>%
+  distinct()
+
+p_abs <- ggplot(data_plt, aes(x = portfolio_name, y = analysed_portfolio_absolute_value_change)) +
+  geom_bar(stat = "identity") +
+  geom_hline(yintercept = 0) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_2dii() +
+  theme(
+    legend.position = "none",
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.title.x = element_blank()
+  ) +
+  labs(
+    title = "Analysed portfolio absolute value change",
+    y = "Value change (currency)"
+  )
+
+(p_perc + plot_spacer())/ (p_abs + plot_spacer())
+
+```
+
+Per sector
+
+```{r}
+
+data_plt <- data_val_change %>%
+  group_by(ald_sector) %>%
+  select(portfolio_name, sector_percent_value_change, sector_absolute_value_change, ald_sector) %>%
+  distinct()
+
+p_perc <- ggplot(data_plt, aes(x = portfolio_name, y = sector_percent_value_change, fill = sector_percent_value_change)) +
+  geom_bar(stat = "identity") +
+  geom_hline(yintercept = 0) +
+  scale_fill_gradient2(
+      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
+      midpoint = 0,
+      name = "Equity value change\n(% points)"
+    ) +
+  facet_wrap(ald_sector ~ .) +
+  theme_2dii() +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.line.x = element_blank()
+  ) +
+  labs(
+    title = "Percentage value change per sector",
+    y = "Value change\n(% points)"
+  )
+
+p_abs <- ggplot(data_plt, aes(x = portfolio_name, y = sector_absolute_value_change, fill = sector_absolute_value_change)) +
+  geom_bar(stat = "identity") +
+  geom_hline(yintercept = 0) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_fill_gradient2(
+      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
+      midpoint = 0,
+      labels = scales::comma,
+      name = "Equity value change\n(currency)"
+    ) +
+  facet_wrap(ald_sector ~ .) +
+  theme_2dii() +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.line.x = element_blank(),
+    legend.text = element_text()
+  ) +
+  labs(
+    title = "Absolute value change per sector",
+    y = "Value change\n(currency)"
+  )
+
+p_perc / p_abs
+```
+Per technology
+
+```{r}
+ggplot(data_val_change, aes(x = portfolio_name, y = technology_percent_value_change, fill = technology_percent_value_change)) +
+  geom_bar(stat = "identity") +
+  geom_hline(yintercept = 0) +
+  scale_fill_gradient2(
+      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
+      midpoint = 0,
+      name = "Equity value\nchange (% points)"
+    ) +
+  facet_wrap(ald_sector ~ technology) +
+  theme_2dii() +
+  theme(
+    legend.title = element_text(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank(),
+    axis.title.x = element_blank()
+  ) +
+  labs(
+    title = "Percentage value change per technology",
+    y = "Value change\n(% points)"
+  )
+```
+
+```{r}
+ggplot(data_val_change, aes(x = portfolio_name, y = technology_absolute_value_change, fill = technology_absolute_value_change)) +
+  geom_bar(stat = "identity") +
+  geom_hline(yintercept = 0) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_fill_gradient2(
+      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
+      midpoint = 0,
+      labels = scales::comma,
+      name = "Equity value\nchange (currency)"
+    ) +
+  facet_wrap(ald_sector ~ technology) +
+  theme_2dii() +
+  theme(
+    legend.title = element_text(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank(),
+    axis.title.x = element_blank()
+  ) +
+  labs(
+    title = "Absolute value change per technology",
+    y = "Value change\n(currency)"
+  )
+```
