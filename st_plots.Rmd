@@ -26,6 +26,7 @@ library(patchwork)
 library(forcats)
 library(lubridate)
 library(scales)
+library(stringr)
 ```
 
 Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
@@ -113,6 +114,18 @@ data_pd_annual <- data_pd_annual %>%
 
 EL data preparation
 ```{r}
+data_exp_per_sector <- data_summary %>%
+  filter(
+    name == "group_sum"
+  ) %>%
+  ungroup() %>%
+  select(-name) %>%
+  mutate(
+    ald_sector = group_variable, 
+    exposure = value*10^6
+    ) %>%
+  select(ald_sector, exposure)
+
 data_el <- data_expected_loss %>%
   filter(
     scenario_geography == "Global",
@@ -121,31 +134,17 @@ data_el <- data_expected_loss %>%
   ) %>%
   group_by(ald_sector) %>%
   summarise(
-    expected_loss_baseline = sum(expected_loss_baseline, na.rm = TRUE),
-    expected_loss_shock = sum(expected_loss_shock, na.rm = TRUE),
-    value_change = expected_loss_shock - expected_loss_baseline,
-    negative_change = if_else(value_change < 0, TRUE, FALSE),
-    expected_loss_after = if_else(negative_change, expected_loss_shock, expected_loss_baseline),
-    value_change = abs(value_change)
+    expected_loss_baseline = -sum(expected_loss_baseline, na.rm = TRUE),
+    expected_loss_shock = -sum(expected_loss_shock, na.rm = TRUE),
+    value_change = expected_loss_shock - expected_loss_baseline
   ) %>%
-  select(-expected_loss_shock) %>%
   pivot_longer(
-    cols = c(expected_loss_baseline, value_change, expected_loss_after)
+    cols = c(expected_loss_baseline, expected_loss_shock, value_change)
   ) %>%
+  inner_join(data_exp_per_sector, by = "ald_sector") %>%
   mutate(
-    state = if_else(name == "expected_loss_baseline", "before", "after"),
-    name = if_else(name == "expected_loss_after", "expected_loss_baseline", name)
-  ) %>%
-  mutate(
-    state = factor(state, levels = c("before", "after")),
-    name = factor(name, levels = c("value_change", "expected_loss_baseline"))
+    el_as_perc_exposure = value / exposure
   )
-```
-
-Value change data preparation
-
-```{r}
-#data_val_change
 ```
 
 # Exposure plots
@@ -425,19 +424,120 @@ ggplot(data_pd_annual, aes(x = year_date, y = pd_change_shock, fill = pd_change_
 
 ## EL changes
 
-```{r}
-ggplot(data_el, aes(x = state, y = value, fill = name)) +
-  geom_bar(stat = "identity") +
-  geom_text(data = data_el %>% filter(state == "after"), aes(x = state, y = value, label = value)) +
-  scale_y_continuous(expand = expansion(mult = c(0, .1)), labels = comma) +
+```{r} 
+
+data_losses <- data_el %>%
+  filter(name %in% c("expected_loss_baseline", "expected_loss_shock")) %>%
+  mutate(
+    name = str_replace(name, "expected_loss_", "")
+  )
+
+ggplot(data_losses, aes(x = name, y = value, fill = value)) +
+  geom_bar(stat = "identity", color = "grey") +
+  scale_x_discrete(position = "top", labels = r2dii.plot::to_title) +
+  scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = comma) +
+  scale_fill_gradient2(
+      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
+      midpoint = 0,
+      labels = comma,
+      name = "Expected loss\n(currency)"
+    ) +
   facet_wrap(~ ald_sector, scales = "free") +
   theme_2dii() +
   theme(
-    legend.position = "none",
-    axis.text.x = element_blank(),
+    legend.title = element_text(),
     axis.ticks.x = element_blank(),
-    axis.title.x = element_blank()
+    axis.title.x = element_blank(),
+    strip.placement = "outside"
+  ) +
+  labs(
+    title = "Expected loss per sector",
+    subtitle = "For baseline and shock scenarios",
+    y = "Expected Loss (currency)"
   )
+```
+```{r}
+ggplot(data_losses, aes(x = name, y = el_as_perc_exposure, fill = el_as_perc_exposure)) +
+  geom_bar(stat = "identity", color = "grey") +
+  scale_x_discrete(position = "top", labels = r2dii.plot::to_title) +
+  scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = percent) +
+  scale_fill_gradient2(
+      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
+      midpoint = 0,
+      labels = percent,
+      name = "Expected loss\n(% exposure)"
+    ) +
+  facet_wrap(~ ald_sector, scales = "free") +
+  theme_2dii() +
+  theme(
+    legend.title = element_text(),
+    axis.ticks.x = element_blank(),
+    axis.title.x = element_blank(),
+    strip.placement = "outside"
+  ) +
+  labs(
+    title = "Expected Loss as percentage of exposure per sector",
+    subtitle = "For baseline and shock scenarios",
+    y = "Expected Loss (% exposure)"
+  )
+```
+```{r}
+data_change <- data_el %>%
+  filter(name %in% c("value_change")) 
+
+p_abs <- ggplot(data_change, aes(x = name, y = value, fill = value)) +
+  geom_bar(stat = "identity", color = "grey") +
+  scale_x_discrete(position = "top", labels = r2dii.plot::to_title) +
+  scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = comma) +
+  scale_fill_gradient2(
+      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
+      midpoint = 0,
+      labels = comma,
+      name = "Expected loss\n(currency)"
+    ) +
+  facet_wrap(~ ald_sector) +
+  theme_2dii() +
+  theme(
+    legend.title = element_text(),
+    axis.ticks.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    strip.placement = "outside"
+  ) +
+  labs(
+    title = "Expected loss shock per sector",
+    y = "Expected Loss\n(currency)"
+  )
+
+p_perc <- ggplot(data_change, aes(x = name, y = el_as_perc_exposure, fill = el_as_perc_exposure)) +
+  geom_bar(stat = "identity", color = "grey") +
+  scale_x_discrete(position = "top", labels = r2dii.plot::to_title) +
+  scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = percent) +
+  scale_fill_gradient2(
+      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
+      midpoint = 0,
+      labels = percent,
+      name = "Expected loss\n(% exposure)"
+    ) +
+  facet_wrap(~ ald_sector) +
+  theme_2dii() +
+  theme(
+    legend.title = element_text(),
+    axis.ticks.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    strip.placement = "outside"
+  ) +
+  labs(
+    title = "Expected loss shock as percentage of exposure per sector",
+    y = "Expected Loss\n(% exposure)"
+  )
+
+p_abs / p_perc
 ```
 
 ## Equity Value changes
