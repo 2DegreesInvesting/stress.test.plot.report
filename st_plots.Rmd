@@ -37,10 +37,10 @@ st_output_path <- here("data")
 expected_loss_file <- here(st_output_path, "loans_company_expected_loss_standard.csv")
 data_expected_loss <- read.csv(expected_loss_file)
 
-pd_file <- here(st_output_path, "loans_sector_pd_changes_overall_standard.csv")
+pd_file <- here(st_output_path, "loans_portfolio_pd_changes_overall_standard.csv")
 data_pd <- read.csv(pd_file)
 
-pd_annual_file <- here(st_output_path, "loans_sector_pd_changes_annual_standard.csv")
+pd_annual_file <- here(st_output_path, "loans_portfolio_pd_changes_annual_standard.csv")
 data_pd_annual <- read.csv(pd_annual_file)
 
 value_changes_file <- here(st_output_path, "loans_portfolio_value_changes_standard.csv")
@@ -98,7 +98,9 @@ data_pd <- data_pd %>%
     scenario_geography == "Global",
     investor_name == "Meta Investor",
     portfolio_name == "Meta Investor"
-  )
+  ) %>%
+  select(ald_sector, term, shock_year_arg, pd_change_sector_shock) %>%
+  distinct()
 
 data_pd_annual <- data_pd_annual %>%
   filter(
@@ -106,7 +108,8 @@ data_pd_annual <- data_pd_annual %>%
     investor_name == "Meta Investor",
     portfolio_name == "Meta Investor"
   ) %>% 
-  select(ald_sector, year, shock_year_arg, pd_change_shock) %>%
+  select(ald_sector, year, shock_year_arg, pd_change_sector_shock) %>%
+  distinct() %>%
   mutate(
     year_date = ymd(year, truncated = 2L)
   )
@@ -329,7 +332,7 @@ ggplot(data_plot, aes(x = .data$group_variable, y = .data$value_to_plot, colour 
 Faceted - joint y-axis (easier to compare between sectors)
 
 ```{r}
-ggplot(data_pd, aes(x = term, y = pd_change_shock, fill = pd_change_shock)) +
+ggplot(data_pd, aes(x = term, y = pd_change_sector_shock, fill = pd_change_sector_shock)) +
   geom_bar(stat = "identity") +
   scale_y_continuous(expand = expansion(mult = c(0, .1))) +
   scale_fill_gradient(
@@ -352,7 +355,7 @@ ggplot(data_pd, aes(x = term, y = pd_change_shock, fill = pd_change_shock)) +
 Faceted - separate y-axis (easier to see the PD change within sector)
 
 ```{r}
-ggplot(data_pd, aes(x = term, y = pd_change_shock, fill = pd_change_shock)) +
+ggplot(data_pd, aes(x = term, y = pd_change_sector_shock, fill = pd_change_sector_shock)) +
   geom_bar(stat = "identity") +
   scale_y_continuous(expand = expansion(mult = c(0, .1))) +
   scale_fill_gradient(
@@ -377,7 +380,7 @@ ggplot(data_pd, aes(x = term, y = pd_change_shock, fill = pd_change_shock)) +
 Faceted - joint y-axis (easier to compare between sectors)
 
 ```{r}
-ggplot(data_pd_annual, aes(x = year_date, y = pd_change_shock, fill = pd_change_shock)) +
+ggplot(data_pd_annual, aes(x = year_date, y = pd_change_sector_shock, fill = pd_change_sector_shock)) +
   geom_bar(stat = "identity") +
   scale_x_date() +
   scale_y_continuous(expand = expansion(mult = c(0, .1)), labels = comma) +
@@ -401,7 +404,7 @@ ggplot(data_pd_annual, aes(x = year_date, y = pd_change_shock, fill = pd_change_
 Faceted - separate y-axis (easier to see the PD change within sector)
 
 ```{r}
-ggplot(data_pd_annual, aes(x = year_date, y = pd_change_shock, fill = pd_change_shock)) +
+ggplot(data_pd_annual, aes(x = year_date, y = pd_change_sector_shock, fill = pd_change_sector_shock)) +
   geom_bar(stat = "identity") +
   scale_x_date() +
   scale_y_continuous(expand = expansion(mult = c(0, .1)), labels = comma) +
@@ -425,7 +428,6 @@ ggplot(data_pd_annual, aes(x = year_date, y = pd_change_shock, fill = pd_change_
 ## EL changes
 
 ```{r} 
-
 data_losses <- data_el %>%
   filter(name %in% c("expected_loss_baseline", "expected_loss_shock")) %>%
   mutate(
