@@ -28,7 +28,7 @@ qplot_val_change <- function(data) {
 }
 
 plot_value_change <- function(data, y_val_name) {
-  p <- ggplot(data_plt, aes_string(x = "portfolio_name", y = y_val_name)) +
+  p <- ggplot(data, aes_string(x = "portfolio_name", y = y_val_name)) +
   geom_bar(stat = "identity") +
   geom_hline(yintercept = 0) +
   theme_2dii() +
