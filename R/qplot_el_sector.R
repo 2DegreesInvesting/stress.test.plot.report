@@ -21,7 +21,7 @@ qplot_el_sector <- function(data) {
       y = "Expected Loss (% exposure)"
     )
 
-  p_abs / p_perc
+  p_perc / p_abs
 }
 
 plot_el_coloured <- function(data, y_val_name, is_percentage = FALSE) {
