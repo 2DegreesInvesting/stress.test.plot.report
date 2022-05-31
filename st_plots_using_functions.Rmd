@@ -104,119 +104,11 @@ qplot_pd_sector(data_pd_annual, annual_pds = TRUE, common_y_axis = TRUE)
 
 ## EL changes
 
-```{r} 
-data_losses <- data_el %>%
-  filter(name %in% c("expected_loss_baseline", "expected_loss_shock")) %>%
-  mutate(
-    name = str_replace(name, "expected_loss_", "")
-  )
-
-ggplot(data_losses, aes(x = name, y = value, fill = value)) +
-  geom_bar(stat = "identity", color = "grey") +
-  scale_x_discrete(position = "top", labels = r2dii.plot::to_title) +
-  scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = comma) +
-  scale_fill_gradient2(
-      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
-      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
-      midpoint = 0,
-      labels = comma,
-      name = "Expected loss\n(currency)"
-    ) +
-  facet_wrap(~ ald_sector, scales = "free") +
-  theme_2dii() +
-  theme(
-    legend.title = element_text(),
-    axis.ticks.x = element_blank(),
-    axis.title.x = element_blank(),
-    strip.placement = "outside"
-  ) +
-  labs(
-    title = "Expected loss per sector",
-    subtitle = "For baseline and shock scenarios",
-    y = "Expected Loss (currency)"
-  )
+```{r fig3, fig.width = 8, fig.height = 8} 
+qplot_el_sector(data_el)
 ```
 ```{r}
-ggplot(data_losses, aes(x = name, y = el_as_perc_exposure, fill = el_as_perc_exposure)) +
-  geom_bar(stat = "identity", color = "grey") +
-  scale_x_discrete(position = "top", labels = r2dii.plot::to_title) +
-  scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = percent) +
-  scale_fill_gradient2(
-      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
-      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
-      midpoint = 0,
-      labels = percent,
-      name = "Expected loss\n(% exposure)"
-    ) +
-  facet_wrap(~ ald_sector, scales = "free") +
-  theme_2dii() +
-  theme(
-    legend.title = element_text(),
-    axis.ticks.x = element_blank(),
-    axis.title.x = element_blank(),
-    strip.placement = "outside"
-  ) +
-  labs(
-    title = "Expected Loss as percentage of exposure per sector",
-    subtitle = "For baseline and shock scenarios",
-    y = "Expected Loss (% exposure)"
-  )
-```
-```{r}
-data_change <- data_el %>%
-  filter(name %in% c("value_change")) 
-
-p_abs <- ggplot(data_change, aes(x = name, y = value, fill = value)) +
-  geom_bar(stat = "identity", color = "grey") +
-  scale_x_discrete(position = "top", labels = r2dii.plot::to_title) +
-  scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = comma) +
-  scale_fill_gradient2(
-      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
-      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
-      midpoint = 0,
-      labels = comma,
-      name = "Expected loss\n(currency)"
-    ) +
-  facet_wrap(~ ald_sector) +
-  theme_2dii() +
-  theme(
-    legend.title = element_text(),
-    axis.ticks.x = element_blank(),
-    axis.text.x = element_blank(),
-    axis.title.x = element_blank(),
-    strip.placement = "outside"
-  ) +
-  labs(
-    title = "Expected loss shock per sector",
-    y = "Expected Loss\n(currency)"
-  )
-
-p_perc <- ggplot(data_change, aes(x = name, y = el_as_perc_exposure, fill = el_as_perc_exposure)) +
-  geom_bar(stat = "identity", color = "grey") +
-  scale_x_discrete(position = "top", labels = r2dii.plot::to_title) +
-  scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = percent) +
-  scale_fill_gradient2(
-      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
-      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
-      midpoint = 0,
-      labels = percent,
-      name = "Expected loss\n(% exposure)"
-    ) +
-  facet_wrap(~ ald_sector) +
-  theme_2dii() +
-  theme(
-    legend.title = element_text(),
-    axis.ticks.x = element_blank(),
-    axis.text.x = element_blank(),
-    axis.title.x = element_blank(),
-    strip.placement = "outside"
-  ) +
-  labs(
-    title = "Expected loss shock as percentage of exposure per sector",
-    y = "Expected Loss\n(% exposure)"
-  )
-
-p_abs / p_perc
+qplot_el_change_sector(data_el)
 ```
 
 ## Equity Value changes
@@ -235,6 +127,6 @@ qplot_val_change_sector(data_val_change)
 
 Per technology
 
-```{r fig3, fig.width = 8, fig.height = 12}
+```{r fig4, fig.width = 8, fig.height = 12}
 qplot_val_change_technology(data_val_change)
 ```
