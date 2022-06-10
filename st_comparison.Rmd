@@ -1,8 +1,8 @@
 ---
 title: "Draft Stress test comparison"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{r include = FALSE}
@@ -28,16 +28,16 @@ Read in the first data set. Put the outputs of a stress test run into
 ```{r}
 st_output_path1 <- here::here("data/data1")
 
-expected_loss_file <- here::here(st_output_path, "loans_company_expected_loss_standard.csv")
+expected_loss_file <- here::here(st_output_path1, "loans_company_expected_loss_standard.csv")
 data_expected_loss1 <- read.csv(expected_loss_file)
 # Expected loss data preparation. Initial filtering and assigning variables to plot. The values are turned into millions.
-data_el1 <- prepare_for_el_plots(data_expected_loss)
+data_el1 <- prepare_for_el_plots(data_expected_loss1)
 
-pd_file <- here::here(st_output_path, "loans_portfolio_pd_changes_overall_standard.csv")
+pd_file <- here::here(st_output_path1, "loans_portfolio_pd_changes_overall_standard.csv")
 data_pd <- read.csv(pd_file)
 data_pd1 <- prepare_for_pd_plot(data_pd)
 
-value_changes_file <- here::here(st_output_path, "loans_portfolio_value_changes_standard.csv")
+value_changes_file <- here::here(st_output_path1, "loans_portfolio_value_changes_standard.csv")
 data_val_change1 <- read.csv(value_changes_file)
 ```
 
@@ -45,18 +45,18 @@ Read in the second data set. Put the outputs of a stress test run into
 'data/data1' folder of this project to run the code successfully.
 
 ```{r}
-st_output_path1 <- here::here("data/data2")
+st_output_path2 <- here::here("data/data2")
 
-expected_loss_file <- here::here(st_output_path, "loans_company_expected_loss_standard.csv")
+expected_loss_file <- here::here(st_output_path2, "loans_company_expected_loss_standard.csv")
 data_expected_loss2 <- read.csv(expected_loss_file)
 # Expected loss data preparation. Initial filtering and assigning variables to plot. The values are turned into millions.
-data_el2 <- prepare_for_el_plots(data_expected_loss)
+data_el2 <- prepare_for_el_plots(data_expected_loss2)
 
-pd_file <- here::here(st_output_path, "loans_portfolio_pd_changes_overall_standard.csv")
+pd_file <- here::here(st_output_path2, "loans_portfolio_pd_changes_overall_standard.csv")
 data_pd <- read.csv(pd_file)
 data_pd2 <- prepare_for_pd_plot(data_pd)
 
-value_changes_file <- here::here(st_output_path, "loans_portfolio_value_changes_standard.csv")
+value_changes_file <- here::here(st_output_path2, "loans_portfolio_value_changes_standard.csv")
 data_val_change2 <- read.csv(value_changes_file)
 ```
 
