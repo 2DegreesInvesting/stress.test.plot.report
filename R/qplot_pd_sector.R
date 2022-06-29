@@ -18,9 +18,9 @@ qplot_pd_sector <- function(data, common_y_axis = FALSE, annual_pds = FALSE) {
   )
 
   if (!common_y_axis) {
-    p <- p + facet_grid(shock_year_arg ~  ald_sector, scales = "free")
+    p <- p + facet_grid(ald_sector ~ shock_year_arg, scales = "free")
   } else {
-    p <- p + facet_wrap(ald_sector ~ shock_year_arg, scales = "free")
+    p <- p + facet_wrap(ald_sector ~ shock_year_arg)
   }
 
   if (!annual_pds) {
