@@ -45,7 +45,7 @@ qplot_val_change_sector_perc <- function(data) {
       facet_wrap(ald_sector ~ .) +
       labs(
         title = "Percentage value change per sector",
-        y = "Value change\n(% points)"
+        y = "Value change (%)"
       )
   p
 }

@@ -14,10 +14,12 @@ Imports:
     dplyr,
     forcats,
     ggplot2,
+    glue,
     lubridate,
     patchwork,
     r2dii.colours,
     r2dii.plot,
+    scales,
     stringr,
     tidyr,
     tidytext

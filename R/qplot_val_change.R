@@ -10,7 +10,7 @@ qplot_val_change <- function(data) {
     ) +
   labs(
     title = "Analysed portfolio percentage value change",
-    y = "Value change (% points)"
+    y = "Value change (%)"
   )
 
   p_abs <- plot_value_change(
@@ -20,7 +20,7 @@ qplot_val_change <- function(data) {
   scale_y_continuous(labels = scales::comma) +
   labs(
     title = "Analysed portfolio absolute value change",
-    y = "Value change (currency)"
+    y = "Value change\n(currency)"
   )
 
   p <- (p_perc + patchwork::plot_spacer())/ (p_abs + patchwork::plot_spacer())

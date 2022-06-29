@@ -1,7 +1,6 @@
 prepare_for_pd_annual_plot <- function(data) {
   out <- data %>%
   filter(
-    scenario_geography == "Global",
     investor_name == "Meta Investor",
     portfolio_name == "Meta Investor"
   ) %>%

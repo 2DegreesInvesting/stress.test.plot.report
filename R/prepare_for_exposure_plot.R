@@ -1,8 +1,6 @@
 prepare_for_exposure_plot <- function(data) {
   out <- data %>%
   filter(
-    scenario_name == "Carbon balance 2030",
-    scenario_geography == "Global",
     investor_name == "Meta Investor",
     portfolio_name == "Meta Investor"
   ) %>%

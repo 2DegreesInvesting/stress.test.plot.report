@@ -14,7 +14,6 @@ prepare_for_el_plots <- function(data) {
 
   out <- data %>%
     filter(
-      scenario_geography == "Global",
       investor_name == "Meta Investor",
       portfolio_name == "Meta Investor"
     ) %>%

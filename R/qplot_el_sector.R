@@ -10,7 +10,7 @@ qplot_el_sector <- function(data) {
     labs(
       title = "Expected loss per sector",
       subtitle = "For baseline and shock scenarios",
-      y = "Expected Loss (currency)"
+      y = "Expected Loss\n(currency)"
     )
 
   p_perc <- plot_el_coloured(data_losses, "el_as_perc_exposure", is_percentage = TRUE) +
@@ -18,7 +18,7 @@ qplot_el_sector <- function(data) {
     labs(
       title = "Expected Loss as percentage of exposure per sector",
       subtitle = "For baseline and shock scenarios",
-      y = "Expected Loss (% exposure)"
+      y = "Expected Loss\n(% exposure)"
     )
 
   p_perc / p_abs
