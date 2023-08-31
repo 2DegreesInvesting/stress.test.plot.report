@@ -51,12 +51,6 @@ Expected loss data preparation. Initial filtering and assigning variables to plo
 
 ```{r}
 data_plot <- data_expected_loss %>%
-  filter(
-    scenario_name == "Carbon balance 2030",
-    scenario_geography == "Global",
-    investor_name == "Meta Investor",
-    portfolio_name == "Meta Investor"
-  ) %>%
   mutate(
     value_to_plot = .data$exposure_at_default,
     group_variable = .data$ald_sector
@@ -94,20 +88,10 @@ PD data preparation.
 
 ```{r}
 data_pd <- data_pd %>%
-  filter(
-    scenario_geography == "Global",
-    investor_name == "Meta Investor",
-    portfolio_name == "Meta Investor"
-  ) %>%
   select(ald_sector, term, shock_year_arg, pd_change_sector_shock) %>%
   distinct()
 
-data_pd_annual <- data_pd_annual %>%
-  filter(
-    scenario_geography == "Global",
-    investor_name == "Meta Investor",
-    portfolio_name == "Meta Investor"
-  ) %>% 
+data_pd_annual <- data_pd_annual %>% 
   select(ald_sector, year, shock_year_arg, pd_change_sector_shock) %>%
   distinct() %>%
   mutate(
