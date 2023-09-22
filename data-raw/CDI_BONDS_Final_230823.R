@@ -1,6 +1,5 @@
 ## please open file within the stress test repo
 
-devtools::load_all()
 library(ggplot2)
 library(dplyr)
 library(r2dii.colours)
@@ -10,21 +9,18 @@ library(tidyverse)
 library(scales)
 library(cowplot)
 
+
 ################################################################################
 # LOAD Exposure data
 
-equity_input_path <- r2dii.utils::path_dropbox_2dii(
-  "PortCheck_v2",
-  "10_Projects",
-  "CDI",
-  "data",
-  glue::glue("california_exposures_per_ar_id.csv")
-)
+equity_input_path <- here::here("data",
+                                "CDI",
+                                "california_exposures_per_ar_id.csv")
 
 equity_exposures <- readr::read_csv(
   equity_input_path,
   col_types = readr::cols_only(
-    holding_id = "c",
+    # holding_id = "c",
     insurance_category = "c",
     value_usd = "d",
     asset_type = "c",
@@ -42,16 +38,14 @@ equity_exposures <-
 names(equity_exposures) <-
   paste0("cpr_", names(equity_exposures))
 
+equity_exposures <- equity_exposures %>%
+  dplyr::rename(company_id = cpr_ar_company_id)
 
 ## LOAD Bond data
 
-bonds_input_path <- r2dii.utils::path_dropbox_2dii(
-  "PortCheck_v2",
-  "10_Projects",
-  "CDI",
-  "data",
-  glue::glue("matched_bond_data_meta.csv") ##here change meta or not meta portfolio included
-)
+bonds_input_path <- here::here("data",
+                               "CDI",
+                               glue::glue("matched_bond_data_meta.csv"))
 
 bond_data <- readr::read_csv(
   bonds_input_path,
@@ -62,267 +56,139 @@ bond_data <- readr::read_csv(
     ar_company_id = "d",
     value_usd = "d",
     first_maturity = "c",
-    term = "d")
-)
-################################################################################
-
-# LOAD Default WEO run
-
-input_path_default <- r2dii.utils::path_dropbox_2dii(
-  "PortCheck_v2",
-  "10_Projects",
-  "CDI",
-  "data",
-  "2023-03-28_18-21-04_standard",
-  glue::glue("crispy_output_standard.csv")
-)
-
-crispy_output_standard <- readr::read_csv(
-  input_path_default,
-  col_types = readr::cols_only(
-    company_name = "c",
-    sector = "c",
-    business_unit = "c",
-    roll_up_type = "c",
-    scenario_geography = "c",
-    baseline_scenario = "c",
-    shock_scenario = "c",
-    lgd = "d",
-    risk_free_rate = "d",
-    discount_rate = "d",
-    dividend_rate = "d",
-    growth_rate = "d",
-    shock_year = "d",
-    net_present_value_baseline = "d",
-    net_present_value_shock = "d",
-    net_present_value_difference = "d",
-    term = "d",
-    pd_baseline = "d",
-    pd_shock = "d",
-    pd_difference = "d",
-    id = "d"
+    term = "d"
   )
-)
+) %>% rename(company_id = ar_company_id)
+
 
 ################################################################################
-
-input_path_sensitivity <- r2dii.utils::path_dropbox_2dii(
-  "PortCheck_v2",
-  "10_Projects",
-  "CDI",
-  "data",
-  "ST_outputs"
-)
-
-# LOAD Default WEO run
-
-crispy_output_shock_year <- readr::read_csv(
-  input_path_default,
-  col_types = readr::cols_only(
-    company_name = "c",
-    sector = "c",
-    business_unit = "c",
-    roll_up_type = "c",
-    scenario_geography = "c",
-    baseline_scenario = "c",
-    shock_scenario = "c",
-    lgd = "d",
-    risk_free_rate = "d",
-    discount_rate = "d",
-    dividend_rate = "d",
-    growth_rate = "d",
-    shock_year = "d",
-    net_present_value_baseline = "d",
-    net_present_value_shock = "d",
-    net_present_value_difference = "d",
-    term = "d",
-    pd_baseline = "d",
-    pd_shock = "d",
-    pd_difference = "d",
-    id = "d"
-  )
-)
-
-
 # LOAD in different crispy runs
-output_paths <- c(
-  r2dii.utils::path_dropbox_2dii("PortCheck_v2", "10_Projects", "CDI", "data", "CDI_runs"))
 
-dataset_files <- list.files(path = output_paths, pattern = "crispy_", recursive = TRUE, full.names = TRUE)
+trisk_output_path <- c(here::here("data", "trisk_runs"))
 
-data_list <- list()
+load_multi_crispy_outputs <- function(trisk_output_path) {
+  dataset_files <-
+    list.files(
+      path = trisk_output_path,
+      pattern = "crispy_",
+      recursive = TRUE,
+      full.names = TRUE
+    )
 
-for (file in dataset_files) {
-  data <- read.csv(file)
+  data_list <- list()
 
-  # file_name <- basename(dirname(file))
-  # file_name <- gsub("[0-9]", "", file_name)
-  parent_dir <- basename(dirname(file))
-  parent_modified_filename <- substring(parent_dir, 27)
-  sub_dir <- basename((file))
-  sub_modified_filename <- substring(sub_dir, 1, 14)
-
-  # Create the modified filename with both parent and subdirectory names
-  modified_filename <- paste0(sub_modified_filename, parent_modified_filename)
-
-  data_list[[modified_filename]] <- data%>%dplyr::inner_join(company_to_name%>%rename(id=company_id))
-
+  all_crispy <- NULL
+  for (file in dataset_files) {
+    crispy <-  readr::read_csv(
+      file,
+      col_types = readr::cols_only(
+        company_id = "d",
+        company_name = "c",
+        sector = "c",
+        business_unit = "c",
+        roll_up_type = "c",
+        scenario_geography = "c",
+        baseline_scenario = "c",
+        shock_scenario = "c",
+        # lgd = "d",
+        risk_free_rate = "d",
+        discount_rate = "d",
+        dividend_rate = "d",
+        growth_rate = "d",
+        shock_year = "d",
+        net_present_value_baseline = "d",
+        net_present_value_shock = "d",
+        net_present_value_difference = "d",
+        term = "d",
+        pd_baseline = "d",
+        pd_shock = "d",
+        pd_difference = "d",
+      )
+    )
+    all_crispy <- dplyr::bind_rows(all_crispy, crispy) %>%
+      dplyr::mutate(scenario_duo = paste0(baseline_scenario, "__", shock_scenario))
+  }
+  return(all_crispy)
 }
 
-# LOAD in GECO runs
 
-output_paths_geco <- c(
-  r2dii.utils::path_dropbox_2dii("PortCheck_v2", "10_Projects", "CDI", "data", "CDI_runs", "Geco"))
+all_crispy <- load_multi_crispy_outputs(trisk_output_path)
 
-dataset_files_geco <- list.files(path = output_paths_geco, pattern = "crispy_", recursive = TRUE, full.names = TRUE)
 
-data_list_geco <- list()
+#############################################################
+#############################################################
+################# DEBUG ONLY TODO REMOVE #####################
 
-for (file in dataset_files_geco) {
-  data <- read.csv(file)
+##randomly shuffle dataset to create a 2nd shock_year
+all_crispy_newshockyear = all_crispy %>%
+  select(-c(company_name))  %>%
+  bind_cols(all_crispy %>% select(company_name)%>% sample_frac(size = 1)) %>%
+  mutate(shock_year=2020)
+all_crispy <- all_crispy %>%
+  bind_rows(all_crispy_newshockyear)
 
-  # file_name <- basename(dirname(file))
-  # file_name <- gsub("[0-9]", "", file_name)
-  parent_dir <- basename(dirname(file))
-  parent_modified_filename <- substring(parent_dir, 27)
-  sub_dir <- basename((file))
-  sub_modified_filename <- substring(sub_dir, 1, 14)
+##randomly assign company_ids from portfolio to company_name in crispy
+company_to_name <-
+  dplyr::bind_cols(
+    (all_crispy %>% distinct(company_name) %>% sample_frac(size = 1))[1:nrow(equity_exposures %>% distinct(company_id)), ],
+    equity_exposures %>% distinct(company_id) %>% sample_frac(size = 1)
+  )
+all_crispy <- all_crispy %>% inner_join(company_to_name)
 
-  # Create the modified filename with both parent and subdirectory names
-  modified_filename <- paste0(sub_modified_filename, parent_modified_filename)
 
-  data_list_geco[[modified_filename]] <- data
+################# DEBUG ONLY TODO REMOVE #####################
+#############################################################
+#############################################################
+
+
+#' Check that only 1 trisk parameter has been tweaked in the aggregated crispys.
+#' Remove this safety on the results without guarantee
+#'
+#' @param plot_variable
+#'
+#' @return
+#' @export
+#'
+#' @examples
+stop_if_multivariate_analysis <- function(plot_variable) {
+  trisk_variables <-
+    c(
+      "scenario_geography",
+      "risk_free_rate",
+      "discount_rate",
+      "dividend_rate",
+      "growth_rate",
+      "shock_year"
+    )
+  trisk_variables_not_for_plot <-
+    trisk_variables[!grepl(plot_variable, trisk_variables)]
+
+  stopifnot(nrow(all_crispy %>% select(
+    dplyr::any_of(trisk_variables_not_for_plot)
+  ) %>% distinct_all()) == 1)
 
 }
+plot_variable <- "shock_year"
+stop_if_multivariate_analysis(plot_variable)
 
-
-##categories can own the same holding_id
-
-crispy_cpr_company_id <- map(data_list, ~ .x %>% dplyr::filter(roll_up_type == "equity_ownership") %>%
-                               dplyr::filter(term == "1") %>%
-                               dplyr::select(-c("term")) %>%
-                               dplyr::inner_join(equity_exposures,by = c("id" = "cpr_ar_company_id")) %>%
-                               dplyr::group_by(cpr_insurance_category, id) %>%
-                               dplyr::mutate(sum_cpr_value_usd = sum(cpr_value_usd, na.rm = TRUE)) %>%
-                               dplyr::ungroup())
-
-# WARNING THIS GENERATE ROWS DUPLICATES BC MULTIPLE COMPANY_ID ROWS IN equity_exposures
 
 ######################################################################################################################################################
 
-### Sector Weights
-### picking only the relevant scenarios for the weights
+# TODO PQ filter term and not group by term ?
 
-WEO_SY <- data_list$crispy_output__shock_year_WEO_global
-GCAM_SY <- data_list$crispy_output__shock_year_NGFS_global_GCAM
-REMIND_SY <- data_list$crispy_output__shock_year_NGFS_global_REMIND
-WEO_NA_SY <- data_list$crispy_output__shock_year_WEO_NorthAmerica
-GCAMTax_SY <- data_list$crispy_output__shock_year_NGFS_global_GCAM_carbon_tax
+total_npv_weights <- all_crispy %>%
+  dplyr::filter(term == 1) %>%
+  group_by(company_name, company_id) %>%
+  summarize(sum_NPV_total = sum(net_present_value_baseline), .groups="drop")
 
-WEO_SY <- WEO_SY[WEO_SY$shock_year==2030 & WEO_SY$term==1,]
-GCAM_SY <- GCAM_SY[GCAM_SY$shock_year==2030 & GCAM_SY$term==1,]
-REMIND_SY <- REMIND_SY[REMIND_SY$shock_year==2030 & REMIND_SY$term==1,]
-WEO_NA_SY <-WEO_NA_SY[WEO_NA_SY$shock_year==2030 & WEO_NA_SY$term==1,]
-GCAMTax_SY <- GCAMTax_SY[GCAMTax_SY$shock_year==2030 & GCAMTax_SY$term==1,]
+sector_npv_weights <- all_crispy %>%
+  dplyr::filter(term == 1) %>%
+  group_by(company_name,company_id, sector) %>%
+  summarize(sum_NPV_total = sum(net_present_value_baseline), .groups="drop")
 
-## calculating the sector weights
-## These are the weihts used for EL plots and calculations
-
-## Weights WEO
-total_NPV_WEO <- WEO_SY %>%
-  group_by(company_name, id) %>%
-  summarize(sum_NPV_total = sum(net_present_value_baseline))
-
-sector_NPV_WEO <- WEO_SY %>%
-  group_by(company_name, sector, id) %>%
-  summarize(sum_NPV_sector = sum(net_present_value_baseline))
-
-scenario_weights_WEO <- merge(sector_NPV_WEO, total_NPV_WEO, by= c("company_name", "id"))
-
-##final weights WEO
-sector_weights_WEO <- scenario_weights_WEO %>%
-  group_by(company_name, id, sector) %>%
-  mutate(sector_weight = sum_NPV_sector / sum_NPV_total)
-
-## GCAM
-total_NPV_GCAM <- GCAM_SY %>%
-  group_by(company_name, id) %>%
-  summarize(sum_NPV_total = sum(net_present_value_baseline))
-
-sector_NPV_GCAM <- GCAM_SY %>%
-  group_by(company_name, sector, id) %>%
-  summarize(sum_NPV_sector = sum(net_present_value_baseline))
-
-scenario_weights_GCAM <- merge(sector_NPV_GCAM, total_NPV_GCAM, by= c("company_name", "id"))
-
-## final weights GCAM
-sector_weights_GCAM <- scenario_weights_GCAM %>%
-  group_by(company_name, id, sector) %>%
-  mutate(sector_weight = sum_NPV_sector / sum_NPV_total)
-
-## GCAM Ctax
-total_NPV_GCAMTax <- GCAMTax_SY %>%
-  group_by(company_name, id) %>%
-  summarize(sum_NPV_total = sum(net_present_value_baseline))
-
-sector_NPV_GCAMTax <- GCAMTax_SY %>%
-  group_by(company_name, sector, id) %>%
-  summarize(sum_NPV_sector = sum(net_present_value_baseline))
-
-scenario_weights_GCAMTax <- merge(sector_NPV_GCAMTax, total_NPV_GCAMTax, by= c("company_name", "id"))
-
-## final weights GCAMctax
-sector_weights_GCAMTax <- scenario_weights_GCAMTax %>%
-  group_by(company_name, id, sector) %>%
-  mutate(sector_weight = sum_NPV_sector / sum_NPV_total)
-
-## Weights WEO NA
-total_NPV_WEONA <- WEO_NA_SY %>%
-  group_by(company_name, id) %>%
-  summarize(sum_NPV_total = sum(net_present_value_baseline))
-
-sector_NPV_WEONA <- WEO_NA_SY %>%
-  group_by(company_name, sector, id) %>%
-  summarize(sum_NPV_sector = sum(net_present_value_baseline))
-
-scenario_weights_WEONA <- merge(sector_NPV_WEONA, total_NPV_WEONA, by= c("company_name", "id"))
-
-##final weights WEONA
-sector_weights_WEONA <- scenario_weights_WEONA %>%
-  group_by(company_name, id, sector) %>%
-  mutate(sector_weight = sum_NPV_sector / sum_NPV_total)
-
-## REMIND
-## calculating the weights REMIND
-total_NPV_REMIND <- REMIND_SY %>%
-  group_by(company_name, id) %>%
-  summarize(sum_NPV_total = sum(net_present_value_baseline))
-
-sector_NPV_REMIND <- REMIND_SY %>%
-  group_by(company_name, sector, id) %>%
-  summarize(sum_NPV_sector = sum(net_present_value_baseline))
-
-scenario_weights_REMIND <- merge(sector_NPV_REMIND, total_NPV_REMIND, by= c("company_name", "id"))
-
-## final weights REMIND
-sector_weights_REMIND <- scenario_weights_REMIND %>%
-  group_by(company_name, id, sector) %>%
-  mutate(sector_weight = sum_NPV_sector / sum_NPV_total)
+scenario_weights <- merge(total_npv_weights, sector_npv_weights)
 
 ###########
-
-### Loading in data
-REMIND_DR <- data_list$crispy_output__discount_rate_NGFS_global_REMIND
-WEO_DR <- data_list$crispy_output__discount_rate_WEO_global
-GCAM_DR <- data_list$crispy_output__discount_rate_NGFS_global_GCAM
-WEO_NA_DR <- data_list$crispy_output_discount_rate_WEO_NorthAmerica
-REMIND_SY <- data_list$crispy_output__shock_year_NGFS_global_REMIND
-WEO_SY <- data_list$crispy_output__shock_year_WEO_global
-GCAM_SY <- data_list$crispy_output__shock_year_NGFS_global_GCAM
-WEO_NA_SY <- data_list$crispy_output__shock_year_WEO_NorthAmerica
-GCAMTax_SY <- data_list$crispy_output__shock_year_NGFS_global_GCAM_carbon_tax
-GCAMTax_DR <- data_list$crispy_output__discount_rate_NGFS_global_GCAM_carbon_tax
-
 
 ## plotting calibrations
 width <- 18
@@ -331,63 +197,23 @@ dpi <- 300
 
 
 ####
-colnames(bond_data)[colnames(bond_data) == "ar_company_id"] <- "id"
+# colnames(bond_data)[colnames(bond_data) == "ar_company_id"] <- "id"
 # Define the desired order of insurance categories
-desired_order <- c("fraternal", "life", "health", "p_n_c", "meta")
+# desired_order <- c("fraternal", "life", "health", "p_n_c", "meta")
 color_gradient <- c("#FFC0C0", "#FF8888", "#FF6666", "#FF4444", "#FF2222", "#FF0000")
 
 # List of scenario dataframes
-Scenarios_Sy <- list(WEO_SY = WEO_SY, WEO_NA_SY = WEO_NA_SY, GCAM_SY = GCAM_SY, REMIND_SY = REMIND_SY, GCAMTax_SY = GCAMTax_SY)
+
+Scenarios_Sy <- all_crispy
 
 
-################################## MEAD PD DIFF SY PLOT
+################################## MEAN PD DIFF SY PLOT
 # Loop through scenarios
-for (scenario_name in names(Scenarios_Sy)) {
-  scenario_data <- Scenarios_Sy[[scenario_name]]
 
-  # Merge data
-  Shock_Year_bond_long <- merge(bond_data, scenario_data, by=c("term", "id"))
 
-  # Calculate mean pd difference
-  mean_shockyear <- Shock_Year_bond_long %>%
-    group_by(insurance_category, sector, shock_year) %>%
-    summarise(mean_pd_difference = mean(pd_difference))
+MEAN_PD_DIFF_SY_PLOTS <- make_mean_pd_diff_sy_plots(Scenarios_Sy, bond_data)
 
-  # Reorder levels of insurance_category based on desired order
-  mean_shockyear$insurance_category <- factor(mean_shockyear$insurance_category, levels = desired_order)
 
-  # Remove "SY" from scenario name for plot title
-  scenario_name_for_title <- gsub("_SY", "", scenario_name)
-
-  # Create plot
-  plotsy <- ggplot(data = mean_shockyear, aes(x = shock_year, group = factor(shock_year), y = mean_pd_difference, fill = mean_pd_difference)) +
-    geom_bar(stat = "identity") +
-    scale_fill_gradientn(colors = color_gradient,
-                         limits = c(min(mean_shockyear$mean_pd_difference), max(mean_shockyear$mean_pd_difference)),
-                         breaks = c(min(mean_shockyear$mean_pd_difference), 0, max(mean_shockyear$mean_pd_difference)),
-                         labels = scales::comma,
-                         name = "Mean pd_difference") +
-    facet_grid(insurance_category ~ sector, scales = "free_y") +  # Allow separate scales for y-axis
-    theme_2dii() +
-    labs(x = "Shock_Year", y = "Mean pd_difference", title = paste("Mean PD Difference by Shock Year -", scenario_name_for_title)) +
-    theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 28),  # Adjust title size
-          axis.text = element_text(size = 23),  # Adjust tick label size
-          axis.title.x = element_text(size = 26),  # Adjust x-axis label size
-          axis.title.y = element_text(size = 26),  # Adjust y-axis label size
-          strip.text = element_text(size = 24),
-          panel.grid = element_blank(),
-          panel.grid.major = element_line(color = "lightgray", size = 0.2),
-          legend.text = element_text(size = 20),  # Adjust legend text size
-          legend.title = element_text(size = 20)) +  # Adjust legend title size
-    scale_x_continuous(breaks = c(2026, 2030, 2034))
-
-  # Output Path and filename
-  output_path <- "/Users/2diigermany/Desktop/Work/CDI/new plots_last/SY/PD Diff/"
-  filename <- paste0(output_path, "PDdiff_Shock_year_", scenario_name, ".png")
-
-  # Save the plot
-  ggsave(filename, plot = plotsy, width = width, height = height, dpi = dpi)
-}
 
 ########################################################################
 ########################################################################
