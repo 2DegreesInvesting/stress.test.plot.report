@@ -1,0 +1,161 @@
+---
+title: "App Bonds Portfolio Plots"
+output: html_document
+runtime: shiny
+---
+
+```{r include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.width=8, fig.height=6) 
+```
+
+Load functions.
+
+```{r, echo=FALSE}
+library(ggplot2)
+library(dplyr)
+library(r2dii.colours)
+library(r2dii.plot)
+library(r2dii.utils)
+library(tidyverse)
+library(scales)
+library(cowplot)
+source(file.path(getwd(), "dataload.R"))
+source(file.path(getwd(), "utils.R"))
+source(file.path(getwd(), "portfolio_plots.R"))
+library(shiny)
+```
+
+
+<!-- ```{r} -->
+<!-- fileInput("equity_input_file", "Choose CSV File") -->
+<!-- fileInput("bonds_input_file", "Choose CSV File") -->
+<!-- fileInput("trisk_outputs_folder_files", "Choose CSV File") -->
+<!-- ``` -->
+
+
+```{r}
+equity_input_path <- file.path(getwd(), "data", "exposures_per_ar_id.csv")
+bonds_input_path <- file.path(getwd(), "data", "matched_bond_data.csv")
+trisk_output_path <- file.path(getwd(), "data", "trisk_runs")
+color_gradient <- c("#FFC0C0", "#FF8888", "#FF6666", "#FF4444", "#FF2222", "#FF0000")
+```
+
+Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
+
+```{r, results=FALSE, warning=FALSE, echo=F}
+################################################################################
+# LOAD Exposure data
+equity_exposures <- load_equity_exposures(equity_input_path)
+## LOAD Bond data
+bond_data <- load_bond_data(bonds_input_path)
+
+################################################################################
+# LOAD in different crispy runs
+all_crispy <- load_multi_crispy_outputs(trisk_output_path)
+```
+
+```{r, echo=F}
+cat(paste0("The following scenarios are included in the analysis : \n", paste(unique(all_crispy$scenario_duo), collapse = "\n")))
+```
+
+
+```{r}
+#############################################################
+#############################################################
+################# DEBUG ONLY TODO REMOVE #####################
+
+##randomly shuffle dataset to create a 2nd shock_year
+all_crispy_newshockyear = all_crispy %>%
+  select(-c(company_name))  %>%
+  bind_cols(all_crispy %>% select(company_name)%>% sample_frac(size = 1)) %>%
+  mutate(shock_year=2020)
+all_crispy <- all_crispy %>%
+  bind_rows(all_crispy_newshockyear)
+
+##randomly assign company_ids from portfolio to company_name in crispy
+company_to_name <-
+  dplyr::bind_cols(
+    (all_crispy %>% distinct(company_name) %>% sample_frac(size = 1))[1:nrow(equity_exposures %>% distinct(company_id)), ],
+    equity_exposures %>% distinct(company_id) %>% sample_frac(size = 1)
+  )
+all_crispy <- all_crispy %>% inner_join(company_to_name)
+
+
+################# DEBUG ONLY TODO REMOVE #####################
+#############################################################
+#############################################################
+
+```
+
+Compute weights
+
+```{r}
+# TODO PQ filter term and not group by term ?
+
+total_npv_weights <- all_crispy %>%
+  dplyr::filter(term == 1) %>%
+  group_by(scenario_duo, company_id) %>%
+  summarize(sum_NPV_total = sum(net_present_value_baseline), .groups="drop")
+
+sector_npv_weights <- all_crispy %>%
+  dplyr::filter(term == 1) %>%
+  group_by(scenario_duo, sector, company_id) %>%
+  summarize(sum_NPV_sector = sum(net_present_value_baseline), .groups="drop")
+
+scenario_weights <- dplyr::inner_join(total_npv_weights, sector_npv_weights, by=c("scenario_duo", "company_id"))
+```
+
+# PLOTS
+```{r br, echo=FALSE}
+
+inputPanel(
+  selectInput(
+    "plot_variable",
+    "Choose variable to analyze in plots",
+    choices = c(
+      "scenario_geography",
+      "risk_free_rate",
+      "discount_rate",
+      "dividend_rate",
+      "growth_rate",
+      "shock_year"
+    ),
+    selected = "shock_year",
+    multiple = FALSE
+  ),
+  
+  checkboxGroupInput(
+    "variable_values",
+    label = "variable values",
+    choices = c())
+)
+
+
+observe({
+  if (!is.null(input$plot_variable)) {
+    available_values <- all_crispy %>%
+      dplyr::distinct(!! rlang::sym(input$plot_variable)) %>%
+      dplyr::pull()
+    updateCheckboxGroupInput(session, "variable_values",
+                      choices = available_values)
+  }
+})
+```
+
+
+
+```{r}
+plot_crispy <- all_crispy %>%
+  dplyr::filter(shock_year %in% c(2020, 2030))
+```
+
+
+################################## MEAN PD DIFF SY PLOT
+
+```{r, warning=FALSE}
+MEAN_PD_DIFF_SY_PLOTS <- make_mean_pd_diff_sy_plots(plot_crispy, bond_data, color_gradient)
+for (scenario_name in names(MEAN_PD_DIFF_SY_PLOTS)){
+  print(MEAN_PD_DIFF_SY_PLOTS[[scenario_name]])
+}
+```
