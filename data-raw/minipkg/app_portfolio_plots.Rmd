@@ -14,11 +14,15 @@ for (r2dii_pkg in c("r2dii.colours", "r2dii.plot", "r2dii.utils")) {
   if (!(r2dii_pkg %in% installed.packages()[,"Package"])) {
     install.packages(file.path(getwd(), "packages", r2dii_pkg),
                      repos = NULL,
-                     type = "source")
+                     type = "source", 
+                     character.only = TRUE)
   }
 }
 
-requirements <- c("ggplot2", "dplyr", "tidyverse", "scales", "cowplot", "shiny", "slickR")
+requirements <- c("ggplot2", "dplyr", "tidyverse", "scales", "cowplot", "shiny", "slickR"
+                  # ,
+                  # "svglite", "shinyWidgets"
+                  )
 for (pkg in requirements) {
   if (!(pkg %in% installed.packages()[,"Package"])) {
     install.packages(pkg, character.only = TRUE)
@@ -36,12 +40,14 @@ library(cowplot)
 library(shiny)
 library(slickR)
 library(svglite)
+library(shinyWidgets)
 library(r2dii.colours)
 library(r2dii.plot)
 library(r2dii.utils)
 source(file.path(getwd(), "scripts", "dataload.R"))
 source(file.path(getwd(), "scripts", "utils.R"))
 source(file.path(getwd(), "scripts", "portfolio_plots.R"))
+source(file.path(getwd(), "scripts", "compute.R"))
 ```
 
 <!-- ```{r} -->
@@ -109,28 +115,10 @@ all_crispy <- all_crispy %>% inner_join(company_to_name)
 
 ```
 
-Compute weights
-
-```{r}
-# TODO PQ filter term and not group by term ?
-
-total_npv_weights <- all_crispy %>%
-  dplyr::filter(term == 1) %>%
-  group_by(scenario_duo, company_id) %>%
-  summarize(sum_NPV_total = sum(net_present_value_baseline), .groups="drop")
-
-sector_npv_weights <- all_crispy %>%
-  dplyr::filter(term == 1) %>%
-  group_by(scenario_duo, sector, company_id) %>%
-  summarize(sum_NPV_sector = sum(net_present_value_baseline), .groups="drop")
-
-scenario_weights <- dplyr::inner_join(total_npv_weights, sector_npv_weights, by=c("scenario_duo", "company_id"))
-```
-
 # PLOTS
 
 ```{r br, echo=FALSE}
-
+# UI
 inputPanel(
   selectInput(
     "plot_variable",
@@ -160,10 +148,24 @@ inputPanel(
 )
 
 
+prettySwitch(
+   inputId = "toggleBtn",
+   label = "Collapse/Reset plots", 
+   value = TRUE
+)
+collapse_disp <- eventReactive(input$toggleBtn, {
+  input$toggleBtn %% 2 == 0
+})
+
+
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+# UI UPDATES
 
 observe({
   if (!is.null(input$plot_variable)) {
-    available_values <- all_crispy %>%
+    available_values <- filtered_crispy() %>%
       dplyr::distinct(!!rlang::sym(input$plot_variable)) %>%
       dplyr::pull()
     updateCheckboxGroupInput(session, "variable_values",
@@ -173,15 +175,18 @@ observe({
 })
 ```
 
+
 ```{r}
-plot_crispy <- reactive({
+# filter dataset
+
+filtered_crispy <- reactive({
   if (!is.null(input$plot_variable) &
       !is.null(input$variable_values) &
-      !(is.null(input$scenario_names))){
+      !is.null(input$scenario_names)){
   all_crispy %>%
     dplyr::filter(
       !!rlang::sym(input$plot_variable) %in% c(input$variable_values),
-      "scenario_duo" %in% c(input$scenario_names)
+      scenario_duo %in% c(input$scenario_names)
     )
   }
   else{
@@ -191,101 +196,134 @@ plot_crispy <- reactive({
 
 ```
 
+# Compute indicators
 ```{r}
-# renderTable({glimpse(plot_crispy())})
-# tableOutput({plot_crispy()})
+scenario_weights <- reactive({compute_scenario_weights(all_crispy)})
 ```
 
-################################## MEAN PD DIFF SY PLOT
+
+# MEAN PD DIFF SY PLOT
 
 ```{r}
-slickR::slickROutput("slick_output",width='100%',height='200px')
-
-
-observe({
-  
-  MEAN_PD_DIFF_SY_PLOTS = make_mean_pd_diff_sy_plots(plot_crispy(), bond_data, color_gradient)
-  
-  output$slick_output <- slickR::renderSlickR({
-    x <- slickR::slickR(
-      lapply(MEAN_PD_DIFF_SY_PLOTS, function(x) {svglite::xmlSVG(show(x), standalone = TRUE)}),
-      # slideId = 'slick1',
-      # height = '200px',
-      # width = '100'
-    ) +
-      slickR::settings(slidesToShow = 1, centerMode = TRUE)
-    
-    # y <- slickR(unname(MEAN_PD_DIFF_SY_PLOTS),
-    #             slideId = 'slick2',
-    #             height = 600,
-    #             width = '50%') + 
-    #   settings(slidesToShow=3,centerMode=TRUE)    
-    # 
-    # switch(input$slick_type,
-    #        'single' = x,
-    #        'stack'  = x %stack% y,
-    #        'synch'  = x %synch% y
-    #        )
-    x
-
-  })
-
+tp_list <- reactive({
+    make_mean_pd_diff_sy_plots(filtered_crispy(), bond_data, color_gradient)
 })
+```
+
+
+
+<!-- ```{r} -->
+<!-- renderUI({ -->
+
+<!--           plot_output_list <- lapply(1:length(tp_list()), function(i) { -->
+<!--         plotname <- paste("plot", i, sep="") -->
+<!--         plotOutput(plotname) -->
+<!--     }) -->
+<!--     do.call(tagList, plot_output_list) -->
+
+<!-- }) -->
+
+
+
+<!-- observe({ -->
+
+<!--     for (i in 1:length(tp_list())) { -->
+<!--     local({ -->
+<!--         my_i <- i -->
+<!--         plotname <- paste("plot", my_i, sep="") -->
+<!--         output[[plotname]] <- renderPlot({ -->
+<!--             tp_list()[[my_i]] -->
+<!--         }) -->
+<!--     }) -->
+<!--     } -->
+
+
+<!-- }) -->
+<!-- ``` -->
+
+
+
+```{r}
+  renderUI({
+  if (input$toggleBtn) {
+    slickR::slickROutput("slick_output", width = '100%', height = '200%')
+  } else{
+    plot_output_list <- lapply(1:length(tp_list()), function(i) {
+      plotname <- paste("plot", i, sep = "")
+      plotOutput(plotname)
+    })
+    do.call(tagList, plot_output_list)
+  }
+})
+
+observeEvent(c(collapse_disp(), filtered_crispy()), {
+
+  
+  if (input$toggleBtn) {
+    for (i in 1:length(tp_list())) {
+      local({
+        my_i <- i
+        plotname <- paste("plot", my_i, sep = "")
+        output[[plotname]] <- renderPlot({
+          tp_list()[[my_i]]
+        })
+      })
+    }
+  }
+  else{
+    output$slick_output <- slickR::renderSlickR({
+      slickR::slickR(lapply(tp_list(), function(x) {
+        svglite::xmlSVG(show(x), standalone = TRUE)
+      }), ) +
+        slickR::settings(
+          slidesToShow = 2,
+          centerMode = TRUE,
+          dots = T,
+          infinite = F
+        )
+    })
+  }
+    
+})
+
+# # 
+# # 
+# observe({
+#   # if (caroussel_toggled()){
+#     for (i in 1:length(tp_list())) {
+#     local({
+#         my_i <- i
+#         plotname <- paste("plot", my_i, sep="")
+#         output[[plotname]] <- renderPlot({
+#             tp_list()[[my_i]]
+#         })
+#     })
+#     }
+#   # }
+#   #   else{
+#   output$slick_output <- slickR::renderSlickR({
+#     slickR::slickR(lapply(tp_list(), function(x) {
+#       svglite::xmlSVG(show(x), standalone = TRUE)
+#     }),) +
+#       slickR::settings(
+#         slidesToShow = 2,
+#         centerMode = TRUE,
+#         dots = T,
+#         infinite = F
+#       )
+#   })
+#     # }
+# })
 ```
 
 ```{r}
 #' tp_list: reactive variable, list of plots
 # render_loop_plot_list <- function(tp_list)
 
-tp_list <- reactive({
-    make_mean_pd_diff_sy_plots(plot_crispy(), bond_data, color_gradient)
-})
 
-renderUI({
-    plot_output_list <- lapply(1:length(tp_list()), function(i) {
-        plotname <- paste("plot", i, sep="")
-        plotOutput(plotname)
-    })
-    do.call(tagList, plot_output_list)
-})
 
-observe({
-for (i in 1:length(tp_list())) {
-    local({
-        my_i <- i
-        plotname <- paste("plot", my_i, sep="")
-        output[[plotname]] <- renderPlot({
-            tp_list()[[my_i]]
-        })
-    })
-}
-})
-
-```
-
-```{r}
-
-# renderPlot({
-#     MEAN_PD_DIFF_SY_PLOTS <-
-#     make_mean_pd_diff_sy_plots(plot_crispy(), bond_data, color_gradient)
-#   MEAN_PD_DIFF_SY_PLOTS[[names(MEAN_PD_DIFF_SY_PLOTS)[1]]]
-#   
-#   # for (scenario_name in names(MEAN_PD_DIFF_SY_PLOTS)) {
-#   # MEAN_PD_DIFF_SY_PLOTS[[scenario_name]]  
-#   # }
+# observe({
+# 
 # })
 
-```
-
-```{r}
-
-# MEAN_PD_DIFF_SY_PLOTS <- make_mean_pd_diff_sy_plots(all_crispy, bond_data, color_gradient)
-# bs_carousel(id = "with_the_beatles") %>%
-#   bs_set_data(interval = FALSE) %>%
-#   bs_append(content = bs_carousel_image(src = "img/john.jpg")) %>%
-#   bs_append(content = bs_carousel_image(src = "img/paul.jpg")) %>%
-#   bs_append(content = bs_carousel_image(src = "img/george.jpg")) %>%
-#   bs_append(content = bs_carousel_image(src = "img/ringo.jpg")) 
-
-functional::Compose
 ```
