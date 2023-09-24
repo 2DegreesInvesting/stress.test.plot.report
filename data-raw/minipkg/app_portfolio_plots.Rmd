@@ -6,10 +6,9 @@ runtime: shiny
 
 ```{r include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(fig.width=8, fig.height=6) 
 ```
 
-```{r, echo=FALSE}
+```{r}
 for (r2dii_pkg in c("r2dii.colours", "r2dii.plot", "r2dii.utils")) {
   if (!(r2dii_pkg %in% installed.packages()[,"Package"])) {
     install.packages(file.path(getwd(), "packages", r2dii_pkg),
@@ -19,9 +18,7 @@ for (r2dii_pkg in c("r2dii.colours", "r2dii.plot", "r2dii.utils")) {
   }
 }
 
-requirements <- c("ggplot2", "dplyr", "tidyverse", "scales", "cowplot", "shiny", "slickR"
-                  # ,
-                  # "svglite", "shinyWidgets"
+requirements <- c("ggplot2", "dplyr", "tidyverse", "scales", "cowplot", "shiny", "slickR", "svglite", "shinyWidgets"
                   )
 for (pkg in requirements) {
   if (!(pkg %in% installed.packages()[,"Package"])) {
@@ -81,13 +78,7 @@ bond_data <- load_bond_data(bonds_input_path)
 all_crispy <- load_multi_crispy_outputs(trisk_output_path)
 ```
 
-The following scenarios are included in the analysis :
-
-```{r, echo=F}
-cat(paste(unique(all_crispy$scenario_duo), collapse = "\n"))
-```
-
-```{r}
+```{r, echo=FALSE, results=FALSE, warning=FALSE}
 #############################################################
 #############################################################
 ################# DEBUG ONLY TODO REMOVE #####################
@@ -97,8 +88,12 @@ all_crispy_newshockyear = all_crispy %>%
   select(-c(company_name))  %>%
   bind_cols(all_crispy %>% select(company_name)%>% sample_frac(size = 1)) %>%
   mutate(shock_year=2020)
+all_crispy_newshockyear <- all_crispy_newshockyear %>% mutate(
+  growth_rate = if_else(scenario_duo == "WEO2021_STEPS__WEO2021_SDS", 1, growth_rate)
+)
 all_crispy <- all_crispy %>%
   bind_rows(all_crispy_newshockyear)
+
 
 ##randomly assign company_ids from portfolio to company_name in crispy
 company_to_name <-
@@ -153,10 +148,6 @@ prettySwitch(
    label = "Collapse/Reset plots", 
    value = TRUE
 )
-collapse_disp <- eventReactive(input$toggleBtn, {
-  input$toggleBtn %% 2 == 0
-})
-
 
 ```
 
@@ -165,18 +156,40 @@ collapse_disp <- eventReactive(input$toggleBtn, {
 
 observe({
   if (!is.null(input$plot_variable)) {
-    available_values <- filtered_crispy() %>%
+    available_values <- all_crispy %>% # TODO all_crispy ou filtered_crispy() ?
       dplyr::distinct(!!rlang::sym(input$plot_variable)) %>%
       dplyr::pull()
-    updateCheckboxGroupInput(session, "variable_values",
-                      choices = available_values,
-                      selected = available_values)
+    updateCheckboxGroupInput(session,
+                             "variable_values",
+                             choices = available_values,
+                             selected = available_values)
   }
+  
 })
+
+
+toggle_caroussel <-
+  reactive({
+    if (is.null(input$toggleBtn)) {
+      T
+    } else {
+      input$toggleBtn
+    }
+  })
+
+
+plot_variable.r <-
+  reactive({
+    if (is.null(input$plot_variable)) {
+      "shock_year"
+    } else {
+      input$plot_variable
+    }
+  })
 ```
 
 
-```{r}
+```{r, echo=FALSE}
 # filter dataset
 
 filtered_crispy <- reactive({
@@ -198,132 +211,60 @@ filtered_crispy <- reactive({
 
 # Compute indicators
 ```{r}
-scenario_weights <- reactive({compute_scenario_weights(all_crispy)})
+scenario_weights <- reactive({compute_scenario_weights(filtered_crispy())})
 ```
 
 
 # MEAN PD DIFF SY PLOT
 
-```{r}
+```{r, echo=FALSE}
+
 tp_list <- reactive({
-    make_mean_pd_diff_sy_plots(filtered_crispy(), bond_data, color_gradient)
-})
-```
-
-
-
-<!-- ```{r} -->
-<!-- renderUI({ -->
-
-<!--           plot_output_list <- lapply(1:length(tp_list()), function(i) { -->
-<!--         plotname <- paste("plot", i, sep="") -->
-<!--         plotOutput(plotname) -->
-<!--     }) -->
-<!--     do.call(tagList, plot_output_list) -->
-
-<!-- }) -->
-
-
-
-<!-- observe({ -->
-
-<!--     for (i in 1:length(tp_list())) { -->
-<!--     local({ -->
-<!--         my_i <- i -->
-<!--         plotname <- paste("plot", my_i, sep="") -->
-<!--         output[[plotname]] <- renderPlot({ -->
-<!--             tp_list()[[my_i]] -->
-<!--         }) -->
-<!--     }) -->
-<!--     } -->
-
-
-<!-- }) -->
-<!-- ``` -->
-
-
-
-```{r}
-  renderUI({
-  if (input$toggleBtn) {
-    slickR::slickROutput("slick_output", width = '100%', height = '200%')
-  } else{
-    plot_output_list <- lapply(1:length(tp_list()), function(i) {
-      plotname <- paste("plot", i, sep = "")
-      plotOutput(plotname)
-    })
-    do.call(tagList, plot_output_list)
-  }
+  make_mean_pd_diff_sy_plots(filtered_crispy(),
+                             bond_data,
+                             color_gradient,
+                             plot_variable.r())
 })
 
-observeEvent(c(collapse_disp(), filtered_crispy()), {
+renderUI({
+    if (toggle_caroussel()) {
+      slickR::slickROutput("slick_output", width = '100%', height = '200%')
+    } else{
+      plot_output_list <- lapply(1:length(tp_list()), function(i) {
+        plotname <- paste("plot", i, sep = "")
+        plotOutput(plotname)
+      })
+      do.call(tagList, plot_output_list)
+    }
+  })
 
-  
-  if (input$toggleBtn) {
-    for (i in 1:length(tp_list())) {
-      local({
-        my_i <- i
-        plotname <- paste("plot", my_i, sep = "")
-        output[[plotname]] <- renderPlot({
-          tp_list()[[my_i]]
+  observe({
+    if (toggle_caroussel()) {
+      for (i in 1:length(tp_list())) {
+        local({
+          my_i <- i
+          plotname <- paste("plot", my_i, sep = "")
+          output[[plotname]] <- renderPlot({
+            tp_list()[[my_i]]
+          })
         })
+      }
+    }
+    else{
+      output$slick_output <- slickR::renderSlickR({
+        svg_plot_list <- lapply(tp_list(), function(x) {
+          svglite::xmlSVG(show(x), standalone = TRUE)
+        })
+        slickR::slickR(svg_plot_list,) +
+          slickR::settings(
+            slidesToShow = 2,
+            centerMode = TRUE,
+            dots = T,
+            infinite = F
+          )
       })
     }
-  }
-  else{
-    output$slick_output <- slickR::renderSlickR({
-      slickR::slickR(lapply(tp_list(), function(x) {
-        svglite::xmlSVG(show(x), standalone = TRUE)
-      }), ) +
-        slickR::settings(
-          slidesToShow = 2,
-          centerMode = TRUE,
-          dots = T,
-          infinite = F
-        )
-    })
-  }
-    
-})
 
-# # 
-# # 
-# observe({
-#   # if (caroussel_toggled()){
-#     for (i in 1:length(tp_list())) {
-#     local({
-#         my_i <- i
-#         plotname <- paste("plot", my_i, sep="")
-#         output[[plotname]] <- renderPlot({
-#             tp_list()[[my_i]]
-#         })
-#     })
-#     }
-#   # }
-#   #   else{
-#   output$slick_output <- slickR::renderSlickR({
-#     slickR::slickR(lapply(tp_list(), function(x) {
-#       svglite::xmlSVG(show(x), standalone = TRUE)
-#     }),) +
-#       slickR::settings(
-#         slidesToShow = 2,
-#         centerMode = TRUE,
-#         dots = T,
-#         infinite = F
-#       )
-#   })
-#     # }
-# })
-```
-
-```{r}
-#' tp_list: reactive variable, list of plots
-# render_loop_plot_list <- function(tp_list)
-
-
-
-# observe({
-# 
-# })
+  })
 
 ```
