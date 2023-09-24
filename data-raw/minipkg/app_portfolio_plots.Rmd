@@ -1,0 +1,291 @@
+---
+title: "App Bonds Portfolio Plots"
+output: html_document
+runtime: shiny
+---
+
+```{r include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.width=8, fig.height=6) 
+```
+
+```{r, echo=FALSE}
+for (r2dii_pkg in c("r2dii.colours", "r2dii.plot", "r2dii.utils")) {
+  if (!(r2dii_pkg %in% installed.packages()[,"Package"])) {
+    install.packages(file.path(getwd(), "packages", r2dii_pkg),
+                     repos = NULL,
+                     type = "source")
+  }
+}
+
+requirements <- c("ggplot2", "dplyr", "tidyverse", "scales", "cowplot", "shiny", "slickR")
+for (pkg in requirements) {
+  if (!(pkg %in% installed.packages()[,"Package"])) {
+    install.packages(pkg, character.only = TRUE)
+  }
+  
+}
+```
+
+```{r echo=FALSE, message=FALSE, results=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(scales)
+library(cowplot)
+library(shiny)
+library(slickR)
+library(svglite)
+library(r2dii.colours)
+library(r2dii.plot)
+library(r2dii.utils)
+source(file.path(getwd(), "scripts", "dataload.R"))
+source(file.path(getwd(), "scripts", "utils.R"))
+source(file.path(getwd(), "scripts", "portfolio_plots.R"))
+```
+
+<!-- ```{r} -->
+
+<!-- fileInput("equity_input_file", "Choose CSV File") -->
+
+<!-- fileInput("bonds_input_file", "Choose CSV File") -->
+
+<!-- fileInput("trisk_outputs_folder_files", "Choose CSV File") -->
+
+<!-- ``` -->
+
+```{r}
+equity_input_path <- file.path(getwd(), "data", "exposures_per_ar_id.csv")
+bonds_input_path <- file.path(getwd(), "data", "matched_bond_data.csv")
+trisk_output_path <- file.path(getwd(), "data", "trisk_runs")
+color_gradient <- c("#FFC0C0", "#FF8888", "#FF6666", "#FF4444", "#FF2222", "#FF0000")
+```
+
+Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
+
+```{r, results=FALSE, warning=FALSE}
+################################################################################
+# LOAD Exposure data
+equity_exposures <- load_equity_exposures(equity_input_path)
+## LOAD Bond data
+bond_data <- load_bond_data(bonds_input_path)
+
+################################################################################
+# LOAD in different crispy runs
+all_crispy <- load_multi_crispy_outputs(trisk_output_path)
+```
+
+The following scenarios are included in the analysis :
+
+```{r, echo=F}
+cat(paste(unique(all_crispy$scenario_duo), collapse = "\n"))
+```
+
+```{r}
+#############################################################
+#############################################################
+################# DEBUG ONLY TODO REMOVE #####################
+
+##randomly shuffle dataset to create a 2nd shock_year
+all_crispy_newshockyear = all_crispy %>%
+  select(-c(company_name))  %>%
+  bind_cols(all_crispy %>% select(company_name)%>% sample_frac(size = 1)) %>%
+  mutate(shock_year=2020)
+all_crispy <- all_crispy %>%
+  bind_rows(all_crispy_newshockyear)
+
+##randomly assign company_ids from portfolio to company_name in crispy
+company_to_name <-
+  dplyr::bind_cols(
+    (all_crispy %>% distinct(company_name) %>% sample_frac(size = 1))[1:nrow(equity_exposures %>% distinct(company_id)), ],
+    equity_exposures %>% distinct(company_id) %>% sample_frac(size = 1)
+  )
+all_crispy <- all_crispy %>% inner_join(company_to_name)
+
+
+################# DEBUG ONLY TODO REMOVE #####################
+#############################################################
+#############################################################
+
+```
+
+Compute weights
+
+```{r}
+# TODO PQ filter term and not group by term ?
+
+total_npv_weights <- all_crispy %>%
+  dplyr::filter(term == 1) %>%
+  group_by(scenario_duo, company_id) %>%
+  summarize(sum_NPV_total = sum(net_present_value_baseline), .groups="drop")
+
+sector_npv_weights <- all_crispy %>%
+  dplyr::filter(term == 1) %>%
+  group_by(scenario_duo, sector, company_id) %>%
+  summarize(sum_NPV_sector = sum(net_present_value_baseline), .groups="drop")
+
+scenario_weights <- dplyr::inner_join(total_npv_weights, sector_npv_weights, by=c("scenario_duo", "company_id"))
+```
+
+# PLOTS
+
+```{r br, echo=FALSE}
+
+inputPanel(
+  selectInput(
+    "plot_variable",
+    "Choose variable to analyze in plots",
+    choices = c(
+      "scenario_geography",
+      "risk_free_rate",
+      "discount_rate",
+      "dividend_rate",
+      "growth_rate",
+      "shock_year"
+    ),
+    selected = "shock_year",
+    multiple = FALSE
+  ),
+  
+  checkboxGroupInput(
+    "variable_values",
+    label = "variable values",
+    choices = c()),
+  
+  checkboxGroupInput(
+  "scenario_names",
+  label = "Pick scenarios",
+  choices = unique(all_crispy$scenario_duo),
+  selected= unique(all_crispy$scenario_duo))
+)
+
+
+
+observe({
+  if (!is.null(input$plot_variable)) {
+    available_values <- all_crispy %>%
+      dplyr::distinct(!!rlang::sym(input$plot_variable)) %>%
+      dplyr::pull()
+    updateCheckboxGroupInput(session, "variable_values",
+                      choices = available_values,
+                      selected = available_values)
+  }
+})
+```
+
+```{r}
+plot_crispy <- reactive({
+  if (!is.null(input$plot_variable) &
+      !is.null(input$variable_values) &
+      !(is.null(input$scenario_names))){
+  all_crispy %>%
+    dplyr::filter(
+      !!rlang::sym(input$plot_variable) %in% c(input$variable_values),
+      "scenario_duo" %in% c(input$scenario_names)
+    )
+  }
+  else{
+    all_crispy
+  }
+})
+
+```
+
+```{r}
+# renderTable({glimpse(plot_crispy())})
+# tableOutput({plot_crispy()})
+```
+
+################################## MEAN PD DIFF SY PLOT
+
+```{r}
+slickR::slickROutput("slick_output",width='100%',height='200px')
+
+
+observe({
+  
+  MEAN_PD_DIFF_SY_PLOTS = make_mean_pd_diff_sy_plots(plot_crispy(), bond_data, color_gradient)
+  
+  output$slick_output <- slickR::renderSlickR({
+    x <- slickR::slickR(
+      lapply(MEAN_PD_DIFF_SY_PLOTS, function(x) {svglite::xmlSVG(show(x), standalone = TRUE)}),
+      # slideId = 'slick1',
+      # height = '200px',
+      # width = '100'
+    ) +
+      slickR::settings(slidesToShow = 1, centerMode = TRUE)
+    
+    # y <- slickR(unname(MEAN_PD_DIFF_SY_PLOTS),
+    #             slideId = 'slick2',
+    #             height = 600,
+    #             width = '50%') + 
+    #   settings(slidesToShow=3,centerMode=TRUE)    
+    # 
+    # switch(input$slick_type,
+    #        'single' = x,
+    #        'stack'  = x %stack% y,
+    #        'synch'  = x %synch% y
+    #        )
+    x
+
+  })
+
+})
+```
+
+```{r}
+#' tp_list: reactive variable, list of plots
+# render_loop_plot_list <- function(tp_list)
+
+tp_list <- reactive({
+    make_mean_pd_diff_sy_plots(plot_crispy(), bond_data, color_gradient)
+})
+
+renderUI({
+    plot_output_list <- lapply(1:length(tp_list()), function(i) {
+        plotname <- paste("plot", i, sep="")
+        plotOutput(plotname)
+    })
+    do.call(tagList, plot_output_list)
+})
+
+observe({
+for (i in 1:length(tp_list())) {
+    local({
+        my_i <- i
+        plotname <- paste("plot", my_i, sep="")
+        output[[plotname]] <- renderPlot({
+            tp_list()[[my_i]]
+        })
+    })
+}
+})
+
+```
+
+```{r}
+
+# renderPlot({
+#     MEAN_PD_DIFF_SY_PLOTS <-
+#     make_mean_pd_diff_sy_plots(plot_crispy(), bond_data, color_gradient)
+#   MEAN_PD_DIFF_SY_PLOTS[[names(MEAN_PD_DIFF_SY_PLOTS)[1]]]
+#   
+#   # for (scenario_name in names(MEAN_PD_DIFF_SY_PLOTS)) {
+#   # MEAN_PD_DIFF_SY_PLOTS[[scenario_name]]  
+#   # }
+# })
+
+```
+
+```{r}
+
+# MEAN_PD_DIFF_SY_PLOTS <- make_mean_pd_diff_sy_plots(all_crispy, bond_data, color_gradient)
+# bs_carousel(id = "with_the_beatles") %>%
+#   bs_set_data(interval = FALSE) %>%
+#   bs_append(content = bs_carousel_image(src = "img/john.jpg")) %>%
+#   bs_append(content = bs_carousel_image(src = "img/paul.jpg")) %>%
+#   bs_append(content = bs_carousel_image(src = "img/george.jpg")) %>%
+#   bs_append(content = bs_carousel_image(src = "img/ringo.jpg")) 
+
+functional::Compose
+```
