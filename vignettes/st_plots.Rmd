@@ -1,13 +1,23 @@
 ---
-title: "Draft ST plots"
-output:
-  html_document: default
-  pdf_document: default
+title: "st_plots"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{st_plots}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-```{r include = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
 knitr::opts_chunk$set(fig.width=8, fig.height=6) 
+
+```
+
+```{r setup}
+library(stress.test.plot.report)
 ```
 
 # Data preparation

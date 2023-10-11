@@ -1,19 +1,21 @@
 ---
-title: "Draft ST plots"
-output:
-  html_document: default
-  pdf_document: default
+title: "st_plots_using_functions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{st_plots_using_functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-```{r include = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(fig.width=8, fig.height=6) 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
 ```
 
-Load functions.
-
-```{r}
-devtools::load_all()
+```{r setup}
+library(stress.test.plot.report)
 ```
 
 Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
