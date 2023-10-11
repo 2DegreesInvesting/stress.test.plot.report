@@ -1,3 +1,7 @@
+# TODO REMOVE THIS SCRIPT AND REWRITE IN PYTHON
+# ALL INFRA IN PYTHON
+
+
 #' In a terminal opened in the project folder,
 #' execute this command to start a local mlflow server :
 #'  mlflow server --backend-store-uri ~/mlflow_outputs/mlruns --default-artifact-root ~/mlflow_outputs/mlartifacts --serve-artifacts --host 127.0.0.1 --port 5000
@@ -77,6 +81,25 @@ collect_and_aggregate_crispys <- function(all_runs) {
 
 
 
+collect_artifacts <-
+  function(output_dir,
+            run_id,
+            save_name) {
+    dir.create(output_dir, showWarnings = F)
+    artifacts_path <-
+      mlflow::mlflow_download_artifacts(path = "", run_id = run_id)
+
+    # TODO rewrite here with connection to cloud
+    file.copy(from = file.path(artifacts_path, "artifacts.zip"),
+              to = output_dir)
+    file.rename(
+      from = file.path(output_dir, "artifacts.zip"),
+      to = file.path(output_dir, paste0(save_name, ".zip"))
+    )
+  }
+
+
+
 
 
 #' Artifacts collect
@@ -92,21 +115,6 @@ collect_and_aggregate_crispys <- function(all_runs) {
 download_experiment_outputs <- function(all_runs,
                                         output_dir,
                                         unzip = F) {
-  collect_artifacts <-
-    function(output_dir,
-             run_id,
-             save_name) {
-      dir.create(output_dir, showWarnings = F)
-      artifacts_path <-
-        mlflow::mlflow_download_artifacts(path = "", run_id = run_id)
-      file.copy(from = file.path(artifacts_path, "artifacts.zip"),
-                to = output_dir)
-      file.rename(
-        from = file.path(output_dir, "artifacts.zip"),
-        to = file.path(output_dir, paste0(save_name, ".zip"))
-      )
-    }
-
 
   for (run_id in all_runs[["run_uuid"]]) {
     shock_scen <- (all_runs[all_runs$run_uuid == run_id,] %>%
