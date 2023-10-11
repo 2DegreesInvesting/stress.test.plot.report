@@ -26,7 +26,7 @@ Read in the first data set. Put the outputs of a stress test run into
 'data/data1' folder of this project to run the code successfully.
 
 ```{r}
-st_output_path1 <- here::here("data/data1")
+st_output_path1 <- here::here("data", "initial repo")
 
 expected_loss_file <- here::here(st_output_path1, "loans_company_expected_loss_standard.csv")
 data_expected_loss1 <- read.csv(expected_loss_file)
@@ -45,7 +45,7 @@ Read in the second data set. Put the outputs of a stress test run into
 'data/data1' folder of this project to run the code successfully.
 
 ```{r}
-st_output_path2 <- here::here("data/data2")
+st_output_path2 <- here::here("data", "initial repo")
 
 expected_loss_file <- here::here(st_output_path2, "loans_company_expected_loss_standard.csv")
 data_expected_loss2 <- read.csv(expected_loss_file)

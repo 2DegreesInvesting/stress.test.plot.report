@@ -1,7 +1,7 @@
-load_loans_data <- function(bonds_input_path){
+load_loans_data <- function(loans_input_path){
 
   loans_data <- readr::read_csv(
-    bonds_input_path,
+    loans_input_path,
     col_types = readr::cols_only(
       bank="c",
       company_name = "c",
