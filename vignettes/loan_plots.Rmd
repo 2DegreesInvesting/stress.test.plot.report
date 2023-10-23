@@ -31,8 +31,8 @@ Load the data :
 Fill in the input path for the bond dataset and the stress test directory containing multiple trisk runs :
 
 ```{r}
-loans_input_path <- file.path(getwd(), "data", "loans_template.csv")
-trisk_output_path <- file.path(getwd(), "data", "stress_test_runs")
+loans_input_path <- file.path(getwd(), "data", "indonesia_sample","loans_template.csv")
+trisk_output_path <- file.path(getwd(), "data", "indonesia_sample", "stress_test_runs")
 ```
 
 ```{r, results=FALSE, warning=FALSE, echo=FALSE}
