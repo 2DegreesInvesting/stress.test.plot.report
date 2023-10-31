@@ -22,25 +22,17 @@ library(stress.test.plot.report)
 Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
 
 ```{r}
-st_output_path <- here::here("data", "initial repo")
+maturity_month_term_bridge_fp = here::here("data","maturity_month_term_bridge.csv")
+maturity_month_term_bridge <- readr::read_csv(maturity_month_term_bridge_fp)
 
-expected_loss_file <- here::here(st_output_path, "loans_company_expected_loss_standard.csv")
-data_expected_loss <- read.csv(expected_loss_file)
-# Expected loss data preparation. Initial filtering and assigning variables to plot. The values are turned into millions.
-data_plot <- prepare_for_exposure_plot(data_expected_loss)
-data_summary <- prepare_for_summary_plot(data_expected_loss)
-data_el <- prepare_for_el_plots(data_expected_loss)
+portfolio_data_path <- here::here("data-raw/synthetic_portfolio.csv")
+portfolio_data <- load_portfolio_data(portfolio_data_path) |>
+  map_portfolio_maturity_to_term(maturity_month_term_bridge, start_year=2022)
 
-pd_file <- here::here(st_output_path, "loans_portfolio_pd_changes_overall_standard.csv")
-data_pd <- read.csv(pd_file)
-data_pd <- prepare_for_pd_plot(data_pd)
+crispy_output_dir <- here::here("data-raw/synthetic_crispy")
+multi_crispy <- load_multiple_crispy(crispy_output_dir)
 
-pd_annual_file <- here::here(st_output_path, "loans_portfolio_pd_changes_annual_standard.csv")
-data_pd_annual <- read.csv(pd_annual_file)
-data_pd_annual <- prepare_for_pd_annual_plot(data_pd_annual) 
-
-value_changes_file <- here::here(st_output_path, "loans_portfolio_value_changes_standard.csv")
-data_val_change <- read.csv(value_changes_file)
+analysis_data <- create_analysis_data(portfolio_data, multi_crispy)
 ```
 
 # Exposure plots
