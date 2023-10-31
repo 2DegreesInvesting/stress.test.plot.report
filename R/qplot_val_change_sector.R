@@ -1,3 +1,11 @@
+#' Title
+#'
+#' @param data
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qplot_val_change_sector <- function(data) {
     p_perc <- qplot_val_change_sector_perc(data)
 
@@ -6,6 +14,15 @@ qplot_val_change_sector <- function(data) {
     p
 }
 
+#' Title
+#'
+#' @param data
+#' @param y_val_name
+#'
+#' @return
+#' @export
+#'
+#' @examples
 plot_value_change_coloured <- function(data, y_val_name) {
   p <- ggplot(
     data,
@@ -35,6 +52,14 @@ plot_value_change_coloured <- function(data, y_val_name) {
   )
 }
 
+#' Title
+#'
+#' @param data
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qplot_val_change_sector_perc <- function(data) {
   data_plt <- data %>%
       group_by(ald_sector) %>%
@@ -50,6 +75,14 @@ qplot_val_change_sector_perc <- function(data) {
   p
 }
 
+#' Title
+#'
+#' @param data
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qplot_val_change_sector_abs <- function(data) {
   data_plt <- data %>%
       group_by(ald_sector) %>%

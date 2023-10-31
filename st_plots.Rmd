@@ -32,7 +32,7 @@ library(stringr)
 Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
 
 ```{r}
-st_output_path <- here("data")
+st_output_path <- here("data", "initial repo")
 
 expected_loss_file <- here(st_output_path, "loans_company_expected_loss_standard.csv")
 data_expected_loss <- read.csv(expected_loss_file)
