@@ -33,14 +33,14 @@ compute_analysis_metrics <- function(analysis_data) {
       exposure_at_default = .data$exposure_value_usd * .data$loss_given_default,
       expected_loss = .data$exposure_at_default * .data$pd_portfolio,
 
-      exposure_at_default_baseline = .data$net_present_value_baseline * .data$loss_given_default,
-      expected_loss_baseline = .data$exposure_at_default_baseline * .data$pd_baseline,
+      # exposure_at_default_baseline = .data$net_present_value_baseline * .data$loss_given_default,
+      expected_loss_baseline = .data$exposure_at_default * .data$pd_baseline,
 
-      exposure_at_default_shock = .data$net_present_value_shock * .data$loss_given_default,
-      expected_loss_shock = .data$exposure_at_default_shock * .data$pd_shock,
+      # exposure_at_default_shock = .data$net_present_value_shock * .data$loss_given_default,
+      expected_loss_shock = .data$exposure_at_default * .data$pd_shock,
 
-      pd_difference_shock = (.data$pd_portfolio - .data$pd_shock) / .data$pd_portfolio,
-      pd_difference_st = (.data$pd_baseline - .data$pd_shock) / .data$pd_baseline
+      pd_difference_shock = .data$pd_portfolio - .data$pd_shock,
+      pd_difference_st = .data$pd_baseline - .data$pd_shock
     )
 
   return(analysis_data)
