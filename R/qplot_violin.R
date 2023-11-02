@@ -1,9 +1,9 @@
 qplot_violin <- function(data) {
   data <- remove_outliers(data)
-  ggplot(data, aes(x = .data$group_variable, y = .data$value_to_plot, colour = .data$value_to_plot)) +
+  ggplot(data, aes(x = .data$group_variable, y = .data$value_to_plot, colour = data$value_to_plot)) +
   geom_violin() +
   geom_jitter(alpha = 0.5) +
-  scale_colour_gradient(
+  scale_color_gradient(
     low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
     high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
     name = "Exposure (millions)"
@@ -21,3 +21,5 @@ qplot_violin <- function(data) {
   ) +
   facet_wrap(~.data$group_variable, scales = "free")
 }
+
+

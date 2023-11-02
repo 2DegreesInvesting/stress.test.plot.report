@@ -1,17 +1,14 @@
-prepare_for_exposure_plot <- function(data) {
-  out <- data %>%
-  mutate(
-    value_to_plot = .data$exposure_at_default,
-    group_variable = .data$ald_sector
-    ) %>%
-  mutate(
-    value_to_plot = .data$value_to_plot / 10^6
-  ) %>%
-  group_by(.data$group_variable) %>%
-  mutate(
+prepare_for_exposure_plot <- function(analysis_data, group_variable_char, value_to_plot_char) {
+  data_exposure_plot <- analysis_data |>
+  dplyr::mutate(
+    group_variable = !!rlang::sym(group_variable_char),
+    value_to_plot = !!rlang::sym(value_to_plot_char)
+    ) |>
+  dplyr::group_by(.data$group_variable) |>
+  dplyr::mutate(
     group_mean = mean(.data$value_to_plot, na.rm = TRUE),
     group_sum = sum(.data$value_to_plot, na.rm = TRUE),
     group_max = max(.data$value_to_plot, na.rm = TRUE)
   )
-  out
+  data_exposure_plot
 }

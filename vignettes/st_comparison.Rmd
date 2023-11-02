@@ -1,4 +1,4 @@
----
+<!-----
 title: "st_comparison"
 output: rmarkdown::html_vignette
 vignette: >
@@ -110,3 +110,4 @@ p2 <- qplot_val_change_technology_abs(data_val_change2)
 
 p1 / p2
 ```
+-->

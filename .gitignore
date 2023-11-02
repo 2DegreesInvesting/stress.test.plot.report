@@ -5,7 +5,6 @@
 .DS_Store
 *.html
 *.pdf
-data/
 drafts/
 legacy/
 documentation/

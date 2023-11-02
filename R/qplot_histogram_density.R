@@ -1,7 +1,9 @@
-qplot_histogram_density <- function(data) {
-  phist <- ggplot(data, aes(x = .data$value_to_plot, fill = .data$group_mean)) +
-  geom_histogram(bins = 15) +
-  scale_y_continuous(expand = expansion(mult = c(0, .1))) +
+qplot_histogram_density <- function(data_exposure_plot) {
+  phist <- ggplot(data_exposure_plot, aes(x = .data$value_to_plot, fill = .data$group_mean)) +
+  geom_histogram(bins = 15, stat="identity") +
+  scale_y_continuous(
+    expand = expansion(mult = c(0, .1)),
+                     labels = scales::unit_format(unit = "M", scale = 1e-6)) +
   scale_fill_gradient(
     low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
     high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
@@ -20,7 +22,7 @@ qplot_histogram_density <- function(data) {
   ) +
   facet_wrap(~.data$group_variable, scales = "free")
 
-pdens <- ggplot(data, aes(x = .data$value_to_plot, fill = .data$group_mean)) +
+pdens <- ggplot(data_exposure_plot, aes(x = .data$value_to_plot, fill = .data$group_mean)) +
   geom_density(aes(y = ..scaled..)) +
   scale_y_continuous(expand = expansion(mult = c(0, .1))) +
   scale_fill_gradient(

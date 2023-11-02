@@ -1,4 +1,4 @@
----
+<!-----
 title: "st_plots"
 output: rmarkdown::html_vignette
 vignette: >
@@ -697,4 +697,4 @@ ggplot(data_val_change, aes(x = portfolio_name, y = technology_absolute_value_ch
     title = "Absolute value change per technology",
     y = "Value change\n(currency)"
   )
-```
+```-->

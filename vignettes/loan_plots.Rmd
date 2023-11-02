@@ -1,4 +1,4 @@
----
+<!-----
 title: "loan_plots"
 output: rmarkdown::html_vignette
 vignette: >
@@ -134,3 +134,4 @@ for (plot_name in names(plot_list)){
   plot(plot_list[[plot_name]])
 }
 ```
+-->

@@ -16,24 +16,101 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 devtools::load_all()
-library(stress.test.plot.report)
+# library(stress.test.plot.report)
+
+
+max_portfolio_granularity <-
+  c("portfolio_id",
+    "asset_type",
+    "ald_sector",
+    "ald_business_unit",
+    "term")
+max_crispy_granularity <-  c("run_id",
+                             "scenario_geography",
+                             "ald_sector",
+                             "ald_business_unit",
+                             "term")
+portfolio_crispy_merge_cols <-
+  c("ald_sector", "ald_business_unit", "term")
+
+focus_run_id <- "NGFS2021_MESSAGE_B2DS_Global_no_carbon_tax"
+focus_scenario_geography <- "Global"
 ```
 
 Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
 
 ```{r}
-maturity_month_term_bridge_fp = here::here("data","maturity_month_term_bridge.csv")
-maturity_month_term_bridge <- readr::read_csv(maturity_month_term_bridge_fp)
 
-portfolio_data_path <- here::here("data-raw/synthetic_portfolio.csv")
+
+maturity_month_term_bridge_fp <-
+  here::here("data", "maturity_month_term_bridge.csv")
+maturity_month_term_bridge <-
+  readr::read_csv(maturity_month_term_bridge_fp)
+portfolio_data_path <-
+  here::here("data-raw/synthetic_portfolio.csv")
 portfolio_data <- load_portfolio_data(portfolio_data_path) |>
-  map_portfolio_maturity_to_term(maturity_month_term_bridge, start_year=2022)
+  map_portfolio_maturity_to_term(maturity_month_term_bridge = maturity_month_term_bridge,
+                                 start_year = 2022) |>
+  aggregate_portfolio_facts(group_cols = max_portfolio_granularity)
 
-crispy_output_dir <- here::here("data-raw/synthetic_crispy")
-multi_crispy <- load_multiple_crispy(crispy_output_dir)
 
-analysis_data <- create_analysis_data(portfolio_data, multi_crispy)
+crispy_outputs_dir <- here::here("data-raw/synthetic_crispy")
+multi_crispy <-
+  load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
+  aggregate_crispy_facts(group_cols = max_crispy_granularity)
+
+trisk_runs_params <- 
+  load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
+  get_trisk_params() # TODO load from mlflow
+
+analysis_data <-
+  create_analysis_data(portfolio_data, multi_crispy, portfolio_crispy_merge_cols =
+                         portfolio_crispy_merge_cols)
+analysis_data <- compute_analysis_metrics(analysis_data)
+
+analysis_data <- join_trisk_parameters(analysis_data, trisk_runs_params)
+
+analysis_data_single_run <- analysis_data |>
+  dplyr::filter(.data$run_id == focus_run_id, .data$scenario_geography == focus_scenario_geography)
 ```
+
+
+```{r}
+
+
+
+data_exposure_plot <-
+  prepare_for_exposure_plot(analysis_data_single_run,
+                            group_variable_char = "ald_sector",
+                            value_to_plot_char = "exposure_at_default")
+data_summary_plot <-
+  prepare_for_summary_plot(analysis_data_single_run,
+                           group_variable_char = "ald_sector",
+                           value_to_plot_char = "exposure_at_default")
+data_el_plot <-
+  prepare_for_el_plots(analysis_data_single_run,
+                       group_variable_char = "ald_sector",
+                       value_to_plot_char = "exposure_at_default")
+
+```
+
+
+```{r}
+data_pd <-
+  prepare_for_pd_plot(
+    analysis_data_single_run,
+    group_variable_charvec = c("ald_sector"),
+    value_to_plot_char = "pd_difference_st"
+  )
+data_pd_annual <-
+  prepare_for_pd_annual_plot(
+    analysis_data_single_run,
+    group_variable_char = c("ald_sector", "term", "shock_year"),
+    value_to_plot_char = "pd_difference_st"
+  )
+# data_val_change <- prepare_for_value_change_plot(analysis_data_single_run)
+```
+
 
 # Exposure plots
 
@@ -42,7 +119,7 @@ analysis_data <- create_analysis_data(portfolio_data, multi_crispy)
 Pie chart of exposures summary
 
 ```{r}
-qplot_pie_summaries(data_summary)
+qplot_pie_summaries(data_summary_plot, agg_sum_name_chr="group_sum")
 ```
 
 ## Risk-driving companies (based on exposure)
@@ -50,7 +127,9 @@ qplot_pie_summaries(data_summary)
 10 worst performers - coloured by sector
 
 ```{r fig2, fig.width = 8, fig.height=8}
-qplot_worst_performers(data_plot)
+qplot_worst_performers(data_exposure_plot,
+                       group_variable_char="ald_sector",
+                       performer_entity="ald_business_unit")
 ```
 
 ## Distributions
@@ -58,7 +137,7 @@ qplot_worst_performers(data_plot)
 ### Histograms and densities per sector
 
 ```{r}
-qplot_histogram_density(data_plot) 
+qplot_histogram_density(data_exposure_plot) 
 ```
 
 
@@ -67,13 +146,13 @@ qplot_histogram_density(data_plot)
 Boxplots
 
 ```{r}
-qplot_boxplot(data_plot)
+qplot_boxplot(data_exposure_plot)
 ```
 
 Points distribution with violin
 
 ```{r}
-qplot_violin(data_plot)
+qplot_violin(data_exposure_plot)
 ```
 
 ## PD changes
@@ -100,10 +179,10 @@ qplot_pd_sector(data_pd_annual, annual_pds = TRUE, common_y_axis = TRUE)
 ## EL changes
 
 ```{r fig3, fig.width = 8, fig.height = 8} 
-qplot_el_sector(data_el)
+qplot_el_sector(data_el_plot)
 ```
 ```{r}
-qplot_el_change_sector(data_el)
+qplot_el_change_sector(data_el_plot)
 ```
 
 ## Equity Value changes
