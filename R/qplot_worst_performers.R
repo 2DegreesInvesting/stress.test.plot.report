@@ -31,7 +31,9 @@ qplot_worst_performers <-
       stat = "identity") +
       scale_x_reordered() +
       scale_y_continuous(expand = expansion(mult = c(0, .1))) +
-      scale_fill_2dii("pacta", colour_groups = data_worst_performers$group_variable) +
+      ggplot2::scale_color_manual(breaks=data_summary_plot$group_variable,
+                                  values=r2dii.colours::palette_1in1000_plot[-c(1:2),][c(1:length(unique(data_summary_plot$group_variable))),]$hex )+
+      # scale_fill_2dii("pacta", colour_groups = data_worst_performers$group_variable) +
       coord_flip() +
       theme_2dii() +
       theme(axis.title.y = element_blank(),

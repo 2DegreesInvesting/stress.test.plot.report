@@ -1,42 +1,66 @@
-qplot_val_change <- function(data) {
-  data_plt <- data %>%
-    group_by(portfolio_name) %>%
-    select(portfolio_name, analysed_portfolio_percent_value_change, analysed_portfolio_absolute_value_change) %>%
-    distinct()
+qplot_val_change <- function(data_val_change) {
 
-  p_perc <- plot_value_change(
-    data_plt,
-    y_val_name = "analysed_portfolio_percent_value_change"
-    ) +
-  labs(
-    title = "Analysed portfolio percentage value change",
-    y = "Value change (% points)"
-  )
+  # prepare data for plots
+  group_cols <-
+    colnames(data_val_change)[!colnames(data_val_change) %in% c("value_change_absolute", "value_change_percent")]
+  data_plt <- data_val_change |>
+    tidyr::unite("xaxis_values",
+                 all_of(group_cols),
+                 sep = "-",
+                 remove = TRUE)
 
-  p_abs <- plot_value_change(
-    data_plt,
-    y_val_name = "analysed_portfolio_absolute_value_change"
-    ) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(
-    title = "Analysed portfolio absolute value change",
-    y = "Value change (currency)"
-  )
+  # do plots
+  p_perc <-
+    plot_value_change(data_plt,
+                      is_percentage = TRUE) +
+    labs(title = "Analysed portfolio percentage value change",
+         y = "Value change (% points)")
 
-  p <- (p_perc + patchwork::plot_spacer())/ (p_abs + patchwork::plot_spacer())
+  p_abs <- plot_value_change(data_plt,
+                             is_percentage = FALSE)  +
+    labs(title = "Analysed portfolio absolute value change",
+         y = "Value change (currency)")
+
+
+
+  p <-
+    (p_perc + patchwork::plot_spacer()) / (p_abs + patchwork::plot_spacer())
   p
 }
 
-plot_value_change <- function(data, y_val_name) {
-  p <- ggplot(data, aes_string(x = "portfolio_name", y = y_val_name)) +
-  geom_bar(stat = "identity") +
-  geom_hline(yintercept = 0) +
-  theme_2dii() +
-  theme(
-    legend.position = "none",
-    axis.text.x = element_blank(),
-    axis.ticks.x = element_blank(),
-    axis.title.x = element_blank()
-  )
+plot_value_change <- function(data_plt, is_percentage) {
+  if (is_percentage) {
+    labels <- scales::percent
+    y_val_name <- "value_change_percent"
+  } else {
+    labels <- scales::unit_format(unit = "M", scale = 1e-6)
+    y_val_name <- "value_change_absolute"
+  }
+
+  p <-
+    ggplot(data_plt,
+           aes(x = xaxis_values, y = !!rlang::sym(y_val_name), fill = !!rlang::sym(y_val_name))) +
+    geom_bar(stat = "identity") +
+    geom_hline(yintercept = 0) +
+    theme_2dii() +
+    theme(
+      legend.position = "right",
+      axis.text.x = element_text(angle = 45, hjust=1, size = 10),
+      # axis.ticks.x = element_blank(),
+      axis.title.x = element_blank()
+    ) +
+    scale_fill_gradient(
+      low = r2dii.colours::palette_1in1000_plot %>%
+        filter(.data$label == "red") %>%
+        pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>%
+        filter(.data$label == "green") %>%
+        pull(.data$hex),
+      # midpoint = min(data_plt[,y_val_name]),
+      labels = labels,
+      name = "Expected loss"
+    )  +
+    scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = labels)
+
   p
 }

@@ -19,8 +19,9 @@ create_analysis_data <- function(portfolio_data, multi_crispy, portfolio_crispy_
   return(analysis_data)
 }
 
-#' Title
+#' Compute Analysis Metrics
 #'
+#' @description Function computing financial metrics to use for analysis
 #' @param analysis_data
 #'
 #' @return
@@ -31,7 +32,7 @@ compute_analysis_metrics <- function(analysis_data) {
   analysis_data <- analysis_data |>
     dplyr::mutate(
       exposure_at_default = .data$exposure_value_usd * .data$loss_given_default,
-      expected_loss = .data$exposure_at_default * .data$pd_portfolio,
+      expected_loss_portfolio = .data$exposure_at_default * .data$pd_portfolio,
 
       # exposure_at_default_baseline = .data$net_present_value_baseline * .data$loss_given_default,
       expected_loss_baseline = .data$exposure_at_default * .data$pd_baseline,

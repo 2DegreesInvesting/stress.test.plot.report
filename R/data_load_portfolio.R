@@ -39,13 +39,13 @@ load_portfolio_data <- function(portfolio_data_path) {
 map_portfolio_maturity_to_term <-
   function(portfolio_data,
            maturity_month_term_bridge,
-           start_year = 2022) {
+           trisk_start_year = 2022) {
     min_maturity_month <-
       min(maturity_month_term_bridge$portfolio_maturity_month)
     max_maturity_month <-
       max(maturity_month_term_bridge$portfolio_maturity_month)
 
-    start_date <- as.Date(paste0(start_year, "-01-01"))
+    start_date <- as.Date(paste0(trisk_start_year, "-01-01"))
 
     portfolio_data <- portfolio_data |>
       # dplyr::mutate(portfolio_maturity_month=expiration_date-start_date) |>

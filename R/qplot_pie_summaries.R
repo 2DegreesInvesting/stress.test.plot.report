@@ -22,8 +22,7 @@ qplot_pie_summaries <-
       ggplot2::coord_polar(theta = "y") +
       ggrepel::geom_label_repel(
         aes(
-          label = scales::percent_format(accuracy = 0.01)(.data$perc_of_total)
-          ,
+          label = scales::percent_format(accuracy = 0.01)(.data$perc_of_total),
           y = .data$pos
           #   fill = .data$group_variable,
           #   label = scales::unit_format(unit = "M", scale = 1e-6)(.data$agg_sum_value)
@@ -34,7 +33,9 @@ qplot_pie_summaries <-
         nudge_x = 1,
         show.legend = FALSE
       ) +
-      r2dii.colours::scale_fill_2dii("2dii", colour_groups = data_summary_plot$group_variable) +
+      ggplot2::scale_color_manual(breaks=data_summary_plot$group_variable,
+                                  values=r2dii.colours::palette_1in1000_plot[-c(1:2),][c(1:length(unique(data_summary_plot$group_variable))),]$hex )+
+      # r2dii.colours::scale_fill_2dii("2dii", colour_groups = data_summary_plot$group_variable) +
       r2dii.plot::theme_2dii() +
       ggplot2::theme(
         axis.title = element_blank(),
@@ -71,8 +72,11 @@ qplot_pie_summaries <-
         )
       ) +
       ggplot2::geom_col(width = 1, color = 1) +
-      ggplot2::coord_polar(theta = "y") +
-      r2dii.colours::scale_fill_2dii("pacta", colour_groups = data_summary_plot$group_variable) +
+      ggplot2::coord_polar(theta = "y")  +
+      ggplot2::scale_color_manual(breaks=data_summary_plot$group_variable,
+                                  values=r2dii.colours::palette_1in1000_plot[-c(1:2),][c(1:length(unique(data_summary_plot$group_variable))),]$hex )+
+
+      # r2dii.colours::scale_fill_2dii("pacta", colour_groups = data_summary_plot$group_variable) +
       r2dii.plot::theme_2dii() +
       ggrepel::geom_label_repel(
         aes(

@@ -35,60 +35,68 @@ portfolio_crispy_merge_cols <-
 
 focus_run_id <- "NGFS2021_MESSAGE_B2DS_Global_no_carbon_tax"
 focus_scenario_geography <- "Global"
+
+maturity_month_term_bridge_fp <-
+  here::here("data", "maturity_month_term_bridge.csv")
+portfolio_data_path <-
+  here::here("data-raw/synthetic_portfolio.csv")
+crispy_outputs_dir <- here::here("data-raw/synthetic_crispy")
+
+
+trisk_start_year <- 2022
+
+selected_tab <- "portfolio_id"
 ```
 
 Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
 
 ```{r}
+# load data
+portfolio_data <-
+  main_load_portfolio_data(
+    maturity_month_term_bridge_fp = maturity_month_term_bridge_fp,
+    max_portfolio_granularity = max_portfolio_granularity,
+    trisk_start_year = trisk_start_year
+  )
 
+multi_crispy_data <- main_load_multi_crispy_data(crispy_outputs_dir = crispy_outputs_dir,
+                                                 max_crispy_granularity = max_crispy_granularity)
 
-maturity_month_term_bridge_fp <-
-  here::here("data", "maturity_month_term_bridge.csv")
-maturity_month_term_bridge <-
-  readr::read_csv(maturity_month_term_bridge_fp)
-portfolio_data_path <-
-  here::here("data-raw/synthetic_portfolio.csv")
-portfolio_data <- load_portfolio_data(portfolio_data_path) |>
-  map_portfolio_maturity_to_term(maturity_month_term_bridge = maturity_month_term_bridge,
-                                 start_year = 2022) |>
-  aggregate_portfolio_facts(group_cols = max_portfolio_granularity)
-
-
-crispy_outputs_dir <- here::here("data-raw/synthetic_crispy")
-multi_crispy <-
-  load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
-  aggregate_crispy_facts(group_cols = max_crispy_granularity)
-
-trisk_runs_params <- 
-  load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
-  get_trisk_params() # TODO load from mlflow
+trisk_run_params <- main_load_trisk_run_params(crispy_outputs_dir = crispy_outputs_dir)
 
 analysis_data <-
-  create_analysis_data(portfolio_data, multi_crispy, portfolio_crispy_merge_cols =
-                         portfolio_crispy_merge_cols)
-analysis_data <- compute_analysis_metrics(analysis_data)
-
-analysis_data <- join_trisk_parameters(analysis_data, trisk_runs_params)
-
-analysis_data_single_run <- analysis_data |>
-  dplyr::filter(.data$run_id == focus_run_id, .data$scenario_geography == focus_scenario_geography)
+  main_load_analysis_data(
+    portfolio_data = portfolio_data,
+    multi_crispy_data = multi_crispy_data,
+    trisk_run_params = trisk_run_params,
+    portfolio_crispy_merge_cols = portfolio_crispy_merge_cols
+  )
 ```
 
+
+Filter the trisk data to focus on a single geography/run
+
+```{r}
+analysis_data_single_run <- analysis_data |>
+  dplyr::filter(.data$run_id == focus_run_id,
+                .data$scenario_geography == focus_scenario_geography)
+```
+
+prepare data for plots
 
 ```{r}
 data_exposure_plot <-
   prepare_for_exposure_plot(analysis_data_single_run,
-                            group_variable_char = "ald_sector",
+                            group_variable_char = selected_tab,
                             value_to_plot_char = "exposure_at_default")
 data_summary_plot <-
   prepare_for_summary_plot(analysis_data_single_run,
-                           group_variable_char = "ald_sector",
+                           group_variable_char = selected_tab,
                            value_to_plot_char = "exposure_at_default")
 data_el_plot <-
   prepare_for_el_plots(analysis_data_single_run,
-                       group_variable_char = "ald_sector",
+                       group_variable_char = selected_tab,
                        value_to_plot_char = "exposure_at_default")
-
 ```
 
 
@@ -96,7 +104,7 @@ data_el_plot <-
 data_pd <-
   prepare_for_pd_plot(
     analysis_data_single_run,
-    group_variable_charvec = c("ald_sector", "term", "shock_year"),
+    group_variable_charvec = c("ald_sector", "term"),
     value_to_plot_char = "pd_difference_st"
   )
 # data_pd_annual <-
@@ -105,7 +113,12 @@ data_pd <-
 #     group_variable_char = c("ald_sector", "term", ""),
 #     value_to_plot_char = "pd_difference_st"
 #   )
-# data_val_change <- prepare_for_value_change_plot(analysis_data_single_run)
+data_val_change <-
+  prepare_for_value_change_plot(
+    analysis_data_single_run,
+    group_variable_charvec = c("portfolio_id", "ald_sector"),
+    value_to_plot_char = "shock"
+  )
 ```
 
 
@@ -125,7 +138,7 @@ qplot_pie_summaries(data_summary_plot, agg_sum_name_chr="group_sum")
 
 ```{r fig2, fig.width = 8, fig.height=8}
 qplot_worst_performers(data_exposure_plot,
-                       group_variable_char="ald_sector",
+                       group_variable_char= selected_tab,
                        performer_entity="ald_business_unit")
 ```
 
@@ -197,11 +210,11 @@ qplot_val_change(data_val_change)
 Per sector
 
 ```{r} 
-qplot_val_change_sector(data_val_change)
+qplot_val_change_facet(data_val_change, facet_chr="ald_sector")
 ```
 
 Per technology
 
 ```{r fig4, fig.width = 8, fig.height = 12}
-qplot_val_change_technology(data_val_change)
+# qplot_val_change_facet(data_val_change, facet_chr="ald_business_unit")
 ```
