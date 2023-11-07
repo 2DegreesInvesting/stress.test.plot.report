@@ -1,11 +1,11 @@
 prepare_for_el_plots <-
-  function(analysis_data,
+  function(analysis_data_single_run,
            group_variable_char,
            value_to_plot_char) {
     stopifnot(value_to_plot_char == "exposure_at_default")
 
     data_summary_plot <-
-      prepare_for_summary_plot(analysis_data,
+      prepare_for_summary_plot(analysis_data_single_run,
                                group_variable = group_variable_char,
                                value_to_plot = value_to_plot_char)
 
@@ -13,7 +13,7 @@ prepare_for_el_plots <-
       dplyr::select(-c(perc_of_total))|>
       dplyr::filter(agg_sum_name == "group_sum")
 
-    st_expected_loss <- analysis_data |>
+    st_expected_loss <- analysis_data_single_run |>
       dplyr::rename(group_variable = !!rlang::sym(group_variable_char)) |>
       dplyr::group_by(group_variable) |>
       dplyr::summarise(

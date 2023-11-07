@@ -1,11 +1,13 @@
 prepare_for_summary_plot <-
-  function(analysis_data,
+  function(analysis_data_single_run,
            group_variable_char,
            value_to_plot_char) {
-    data_exposure_plot <-
-      prepare_for_exposure_plot(analysis_data, group_variable_char, value_to_plot_char)
 
-    data_summary_plot <- data_exposure_plot |>
+    data_summary_plot <- analysis_data_single_run |>
+      dplyr::mutate(
+        group_variable = !!rlang::sym(group_variable_char),
+        value_to_plot = !!rlang::sym(value_to_plot_char)
+      )|>
       dplyr::group_by(.data$group_variable) |>
       dplyr::summarise(
         group_sum = sum(.data$value_to_plot, na.rm = TRUE),

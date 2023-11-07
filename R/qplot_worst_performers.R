@@ -1,24 +1,10 @@
 qplot_worst_performers <-
-  function(data_exposure_plot,
-           group_variable_char = "ald_sector",
-           performer_entity = "company_name",
-           n_performers = 10) {
-    data_worst_performers <- data_exposure_plot %>%
-      dplyr::group_by_at(c("group_variable", performer_entity)) %>%
-      summarise(value_to_plot = sum(.data$value_to_plot)) %>%
-      slice_max(order_by = .data$value_to_plot, n = n_performers) %>%
-      ungroup() %>%
-      mutate(company_name = reorder_within(
-        !!rlang::sym(performer_entity),
-        .data$value_to_plot,
-        .data$group_variable
-      ))
-
+  function(data_performers_plot) {
 
     p <- ggplot(
-      data_worst_performers,
+      data_performers_plot,
       aes(
-        x = !!rlang::sym(performer_entity),
+        x = .data$performer_variable,
         y =  .data$value_to_plot,
         fill = .data$group_variable
       )
@@ -30,7 +16,7 @@ qplot_worst_performers <-
       ),
       stat = "identity") +
       scale_x_reordered() +
-      scale_y_continuous(expand = expansion(mult = c(0, .1))) +
+      scale_y_continuous(expand = expansion(mult = c(0, .1)), label = scales::unit_format(unit = "M", scale = 1e-6)) +
       ggplot2::scale_color_manual(breaks=data_summary_plot$group_variable,
                                   values=r2dii.colours::palette_1in1000_plot[-c(1:2),][c(1:length(unique(data_summary_plot$group_variable))),]$hex )+
       # scale_fill_2dii("pacta", colour_groups = data_worst_performers$group_variable) +
@@ -49,11 +35,11 @@ qplot_worst_performers <-
         ncol = 1
       ) +
       labs(
-        title = paste0(
-          performer_entity,
-          " with the highest exposure within ",
-          group_variable_char
-        ),
+        # title = paste0(
+        #   performer_entity,
+        #   " with the highest exposure within ",
+        #   group_variable_char
+        # ),
         y = "Exposure"
       )
     p

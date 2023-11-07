@@ -1,3 +1,12 @@
+#' Title
+#'
+#' @param data_summary_plot
+#' @param agg_sum_name_chr "group_sum" or "group_n"
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qplot_pie_summaries <-
   function(data_summary_plot, agg_sum_name_chr) {
     data_pie_summary_perc <- data_summary_plot |>

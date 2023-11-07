@@ -10,13 +10,12 @@
 #'
 #' @examples
 main_load_portfolio_data <-
-  function(maturity_month_term_bridge_fp,
+  function(raw_portfolio_data,
+           maturity_month_term_bridge,
            max_portfolio_granularity,
            trisk_start_year) {
-    maturity_month_term_bridge <-
-      readr::read_csv(maturity_month_term_bridge_fp)
 
-    portfolio_data <- load_portfolio_data(portfolio_data_path) |>
+    portfolio_data <- raw_portfolio_data |>
       map_portfolio_maturity_to_term(maturity_month_term_bridge = maturity_month_term_bridge,
                                      trisk_start_year = trisk_start_year) |>
       aggregate_portfolio_facts(group_cols = max_portfolio_granularity)
