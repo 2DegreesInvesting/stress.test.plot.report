@@ -11,7 +11,7 @@ qplot_val_change_facet <- function(data_val_change, facet_chr) {
 
     # do plots
     p_perc <-  plot_value_change_coloured(data_plt, is_percentage=TRUE) +
-      facet_wrap(as.formula(paste("~", facet_chr)) ) +
+      facet_wrap(as.formula(paste("~", facet_chr))) +
       labs(
         title = "Percentage value change per sector",
         y = "Value change\n(% points)"

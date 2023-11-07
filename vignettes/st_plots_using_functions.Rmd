@@ -90,16 +90,17 @@ prepare data for plots
 
 ```{r}
 data_exposure_plot <-
-  prepare_for_exposure_plot(
+  prepare_for_exposure_plots(
     analysis_data_single_run,
-    group_variable_vec = active_tab,
-    value_to_plot_char = "exposure_at_default" 
+    group_variable_vec = c(active_tab),
+    agg_fn = sum
   )
 data_performers_plot <- prepare_for_performers_plot(
   analysis_data_single_run,
-  group_variable_char = active_tab,
-  performer_variable_char = "ald_business_unit",
-  value_to_plot_char = "exposure_at_default"
+  group_variable_vec = c(active_tab),
+  performer_variable_char="ald_business_unit",
+  performance_metric = "exposure_at_default",
+  n_performers = 10
 )
 data_summary_plot <-
   prepare_for_summary_plot(
@@ -154,10 +155,12 @@ qplot_pie_summaries(data_summary_plot, agg_sum_name_chr="group_sum")
 
 ```{r fig2, fig.width = 8, fig.height=8}
 qplot_worst_performers(data_performers_plot, 
-  group_variable_char = active_tab,
-  performer_variable_char = "ald_business_unit",
-  value_to_plot_char = "exposure_at_default"
+  x_var = "ald_business_unit",
+  y_var = "exposure_at_default",
+  fill_var = active_tab,
+  facet_var = active_tab
   )
+
 ```
 
 ## Distributions

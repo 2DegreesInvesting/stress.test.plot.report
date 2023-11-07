@@ -1,4 +1,4 @@
-qplot_histogram_density <- function(data_exposure_plot) {
+qplot_histogram_density <- function(data_exposure_plot, plot_variable) {
   phist <-
     ggplot(data_exposure_plot,
            aes(x = .data$value_to_plot,  fill = .data$group_mean)) +
