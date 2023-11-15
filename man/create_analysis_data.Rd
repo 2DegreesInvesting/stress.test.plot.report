@@ -4,11 +4,12 @@
 \alias{create_analysis_data}
 \title{Title}
 \usage{
-create_analysis_data(portfolio_data, multi_crispy)
+create_analysis_data(portfolio_data, multi_crispy, portfolio_crispy_merge_cols)
 }
 \arguments{
 \item{multi_crispy}{}
 }
 \description{
-Title
+\subsection{TODO HOW TO HANDLE ENTRIES IN PORTFOLIO, THAT ARE MISSING IN CRISPY ?}{
+}
 }

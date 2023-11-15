@@ -4,7 +4,7 @@
 \alias{load_multiple_crispy}
 \title{Title}
 \usage{
-load_multiple_crispy(crispy_outputs_dir)
+load_multiple_crispy(crispy_outputs_dir, max_granularity)
 }
 \arguments{
 \item{crispy_outputs_dir}{}

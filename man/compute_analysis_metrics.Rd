@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_preproc_analysis.R
 \name{compute_analysis_metrics}
 \alias{compute_analysis_metrics}
-\title{Title}
+\title{Compute Analysis Metrics}
 \usage{
 compute_analysis_metrics(analysis_data)
 }
@@ -10,5 +10,5 @@ compute_analysis_metrics(analysis_data)
 \item{analysis_data}{}
 }
 \description{
-Title
+Function computing financial metrics to use for analysis
 }
