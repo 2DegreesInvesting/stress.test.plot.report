@@ -45,7 +45,7 @@ crispy_outputs_dir <- here::here("data-raw/synthetic_crispy")
 
 trisk_start_year <- 2022
 
-active_tab <- "portfolio_id"
+active_tab <- "portfolio.portfolio_id"
 ```
 
 Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
@@ -82,23 +82,22 @@ Filter the trisk data to focus on a single geography/run
 
 ```{r}
 analysis_data_single_run <- analysis_data |>
-  dplyr::filter(.data$run_id == focus_run_id,
-                .data$scenario_geography == focus_scenario_geography)
+  dplyr::filter(.data$crispy.run_id == focus_run_id,
+                .data$crispy.scenario_geography == focus_scenario_geography)
 ```
 
 prepare data for plots
 
 ```{r}
-data_exposure_plot <-
-  prepare_for_exposure_plots(
+prepare_for_exposure_plot(
     analysis_data_single_run,
-    group_variable_vec = c(active_tab),
-    agg_fn = sum
+    group_variable_char = active_tab,
+    value_to_plot_char = "exposure_at_default" 
   )
 data_performers_plot <- prepare_for_performers_plot(
   analysis_data_single_run,
   group_variable_vec = c(active_tab),
-  performer_variable_char="ald_business_unit",
+  performer_variable_char="portfolio.ald_business_unit",
   performance_metric = "exposure_at_default",
   n_performers = 10
 )
@@ -121,8 +120,8 @@ data_el_plot <-
 data_pd <-
   prepare_for_pd_plot(
     analysis_data_single_run,
-    group_variable_charvec = c("ald_sector", "term"),
-    value_to_plot_char = "pd_difference_st"
+    group_variable_charvec = c("portfolio.ald_sector", "portfolio.term"),
+    value_to_plot_char = "pd_difference"
   )
 # data_pd_annual <-
 #   prepare_for_pd_annual_plot(
@@ -133,7 +132,7 @@ data_pd <-
 data_val_change <-
   prepare_for_value_change_plot(
     analysis_data_single_run,
-    group_variable_charvec = c("portfolio_id", "ald_sector"),
+    group_variable_charvec = c("portfolio.ald_sector", "portfolio.term"),
     value_to_plot_char = "shock"
   )
 ```
@@ -155,7 +154,7 @@ qplot_pie_summaries(data_summary_plot, agg_sum_name_chr="group_sum")
 
 ```{r fig2, fig.width = 8, fig.height=8}
 qplot_worst_performers(data_performers_plot, 
-  x_var = "ald_business_unit",
+  x_var = "portfolio.ald_business_unit",
   y_var = "exposure_at_default",
   fill_var = active_tab,
   facet_var = active_tab
@@ -168,7 +167,10 @@ qplot_worst_performers(data_performers_plot,
 ### Histograms and densities per sector
 
 ```{r}
-qplot_histogram_density(data_exposure_plot) 
+qplot_histogram_density(data_exposure_plot |> dplyr::rename(
+  group_variable=!!rlang::sym(active_tab),
+  value_to_plot=!!rlang::sym("exposure_at_default")
+  )) 
 ```
 
 
@@ -177,13 +179,17 @@ qplot_histogram_density(data_exposure_plot)
 Boxplots
 
 ```{r}
-qplot_boxplot(data_exposure_plot)
+qplot_boxplot(data_exposure_plot|> dplyr::rename(
+  group_variable=!!rlang::sym(active_tab),
+  value_to_plot=!!rlang::sym("exposure_at_default")))
 ```
 
 Points distribution with violin
 
 ```{r}
-qplot_violin(data_exposure_plot)
+qplot_violin(data_exposure_plot|> dplyr::rename(
+  group_variable=!!rlang::sym(active_tab),
+  value_to_plot=!!rlang::sym("exposure_at_default")))
 ```
 
 ## PD changes
@@ -231,7 +237,7 @@ qplot_val_change(data_val_change)
 Per sector
 
 ```{r} 
-qplot_val_change_facet(data_val_change, facet_chr="ald_sector")
+qplot_val_change_facet(data_val_change, facet_chr="portfolio.ald_sector")
 ```
 
 Per technology

@@ -1,7 +1,7 @@
 qplot_val_change_facet <- function(data_val_change, facet_chr) {
   # prepare data for plots
   group_cols <-
-    colnames(data_val_change)[!colnames(data_val_change) %in% c("ald_sector", "value_change_absolute", "value_change_percent")]
+    colnames(data_val_change)[!colnames(data_val_change) %in% c("portfolio.ald_sector", "value_change_absolute", "value_change_percent")]
   data_plt <- data_val_change |>
     tidyr::unite("xaxis_values",
                  all_of(group_cols),

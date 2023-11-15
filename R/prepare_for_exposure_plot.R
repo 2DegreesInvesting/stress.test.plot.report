@@ -12,14 +12,17 @@
 #' @export
 #'
 #' @examples
-prepare_for_exposure_plots <- function(analysis_data,
-                                          group_variable_vec,
-                                          agg_fn) {
-  data_exposure_plot <- analysis_data |>
-  dplyr::select_at(c(group_variable_vec, "exposure_at_default"))|>
-  dplyr::group_by_at(group_variable_vec) |>
+prepare_for_exposure_plot <- function(analysis_data_single_run, group_variable_char, value_to_plot_char) {
+  data_exposure_plot <- analysis_data_single_run |>
   dplyr::mutate(
-    exposure_at_default=agg_fn(.data$exposure_at_default)
+    group_variable = !!rlang::sym(group_variable_char),
+    value_to_plot = !!rlang::sym(value_to_plot_char)
+    ) |>
+  dplyr::group_by_at(group_variable_char) |>
+  dplyr::mutate(
+    group_mean = mean(.data$value_to_plot, na.rm = TRUE),
+    group_sum = sum(.data$value_to_plot, na.rm = TRUE),
+    group_max = max(.data$value_to_plot, na.rm = TRUE)
   )
-  return(data_exposure_plot)
+  data_exposure_plot
 }

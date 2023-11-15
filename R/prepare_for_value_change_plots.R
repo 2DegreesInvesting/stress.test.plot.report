@@ -16,7 +16,7 @@ prepare_for_value_change_plot <- function(analysis_data_single_run, group_variab
     dplyr::group_by(!!! rlang::syms(group_variable_charvec)) |>
     dplyr::summarise(
       grp_expected_loss= sum(value_to_plot),
-      grp_exposure=sum(exposure_value_usd),
+      grp_exposure=sum(portfolio.exposure_value_usd),
       .groups="drop"
       ) |>
     dplyr::mutate(
