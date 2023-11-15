@@ -66,6 +66,14 @@ aggregate_crispy_facts <- function(multi_crispy, group_cols) {
   return(multi_crispy)
 }
 
+#' Title
+#'
+#' @param multi_crispy
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_trisk_params <- function(multi_crispy){
   trisk_runs_params <- multi_crispy |>
     dplyr::distinct(.data$run_id, .data$roll_up_type, .data$baseline_scenario, .data$shock_scenario,
