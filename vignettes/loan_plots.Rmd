@@ -1,4 +1,4 @@
-<!-----
+---
 title: "loan_plots"
 output: rmarkdown::html_vignette
 vignette: >
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 library(stress.test.plot.report)
 ```
 
-To save a plot, right-click on the plot and choose "save as". Then in the window that opens, 
+To save a plot, right-click on the plot and choose "save as". Then in the window that opens,
 write a name for the image and add ".png" at the end. The image can then be found in the destination
 directory.
 
@@ -56,10 +56,10 @@ Selected runs :
 
 plot_run <- c(
 "standard_WEO2021_SDS_AsiaPacific_no_carbon_tax",
-"standard_NGFS2021_MESSAGE_B2DS_Global_no_carbon_tax", 
+"standard_NGFS2021_MESSAGE_B2DS_Global_no_carbon_tax",
 "standard_NGFS2021_GCAM_B2DS_Indonesia_no_carbon_tax",
-"shock_year_NGFS2021_GCAM_B2DS_Indonesia_no_carbon_tax", 
-"standard_NGFS2021_GCAM_B2DS_Indonesia_NDC_Indonesia_moderate", 
+"shock_year_NGFS2021_GCAM_B2DS_Indonesia_no_carbon_tax",
+"standard_NGFS2021_GCAM_B2DS_Indonesia_NDC_Indonesia_moderate",
 "standard_NGFS2021_GCAM_B2DS_Indonesia_NZ2050_Indonesia_market_assumption"
 )
 print(plot_run)
@@ -77,7 +77,7 @@ color_gradient <- list(pd_baseline=c("#999df6", "#7d81fc", "#6063ff", "#3f42ff",
 ```
 
 ```{r, echo=FALSE}
-crispy_plot <- all_crispy %>% 
+crispy_plot <- all_crispy %>%
   dplyr::filter(shock_year %in% plot_shock_year,
                 run_id %in% plot_run)
 
@@ -89,13 +89,13 @@ scenario_weights <- compute_portfolio_weights(loans_data)
 Expected loss for a company in a given bank and sector is computed as follows:
 
 $$
-EL_{company} = pd_{shock} * exposure_{company} * lgd_{company} * weight_{company} 
+EL_{company} = pd_{shock} * exposure_{company} * lgd_{company} * weight_{company}
 $$
 
 with weight for each sector as :
 
 $$
-weight_{company} = \frac{company\ sector\ exposures}{total\ portfolio\ sector\ exposures} 
+weight_{company} = \frac{company\ sector\ exposures}{total\ portfolio\ sector\ exposures}
 $$
 
 The EL for each companies are then summed independantly for each sector and bank to produce the plots.
@@ -115,10 +115,10 @@ for (plot_name in names(plot_list)){
 
 # <span style="color: red;">Average PD plots</span>
 
-The average PD is computed for each sector and bank independantly using this formula : 
+The average PD is computed for each sector and bank independantly using this formula :
 
 $$
-average\ pd_{sector} = \frac{\sum{(pd_{company} * weight_{company})}}{N_{companies}} 
+average\ pd_{sector} = \frac{\sum{(pd_{company} * weight_{company})}}{N_{companies}}
 $$
 
 
@@ -134,4 +134,3 @@ for (plot_name in names(plot_list)){
   plot(plot_list[[plot_name]])
 }
 ```
--->

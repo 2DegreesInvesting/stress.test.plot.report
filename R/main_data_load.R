@@ -75,10 +75,10 @@ main_load_analysis_data <-
     analysis_data <-
       create_analysis_data(portfolio_data, multi_crispy_data, portfolio_crispy_merge_cols)
 
-    analysis_data <- compute_analysis_metrics(analysis_data)
-
     analysis_data <-
       join_trisk_parameters(analysis_data, trisk_run_params)
+
+    analysis_data <- compute_analysis_metrics(analysis_data)
 
     return(analysis_data)
 

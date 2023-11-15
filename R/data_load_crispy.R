@@ -13,7 +13,7 @@ load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
   # Get file paths
   files_path <- list.files(
     path = crispy_outputs_dir,
-    pattern = "^crispy_output_*",
+    pattern = "^crispy_output_.*.parquet",
     recursive = TRUE,
     full.names = TRUE
   )

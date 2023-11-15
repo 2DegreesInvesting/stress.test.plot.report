@@ -1,0 +1,206 @@
+---
+title: "cdi_plots"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{st_plots_using_functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+devtools::load_all()
+# library(stress.test.plot.report)
+
+
+max_portfolio_granularity <-
+  c("portfolio_id",
+    "asset_type",
+    "ald_sector",
+    "ald_business_unit",
+    "term")
+max_crispy_granularity <-  c("run_id",
+                             "scenario_geography",
+                             "ald_sector",
+                             "ald_business_unit",
+                             "term")
+portfolio_crispy_merge_cols <-
+  c("ald_sector", "ald_business_unit", "term")
+
+focus_run_id <- "NGFS2021_MESSAGE_B2DS_Global_no_carbon_tax"
+focus_scenario_geography <- "Global"
+
+maturity_month_term_bridge_fp <-
+  here::here("data", "maturity_month_term_bridge.csv")
+portfolio_data_path <-
+  here::here("data-raw/synthetic_portfolio.csv")
+crispy_outputs_dir <- here::here("data-raw/synthetic_crispy")
+
+
+trisk_start_year <- 2022
+
+active_tab <- "portfolio_id"
+```
+
+Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
+
+```{r}
+# load data
+raw_portfolio_data <- load_portfolio_data(portfolio_data_path) 
+maturity_month_term_bridge <- readr::read_csv(maturity_month_term_bridge_fp)
+
+portfolio_data <-
+  main_load_portfolio_data(
+    raw_portfolio_data=raw_portfolio_data,
+    maturity_month_term_bridge = maturity_month_term_bridge,
+    max_portfolio_granularity = max_portfolio_granularity,
+    trisk_start_year = trisk_start_year
+  )
+
+multi_crispy_data <- main_load_multi_crispy_data(crispy_outputs_dir = crispy_outputs_dir,
+                                                 max_crispy_granularity = max_crispy_granularity)
+
+trisk_run_params <- main_load_trisk_run_params(crispy_outputs_dir = crispy_outputs_dir)
+
+analysis_data <-
+  main_load_analysis_data(
+    portfolio_data = portfolio_data,
+    multi_crispy_data = multi_crispy_data,
+    trisk_run_params = trisk_run_params,
+    portfolio_crispy_merge_cols = portfolio_crispy_merge_cols
+  )
+```
+
+
+Filter the trisk data to focus on a single geography/run
+
+```{r}
+analysis_data_single_run <- analysis_data |>
+  dplyr::filter(.data$crispy.run_id == focus_run_id,
+                .data$crispy.scenario_geography == focus_scenario_geography)
+```
+
+# PLOTS
+
+```{r}
+
+group_variables_vec <- c("portfolio.ald_sector", "portfolio.ald_business_unit", "crispy.shock_year")
+weight_variable <- "portfolio.exposure_value_usd"
+metrics_npv = c("crispy.net_present_value_baseline", "crispy.net_present_value_shock", "net_present_value_difference")
+metrics_pd <-  c("crispy.pd_baseline", "crispy.pd_shock", "pd_difference")
+metrics_el <- c("expected_loss_baseline", "expected_loss_shock")
+
+# weights_data <- analysis_data |>
+#   dplyr::group_by(crispy.run_id) |>
+#   dplyr::group_modify(
+#     ~ compute_sector_weights(
+#       .,
+#       group_variable_vec = group_variable_vec,
+#       weight_variable = weight_variable
+#     )
+#   )
+
+# 
+# weights_data <- analysis_data |>
+#   dplyr::group_by(crispy.run_id) |>
+#   dplyr::group_modify(
+#     ~ compute_sector_weights(
+#       .,
+#       group_variable_vec = group_variables_vec,
+#       weight_variable = weight_variable
+#     )
+#   )|>
+#   dplyr::ungroup()
+
+
+data_cdi_npv_plot <- analysis_data |>
+  dplyr::group_by(crispy.run_id) |>
+  dplyr::group_modify(
+    ~ prepare_for_cdi_npv_plots(
+      .,
+      group_variables_vec = group_variables_vec,
+      metrics = metrics_npv
+    )
+  ) |>
+  dplyr::ungroup()
+  
+
+
+data_cdi_pd_plot <- analysis_data |>
+  dplyr::group_by(crispy.run_id) |>
+  dplyr::group_modify(
+    ~ prepare_for_cdi_pd_plots(
+      .,
+      group_variables_vec = group_variables_vec,
+      metrics = metrics_pd,
+      )    
+  ) |>
+  dplyr::ungroup()
+
+
+data_cdi_el_plot <- analysis_data |>
+  dplyr::group_by(crispy.run_id) |>
+  dplyr::group_modify(
+    ~ prepare_for_cdi_el_plots(
+      .,
+      group_variables_vec = group_variables_vec,
+      metrics = metrics_el
+      )    
+  ) |>
+  dplyr::ungroup()
+
+
+```
+
+
+```{r}
+
+
+for (run_id_name in unique(data_cdi_el_plot$crispy.run_id)) {
+  plist <- list()
+  plot_i <- 1
+
+  data_cdi_el_plot_filtered <- data_cdi_el_plot %>% filter(crispy.run_id == run_id_name)
+  for (metric_el_name in metrics_el) {
+
+    cdi_plot <- make_expected_loss_plot(
+      data_cdi_el_plot = data_cdi_el_plot_filtered,
+      x_var = "crispy.shock_year",
+      y_var = metric_el_name,
+      fill_var = metric_el_name,
+      facet_rows_var = NULL,
+      facet_cols_var = "portfolio.ald_business_unit",
+      title=paste("With", metric_el_name)
+    ) +
+      theme(plot.title = element_text(size = 12, face = "bold"))
+    
+    plist[[plot_i]] <- cdi_plot
+    plot_i <- plot_i + 1
+    
+  }
+  
+  top_title <-
+    ggpubr::text_grob(
+      paste0("Expected Loss per portfolio and sector\n",
+             run_id_name),
+      size = 15,
+      face = "bold"
+    )
+  plots_grid <- gridExtra::grid.arrange(grobs = plist,
+                                        nrow = length(plist),
+                                        top = top_title)
+  
+  print(plots_grid)
+  
+}
+  
+  
+```
+
+
