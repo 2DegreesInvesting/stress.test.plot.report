@@ -41,21 +41,6 @@ main_load_multi_crispy_data <-
     return(multi_crispy_data)
   }
 
-# TODO load from mlflow
-#' Title
-#'
-#' @param crispy_outputs_dir
-#'
-#' @return
-#' @export
-#'
-#' @examples
-main_load_trisk_run_params <- function(crispy_outputs_dir) {
-  trisk_runs_params <-
-    load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
-    get_trisk_params()
-  return(trisk_runs_params)
-}
 
 #' Title
 #'
@@ -70,13 +55,9 @@ main_load_trisk_run_params <- function(crispy_outputs_dir) {
 main_load_analysis_data <-
   function(portfolio_data,
            multi_crispy_data,
-           trisk_run_params,
            portfolio_crispy_merge_cols) {
     analysis_data <-
       create_analysis_data(portfolio_data, multi_crispy_data, portfolio_crispy_merge_cols)
-
-    analysis_data <-
-      join_trisk_parameters(analysis_data, trisk_run_params)
 
     analysis_data <- compute_analysis_metrics(analysis_data)
 

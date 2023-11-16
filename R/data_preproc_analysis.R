@@ -60,16 +60,3 @@ compute_analysis_metrics <- function(analysis_data) {
   return(analysis_data)
 }
 
-
-join_trisk_parameters <- function(analysis_data, trisk_run_params) {
-  colnames(trisk_run_params) <-
-    paste0("crispy.", colnames(trisk_run_params))
-
-  analysis_data <- dplyr::inner_join(
-    analysis_data,
-    trisk_run_params,
-    by = c("crispy.run_id")
-  )
-
-  return(analysis_data)
-}

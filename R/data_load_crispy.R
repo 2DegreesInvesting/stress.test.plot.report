@@ -52,10 +52,12 @@ load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
 #' @export
 #'
 #' @examples
-aggregate_crispy_facts <- function(multi_crispy, group_cols) {
+aggregate_crispy_facts <- function(multi_crispy, group_cols, param_cols=c("run_id","roll_up_type", "baseline_scenario", "shock_scenario",
+                                                                          "lgd", "risk_free_rate", "discount_rate", "dividend_rate", "growth_rate",
+                                                                          "shock_year")) {
 
   multi_crispy <- multi_crispy|>
-    dplyr::group_by_at(group_cols) |>
+    dplyr::group_by_at(c(group_cols, param_cols)) |>
     dplyr::summarise(
       net_present_value_baseline=stats::median(net_present_value_baseline, na.rm=T),
       net_present_value_shock=stats::median(net_present_value_shock, na.rm=T),
@@ -66,24 +68,3 @@ aggregate_crispy_facts <- function(multi_crispy, group_cols) {
   return(multi_crispy)
 }
 
-#' Title
-#'
-#' @param multi_crispy
-#'
-#' @return
-#' @export
-#'
-#' @examples
-get_trisk_params <- function(multi_crispy){
-  trisk_runs_params <- multi_crispy |>
-    dplyr::distinct(.data$run_id, .data$roll_up_type, .data$baseline_scenario, .data$shock_scenario,
-                    .data$lgd, .data$risk_free_rate, .data$discount_rate, .data$dividend_rate, .data$growth_rate,
-                    .data$shock_year)
-
-    stopifnot(nrow(
-      trisk_runs_params |>
-        dplyr::select(-c(.data$run_id)) |>
-        dplyr::distinct_all()) == length(unique(trisk_runs_params$run_id)))
-
-    return(trisk_runs_params)
-}

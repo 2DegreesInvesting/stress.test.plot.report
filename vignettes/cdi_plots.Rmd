@@ -66,13 +66,10 @@ portfolio_data <-
 multi_crispy_data <- main_load_multi_crispy_data(crispy_outputs_dir = crispy_outputs_dir,
                                                  max_crispy_granularity = max_crispy_granularity)
 
-trisk_run_params <- main_load_trisk_run_params(crispy_outputs_dir = crispy_outputs_dir)
-
 analysis_data <-
   main_load_analysis_data(
     portfolio_data = portfolio_data,
     multi_crispy_data = multi_crispy_data,
-    trisk_run_params = trisk_run_params,
     portfolio_crispy_merge_cols = portfolio_crispy_merge_cols
   )
 ```
