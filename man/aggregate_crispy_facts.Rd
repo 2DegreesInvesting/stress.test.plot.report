@@ -4,7 +4,12 @@
 \alias{aggregate_crispy_facts}
 \title{Title}
 \usage{
-aggregate_crispy_facts(multi_crispy, group_cols)
+aggregate_crispy_facts(
+  multi_crispy,
+  group_cols,
+  param_cols = c("run_id", "roll_up_type", "baseline_scenario", "shock_scenario",
+    "risk_free_rate", "discount_rate", "dividend_rate", "growth_rate", "shock_year")
+)
 }
 \arguments{
 \item{group_cols}{}

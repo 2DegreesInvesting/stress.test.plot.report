@@ -10,6 +10,5 @@ create_analysis_data(portfolio_data, multi_crispy, portfolio_crispy_merge_cols)
 \item{multi_crispy}{}
 }
 \description{
-\subsection{TODO HOW TO HANDLE ENTRIES IN PORTFOLIO, THAT ARE MISSING IN CRISPY ?}{
-}
+Title
 }

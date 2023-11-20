@@ -63,8 +63,7 @@ portfolio_data <-
     trisk_start_year = trisk_start_year
   )
 
-multi_crispy_data <- main_load_multi_crispy_data(crispy_outputs_dir = crispy_outputs_dir,
-                                                 max_crispy_granularity = max_crispy_granularity)
+multi_crispy_data <- main_load_multi_crispy_data(crispy_outputs_dir = crispy_outputs_dir, max_crispy_granularity = max_crispy_granularity)
 
 
 analysis_data <-

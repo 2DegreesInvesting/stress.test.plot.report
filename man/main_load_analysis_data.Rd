@@ -7,7 +7,6 @@
 main_load_analysis_data(
   portfolio_data,
   multi_crispy_data,
-  trisk_run_params,
   portfolio_crispy_merge_cols
 )
 }
