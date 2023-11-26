@@ -19,19 +19,12 @@ load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
   )
 
   # Load all files into a list and add a run_id column for each dataframe
-  data_list <- purrr::map(files_path, function(file_path) {
-    df <- readr::read_csv(file_path) |>
+  data_list <- purrr::map(files_path, function(fp) {
+    df <- readr::read_csv(fp) |>
       dplyr::mutate(
-        run_id=file_path
-          )|>
-      dplyr::mutate(
-        run_id=stringr::str_remove(basename(.data$run_id), ".csv")
-      ) |>
-      dplyr::mutate(
-        run_id=stringr::str_remove(.data$run_id, "crispy_output_standard_")
-      )
+        run_id = sub("^crispy_output_standard_(.*)\\.csv", "\\1", basename(fp))
+          )
   })
-
 
   multi_crispy <- dplyr::bind_rows(data_list)
 
