@@ -1,3 +1,6 @@
+color_gradient <- c("#FFC0C0", "#FF8888", "#FF6666", "#FF4444", "#FF2222", "#FF0000")
+
+
 #' Title
 #'
 #' @param data_cdi_el_plot
@@ -53,125 +56,120 @@ make_expected_loss_plot <-
 
   }
 
-#'
-#' #' Title
-#' #'
-#' #' @param Scenarios_Sy
-#' #' @param loans_data
-#' #' @param groups_var
-#' #' @param color_gradient
-#' #'
-#' #' @return
-#' #' @export
-#' #'
-#' #' @examples
-#' make_average_pd_shock_plots <-
-#'   function(Scenarios_Sy,
-#'            loans_data,
-#'            scenario_weights,
-#'            groups_var,
-#'            color_gradient,
-#'            pd_types,
-#'            run_id_name) {
-#'     MEAN_PD_DIFF_SY_PLOTS <- list()
-#'     for (run_id_name in unique(Scenarios_Sy$run_id)) {
-#'       plist <- list()
-#'       plot_i <- 1
-#'
-#'       plist[[plot_i]] <- plotsy
-#'       plot_i <- plot_i + 1
-#'
-#'       for (pd_type in pd_types) {
-#'         scenario_data <- Scenarios_Sy %>%
-#'           dplyr::filter(run_id == run_id_name)
-#'
-#'         # Merge data
-#'         Shock_Year_bond_long <-
-#'           dplyr::inner_join(
-#'             loans_data,
-#'             scenario_data,
-#'             by = c("term", "company_name", "sector"),
-#'             relationship = "many-to-many"
-#'           )
-#'         Shock_Year_bond_long <-
-#'           inner_join(
-#'             Shock_Year_bond_long,
-#'             scenario_weights,
-#'             by = c("bank", "company_name", "sector")
-#'           )
-#'
-#'
-#'         # Calculate mean pd difference
-#'         mean_shockyear <- Shock_Year_bond_long %>%
-#'           group_by(bank, sector, !!rlang::sym(groups_var)) %>%
-#'           # TODO duplicate by another one on pd_shock. Both should be weighted
-#'           #   Calculate mean_pd_shock as
-#'           #     (pd_shock * exposure_usd) / sum(exposure_company_usd)
-#'           summarise(mean_pd_shock = mean(.data[[pd_type]] * .data$weight),
-#'                     .groups = "drop")
-#'
-#'         # generate plot title used as subtitle
-#'         plot_title <- paste("With", pd_type)
-#'
-#'         # Create plot
-#'         plotsy <-
-#'           ggplot(data = mean_shockyear,
-#'                  aes(
-#'                    x = factor(!!rlang::sym(groups_var)),
-#'                    y = mean_pd_shock,
-#'                    fill = mean_pd_shock
-#'                  )) +
-#'           geom_bar(stat = "identity") +
-#'           scale_fill_gradientn(
-#'             colors = color_gradient[[pd_type]],
-#'             limits = c(
-#'               min(mean_shockyear$mean_pd_shock),
-#'               max(mean_shockyear$mean_pd_shock)
-#'             ),
-#'             breaks = c(
-#'               min(mean_shockyear$mean_pd_shock),
-#'               0,
-#'               max(mean_shockyear$mean_pd_shock)
-#'             ),
-#'             labels = scales::comma,
-#'             name = "Mean PD Shock"
-#'           ) +
-#'           theme(
-#'             panel.grid = element_blank(),
-#'             panel.grid.major = element_line(color = "lightgray", size = 0.2)
-#'           ) +
-#'           facet_grid(sector ~ bank, scales = "free_y") +  # Allow separate scales for y-axis
-#'           theme_2dii() +
-#'           labs(x = groups_var,
-#'                y = "Average PD Shock",
-#'                title = plot_title) +
-#'           theme(
-#'             panel.grid = element_blank(),
-#'             panel.grid.major = element_line(color = "lightgray", size = 0.2),
-#'             plot.title = element_text(size = 12, face = "bold")
-#'
-#'           )
-#'
-#'         plist[[plot_i]] <- plotsy
-#'         plot_i <- plot_i + 1
-#'
-#'       }
-#'       top_title <-
-#'         ggpubr::text_grob(
-#'           paste0("Average PD Shock by Portfolio and Sector \n",
-#'                  run_id_name),
-#'           size = 15,
-#'           face = "bold"
-#'         )
-#'       plots_grid <-
-#'         do.call("grid.arrange",
-#'                 list(
-#'                   grobs = plist,
-#'                   nrow = length(plist),
-#'                   top = top_title
-#'                 ))
-#'       MEAN_PD_DIFF_SY_PLOTS[[run_id_name]] <- plots_grid
-#'
-#'     }
-#'     return(MEAN_PD_DIFF_SY_PLOTS)
-#'   }
+
+make_mean_pd_diff_plot <- function(data_cdi_pd_plot, scenario_name_for_title){
+
+  # Create plot
+  plotsy <- ggplot(data = data_cdi_pd_plot, aes(x = crispy.shock_year, group = factor(crispy.shock_year), y = pd_difference, fill = pd_difference)) +
+    geom_bar(stat = "identity") +
+    scale_fill_gradientn(colors = color_gradient,
+                         limits = c(min(data_cdi_pd_plot$pd_difference), max(data_cdi_pd_plot$pd_difference)),
+                         breaks = c(min(data_cdi_pd_plot$pd_difference), 0, max(data_cdi_pd_plot$pd_difference)),
+                         labels = scales::comma,
+                         name = "Mean pd_difference") +
+    facet_grid( portfolio.ald_business_unit ~ portfolio.ald_sector, scales = "free_y") +  # Allow separate scales for y-axis
+    theme_2dii() +
+    labs(x = "Shock_Year", y = "Mean pd_difference", title = paste("Mean PD Difference by Shock Year -", scenario_name_for_title))
+    # theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 28),  # Adjust title size
+    #       axis.text = element_text(size = 23),  # Adjust tick label size
+    #       axis.title.x = element_text(size = 26),  # Adjust x-axis label size
+    #       axis.title.y = element_text(size = 26),  # Adjust y-axis label size
+    #       strip.text = element_text(size = 24),
+    #       panel.grid = element_blank(),
+    #       panel.grid.major = element_line(color = "lightgray", size = 0.2),
+    #       legend.text = element_text(size = 20),  # Adjust legend text size
+    #       legend.title = element_text(size = 20))
+
+  return(plotsy)
+
+}
+
+
+make_discount_rate_plot <- function(plot_data, scenario_name_for_title, y_var){
+  # Create plot
+  plotsy <- ggplot(data = plot_data, aes(x = crispy.discount_rate, group = factor(crispy.discount_rate), y = !!rlang::sym(y_var), fill = !!rlang::sym(y_var))) +
+    geom_bar(stat = "identity") +
+    scale_fill_gradientn(colors = color_gradient,
+                         limits = c(min(plot_data[[y_var]]), max(plot_data[[y_var]])),
+                         breaks = c(min(plot_data[[y_var]]), 0, max(plot_data[[y_var]])),
+                         labels = scales::comma,
+                         name = "Mean pd_difference") +
+    facet_grid(portfolio.ald_business_unit ~ portfolio.ald_sector, scales = "free_y") +  # Allow separate scales for y-axis
+    theme_2dii() +
+    labs(x = "Discount Rate", y = "Mean pd_difference", title = paste("Mean PD Difference by Discount Rate -", scenario_name_for_title))
+    # theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 24),  # Adjust title size
+    #       axis.text = element_text(size = 23),  # Adjust tick label size
+    #       axis.title.x = element_text(size = 26),  # Adjust x-axis label size
+    #       axis.title.y = element_text(size = 26),  # Adjust y-axis label size
+    #       strip.text = element_text(size = 24),
+    #       panel.grid = element_blank(),
+    #       panel.grid.major = element_line(color = "lightgray", size = 0.2),
+    #       legend.text = element_text(size = 20),  # Adjust legend text size
+    #       legend.title = element_text(size = 20)) +  # Adjust legend title size
+    # scale_x_continuous(breaks = c(0.04, 0.07, 0.1))
+  return(plotsy)
+}
+
+
+make_density_plots <- function(data_cdi_pd_plot, density_var){
+  density_var_values <- unique(data_cdi_pd_plot[[density_var]])
+  plots <- list()
+  # Create plots for each sector
+  for (sector in unique(plot_data$portfolio.ald_sector)) {
+    # Create an empty data frame to store computed density values
+    density_data <- data.frame()
+
+    # Iterate over each desired parameter and compute density values
+    for (i in 1:length(density_var_values)) {
+      pm <- density_var_values[i]
+      data <- data_cdi_pd_plot %>% dplyr::filter(portfolio.ald_sector == sector ,
+                                          !!rlang::sym(density_var) == pm)
+      label <- paste(density_var, pm)
+
+      density_values <- density(data$pd_difference)
+      density_df <- data.frame(x = density_values$x, y = density_values$y, label = label)
+
+      density_data <- rbind(density_data, density_df)
+    }
+
+    # Create the plot with lines and different colors
+    density_plot <- ggplot(density_data, aes(x = x, y = y, color = label)) +
+      geom_line(size = 1) +
+      # scale_color_manual(values = colors) +
+      labs(x = "PD Difference", y = "Density") +
+      ggtitle(paste("", "-", sector)) +
+      scale_x_continuous(labels = scales::percent_format()) +
+      theme(plot.title = element_text(size = 17, face = "bold", hjust = 0.5),
+            axis.text = element_text(size = 13),
+            axis.title.x = element_text(size = 13),
+            axis.title.y = element_text(size = 13),
+            legend.title = element_blank(),
+            legend.text = element_text(size = 10),
+            legend.position = "top",
+            plot.background = element_rect(fill = "white"),
+            panel.background = element_rect(fill = "white"),
+            panel.grid.major = element_line(color = "lightgray", size=0.2),
+            panel.border = element_rect(color = "black", fill = NA, size = 0.3),
+            legend.background = element_rect(fill = "white"),
+            legend.key = element_rect(fill = "white", color = "transparent")
+            #panel.grid.minor = element_line(color = "lightgray")
+      )
+
+    plots[[sector]] <- density_plot
+  }
+
+  # Combine plots into a grid
+  combined_plot <- cowplot::plot_grid(plotlist = plots, nrow = 2, ncol = 2)
+
+  # Add a title to the combined plot
+  # Change here to the relevant scenario
+  title <- cowplot::ggdraw() + cowplot::draw_label(paste(scenario_name, "- Distribution of PD Difference - ",density_var), size = 18)
+  combined_plot <- cowplot::plot_grid(title, combined_plot, ncol = 1, rel_heights = c(0.1, 1))
+
+  # Modify the plot title element to have a white background
+  combined_plot <- combined_plot +
+    theme(plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+          plot.background = element_rect(fill = "white"))
+
+  return(combined_plot)
+}
