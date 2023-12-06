@@ -1,3 +1,15 @@
+#' Title
+#'
+#' @param data_performers_plot
+#' @param x_var
+#' @param y_var
+#' @param fill_var
+#' @param facet_var
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qplot_worst_performers <-
   function(data_performers_plot, x_var, y_var, fill_var, facet_var) {
 

@@ -1,3 +1,13 @@
+#' Title
+#'
+#' @param analysis_data
+#' @param group_variable_charvec
+#' @param value_to_plot_char
+#'
+#' @return
+#' @export
+#'
+#' @examples
 prepare_for_pd_plot <-
   function(analysis_data,
            group_variable_charvec,

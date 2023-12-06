@@ -1,3 +1,11 @@
+#' Title
+#'
+#' @param data_exposure_plot
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qplot_violin <- function(data_exposure_plot) {
   data_exposure_plot_no_outlier <- remove_outliers(data_exposure_plot)
   ggplot2::ggplot(data_exposure_plot_no_outlier, aes(x = .data$group_variable, y = .data$value_to_plot, colour = .data$value_to_plot)) +

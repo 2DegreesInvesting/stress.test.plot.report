@@ -1,3 +1,13 @@
+#' Title
+#'
+#' @param data_pd
+#' @param common_y_axis
+#' @param annual_pds
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qplot_pd_sector <- function(data_pd, common_y_axis = FALSE, annual_pds = FALSE) {
   if (!annual_pds) {
     p <- ggplot(data_pd, aes(x = portfolio.term, y = .data$value_to_plot, fill = .data$value_to_plot))

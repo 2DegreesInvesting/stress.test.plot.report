@@ -11,6 +11,16 @@
 
 
 
+#' Title
+#'
+#' @param analysis_data
+#' @param group_variables_vec
+#' @param metrics_npv
+#'
+#' @return
+#' @export
+#'
+#' @examples
 prepare_for_cdi_npv_plots <-
   function(analysis_data,
            group_variables_vec,
@@ -35,6 +45,17 @@ prepare_for_cdi_npv_plots <-
   }
 
 
+#' Title
+#'
+#' @param analysis_data
+#' @param group_variables_vec
+#' @param weight_variable_char
+#' @param metrics_pd
+#'
+#' @return
+#' @export
+#'
+#' @examples
 prepare_for_cdi_pd_plots <-
   function(analysis_data,
            group_variables_vec,

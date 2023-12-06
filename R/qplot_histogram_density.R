@@ -1,3 +1,12 @@
+#' Title
+#'
+#' @param data_exposure_plot
+#' @param plot_variable
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qplot_histogram_density <- function(data_exposure_plot, plot_variable) {
   phist <-
     ggplot(data_exposure_plot,
