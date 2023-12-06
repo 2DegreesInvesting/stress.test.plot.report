@@ -1,11 +1,13 @@
-prepare_for_pd_plot <- function(data) {
-  out <- data %>%
-  filter(
-    scenario_geography == "Global",
-    investor_name == "Meta Investor",
-    portfolio_name == "Meta Investor"
-  ) %>%
-  select(ald_sector, term, shock_year_arg, pd_change_sector_shock) %>%
-  distinct()
-  out
-}
+prepare_for_pd_plot <-
+  function(analysis_data,
+           group_variable_charvec,
+           value_to_plot_char) {
+    data_pd_plot <- analysis_data |>
+      dplyr::rename(
+        value_to_plot = !!rlang::sym(value_to_plot_char)
+      ) |>
+    dplyr::group_by(!!! rlang::syms(group_variable_charvec)) |>
+      dplyr::summarise(value_to_plot = stats::median(.data$value_to_plot, na.rm = T),
+                       .groups = "drop")
+    return(data_pd_plot)
+  }

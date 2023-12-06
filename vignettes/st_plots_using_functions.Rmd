@@ -1,0 +1,244 @@
+---
+title: "st_plots_using_functions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{st_plots_using_functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+devtools::load_all()
+# library(stress.test.plot.report)
+
+
+max_portfolio_granularity <-
+  c("portfolio_id",
+    "asset_type",
+    "ald_sector",
+    "ald_business_unit",
+    "term")
+max_crispy_granularity <-  c("run_id",
+                             "scenario_geography",
+                             "ald_sector",
+                             "ald_business_unit",
+                             "term")
+portfolio_crispy_merge_cols <-
+  c("ald_sector", "ald_business_unit", "term")
+
+focus_run_id <- "NGFS2021_MESSAGE_B2DS_Global_no_carbon_tax"
+focus_scenario_geography <- "Global"
+
+maturity_month_term_bridge_fp <-
+  here::here("data", "maturity_month_term_bridge.csv")
+portfolio_data_path <-
+  here::here("data-raw/synthetic_portfolio.csv")
+crispy_outputs_dir <- here::here("data-raw/synthetic_crispy")
+
+
+trisk_start_year <- 2022
+
+active_tab <- "portfolio.portfolio_id"
+```
+
+Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
+
+```{r}
+# load data
+raw_portfolio_data <- load_portfolio_data(portfolio_data_path) 
+maturity_month_term_bridge <- readr::read_csv(maturity_month_term_bridge_fp)
+
+portfolio_data <-
+  main_load_portfolio_data(
+    raw_portfolio_data=raw_portfolio_data,
+    maturity_month_term_bridge = maturity_month_term_bridge,
+    max_portfolio_granularity = max_portfolio_granularity,
+    trisk_start_year = trisk_start_year
+  )
+
+multi_crispy_data <- main_load_multi_crispy_data(crispy_outputs_dir = crispy_outputs_dir, max_crispy_granularity = max_crispy_granularity)
+
+
+analysis_data <-
+  main_load_analysis_data(
+    portfolio_data = portfolio_data,
+    multi_crispy_data = multi_crispy_data,
+    portfolio_crispy_merge_cols = portfolio_crispy_merge_cols
+  )
+```
+
+
+Filter the trisk data to focus on a single geography/run
+
+```{r}
+analysis_data_single_run <- analysis_data |>
+  dplyr::filter(.data$crispy.run_id == focus_run_id,
+                .data$crispy.scenario_geography == focus_scenario_geography)
+```
+
+prepare data for plots
+
+```{r}
+prepare_for_exposure_plot(
+    analysis_data_single_run,
+    group_variable_char = active_tab,
+    value_to_plot_char = "exposure_at_default" 
+  )
+data_performers_plot <- prepare_for_performers_plot(
+  analysis_data_single_run,
+  group_variable_vec = c(active_tab),
+  performer_variable_char="portfolio.ald_business_unit",
+  performance_metric = "exposure_at_default",
+  n_performers = 10
+)
+data_summary_plot <-
+  prepare_for_summary_plot(
+    analysis_data_single_run,
+    group_variable_char = active_tab,
+    value_to_plot_char = "exposure_at_default"
+  )
+data_el_plot <-
+  prepare_for_el_plots(
+    analysis_data_single_run,
+    group_variable_char = active_tab,
+    value_to_plot_char = "exposure_at_default"
+  )
+```
+
+
+```{r}
+data_pd <-
+  prepare_for_pd_plot(
+    analysis_data_single_run,
+    group_variable_charvec = c("portfolio.ald_sector", "portfolio.term"),
+    value_to_plot_char = "pd_difference"
+  )
+# data_pd_annual <-
+#   prepare_for_pd_annual_plot(
+#     analysis_data_single_run,
+#     group_variable_char = c("ald_sector", "term", ""),
+#     value_to_plot_char = "pd_difference_st"
+#   )
+data_val_change <-
+  prepare_for_value_change_plot(
+    analysis_data_single_run,
+    group_variable_charvec = c("portfolio.ald_sector", "portfolio.term"),
+    value_to_plot_char = "shock"
+  )
+```
+
+
+# Exposure plots
+
+## Summary exposures per sector
+
+Pie chart of exposures summary
+
+```{r}
+qplot_pie_summaries(data_summary_plot, agg_sum_name_chr="group_sum")
+```
+
+## Risk-driving companies (based on exposure)
+
+10 worst performers - coloured by sector
+
+```{r fig2, fig.width = 8, fig.height=8}
+qplot_worst_performers(data_performers_plot, 
+  x_var = "portfolio.ald_business_unit",
+  y_var = "exposure_at_default",
+  fill_var = active_tab,
+  facet_var = active_tab
+  )
+
+```
+
+## Distributions
+
+### Histograms and densities per sector
+
+```{r}
+qplot_histogram_density(data_exposure_plot |> dplyr::rename(
+  group_variable=!!rlang::sym(active_tab),
+  value_to_plot=!!rlang::sym("exposure_at_default")
+  )) 
+```
+
+
+### Boxplots and violin plots
+
+Boxplots
+
+```{r}
+qplot_boxplot(data_exposure_plot|> dplyr::rename(
+  group_variable=!!rlang::sym(active_tab),
+  value_to_plot=!!rlang::sym("exposure_at_default")))
+```
+
+Points distribution with violin
+
+```{r}
+qplot_violin(data_exposure_plot|> dplyr::rename(
+  group_variable=!!rlang::sym(active_tab),
+  value_to_plot=!!rlang::sym("exposure_at_default")))
+```
+
+## PD changes
+
+### Overall
+
+Faceted - joint y-axis (easier to compare between sectors)
+
+```{r}
+qplot_pd_sector(data_pd)
+```
+
+```{r}
+qplot_pd_sector(data_pd, common_y_axis = TRUE)
+```
+
+
+### Annual
+<!--
+Faceted - joint y-axis (easier to compare between sectors)
+
+```{r}
+qplot_pd_sector(data_pd_annual, annual_pds = TRUE)
+qplot_pd_sector(data_pd_annual, annual_pds = TRUE, common_y_axis = TRUE)
+```
+-->
+
+## EL changes
+
+```{r fig3, fig.width = 8, fig.height = 8} 
+qplot_el_sector(data_el_plot, use_exp_loss_types= c("baseline", "shock", "st_diff"))
+```
+```{r}
+qplot_el_change_sector(data_el_plot)
+```
+
+## Equity Value changes
+
+Total
+
+```{r}
+qplot_val_change(data_val_change)
+```
+
+Per sector
+
+```{r} 
+qplot_val_change_facet(data_val_change, facet_chr="portfolio.ald_sector")
+```
+
+Per technology
+
+```{r fig4, fig.width = 8, fig.height = 12}
+# qplot_val_change_facet(data_val_change, facet_chr="ald_business_unit")
+```

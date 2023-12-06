@@ -1,14 +1,10 @@
-prepare_for_pd_annual_plot <- function(data) {
-  out <- data %>%
-  filter(
-    scenario_geography == "Global",
-    investor_name == "Meta Investor",
-    portfolio_name == "Meta Investor"
-  ) %>%
-  select(ald_sector, year, shock_year_arg, pd_change_sector_shock) %>%
-  distinct() %>%
-  mutate(
-    year_date = ymd(year, truncated = 2L)
-  )
-  out
+prepare_for_pd_annual_plot <- function(data,
+                                       group_variable_charvec,
+                                       value_to_plot_char) {
+  data_pd <- prepare_for_pd_plot(analysis_data_single_run, group_variable_charvec,
+                                 value_to_plot_char)
+
+  data_pd_annual <- data_pd %>%
+    dplyr::mutate(year_date = ymd(.data$shock_year, truncated = 2L))
+  data_pd_annual
 }

@@ -1,100 +1,66 @@
-#' Title
-#'
-#' @param data
-#'
-#' @return
-#' @export
-#'
-#' @examples
-qplot_val_change_sector <- function(data) {
-    p_perc <- qplot_val_change_sector_perc(data)
+qplot_val_change_facet <- function(data_val_change, facet_chr) {
+  # prepare data for plots
+  group_cols <-
+    colnames(data_val_change)[!colnames(data_val_change) %in% c("portfolio.ald_sector", "value_change_absolute", "value_change_percent")]
+  data_plt <- data_val_change |>
+    tidyr::unite("xaxis_values",
+                 all_of(group_cols),
+                 sep = "-",
+                 remove = TRUE)
 
-    p_abs <- qplot_val_change_sector_abs(data)
-    p <- p_perc / p_abs
-    p
-}
 
-#' Title
-#'
-#' @param data
-#' @param y_val_name
-#'
-#' @return
-#' @export
-#'
-#' @examples
-plot_value_change_coloured <- function(data, y_val_name) {
-  p <- ggplot(
-    data,
-    aes_string(
-      x = "portfolio_name",
-      y = y_val_name,
-      fill = y_val_name
-      )
-    ) +
-  geom_bar(stat = "identity") +
-  geom_hline(yintercept = 0) +
-  scale_fill_gradient2(
-      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
-      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
-      midpoint = 0,
-      labels = scales::comma,
-      name = "Equity value change"
-    ) +
-
-  theme_2dii() +
-  theme(
-    axis.text.x = element_blank(),
-    axis.ticks.x = element_blank(),
-    axis.title.x = element_blank(),
-    axis.line.x = element_blank(),
-    legend.title = element_text()
-  )
-}
-
-#' Title
-#'
-#' @param data
-#'
-#' @return
-#' @export
-#'
-#' @examples
-qplot_val_change_sector_perc <- function(data) {
-  data_plt <- data %>%
-      group_by(ald_sector) %>%
-      select(portfolio_name, sector_percent_value_change, sector_absolute_value_change, ald_sector) %>%
-      distinct()
-
-  p <- plot_value_change_coloured(data_plt, "sector_percent_value_change") +
-      facet_wrap(ald_sector ~ .) +
+    # do plots
+    p_perc <-  plot_value_change_coloured(data_plt, is_percentage=TRUE) +
+      facet_wrap(as.formula(paste("~", facet_chr))) +
       labs(
         title = "Percentage value change per sector",
         y = "Value change\n(% points)"
       )
-  p
-}
 
-#' Title
-#'
-#' @param data
-#'
-#' @return
-#' @export
-#'
-#' @examples
-qplot_val_change_sector_abs <- function(data) {
-  data_plt <- data %>%
-      group_by(ald_sector) %>%
-      select(portfolio_name, sector_percent_value_change, sector_absolute_value_change, ald_sector) %>%
-      distinct()
-
-  p <- plot_value_change_coloured(data_plt, "sector_absolute_value_change") +
-      scale_y_continuous(labels = scales::comma) +
-      facet_wrap(ald_sector ~ .) +
+    p_abs <- plot_value_change_coloured(data_plt, is_percentage=FALSE)+
+      facet_wrap(as.formula(paste("~", facet_chr))) +
       labs(
         title = "Absolute value change per sector",
         y = "Value change\n(currency)"
       )
-  p
+    p <-
+      (p_perc + patchwork::plot_spacer()) / (p_abs + patchwork::plot_spacer())
+    p
+}
+
+plot_value_change_coloured <- function(data, is_percentage) {
+  if (is_percentage) {
+    labels <- scales::percent
+    y_val_name <- "value_change_percent"
+  } else {
+    labels <- scales::unit_format(unit = "M", scale = 1e-6)
+    y_val_name <- "value_change_absolute"
+  }
+
+
+  p <- ggplot(
+    data,
+    aes(
+      x = xaxis_values,
+      y = !!rlang::sym(y_val_name),
+      fill = !!rlang::sym(y_val_name)
+      )
+    ) +
+  geom_bar(stat = "identity") +
+  geom_hline(yintercept = 0) +
+  scale_fill_gradient(
+      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
+      labels = labels,
+      name = "Equity value change"
+    ) +
+  theme_2dii() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust=1, size=10),
+    # axis.ticks.x = element_blank(),
+    axis.title.x = element_blank(),
+    # axis.line.x = element_blank(),
+    legend.title = element_text()
+  ) +
+    scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = labels)
 }
