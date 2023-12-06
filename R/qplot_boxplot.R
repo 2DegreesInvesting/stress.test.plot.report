@@ -1,3 +1,11 @@
+#' Title
+#'
+#' @param data_exposure_plot
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qplot_boxplot <- function(data_exposure_plot) {
   data_exposure_plot <- remove_outliers(data_exposure_plot)
   plot <- ggplot(data_exposure_plot, aes(x = .data$group_variable, y = .data$value_to_plot, fill = .data$group_mean)) +

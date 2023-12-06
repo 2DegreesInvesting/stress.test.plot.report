@@ -15,9 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-devtools::load_all()
-# library(stress.test.plot.report)
-
+library(stress.test.plot.report)
 
 max_portfolio_granularity <-
   c("portfolio_id",
@@ -86,7 +84,7 @@ analysis_data_single_run <- analysis_data |>
 prepare data for plots
 
 ```{r}
-prepare_for_exposure_plot(
+data_exposure_plot <- prepare_for_exposure_plot(
     analysis_data_single_run,
     group_variable_char = active_tab,
     value_to_plot_char = "exposure_at_default" 
@@ -120,12 +118,7 @@ data_pd <-
     group_variable_charvec = c("portfolio.ald_sector", "portfolio.term"),
     value_to_plot_char = "pd_difference"
   )
-# data_pd_annual <-
-#   prepare_for_pd_annual_plot(
-#     analysis_data_single_run,
-#     group_variable_char = c("ald_sector", "term", ""),
-#     value_to_plot_char = "pd_difference_st"
-#   )
+
 data_val_change <-
   prepare_for_value_change_plot(
     analysis_data_single_run,
@@ -133,7 +126,6 @@ data_val_change <-
     value_to_plot_char = "shock"
   )
 ```
-
 
 # Exposure plots
 
@@ -164,10 +156,7 @@ qplot_worst_performers(data_performers_plot,
 ### Histograms and densities per sector
 
 ```{r}
-qplot_histogram_density(data_exposure_plot |> dplyr::rename(
-  group_variable=!!rlang::sym(active_tab),
-  value_to_plot=!!rlang::sym("exposure_at_default")
-  )) 
+qplot_histogram_density(data_exposure_plot) 
 ```
 
 
@@ -176,17 +165,13 @@ qplot_histogram_density(data_exposure_plot |> dplyr::rename(
 Boxplots
 
 ```{r}
-qplot_boxplot(data_exposure_plot|> dplyr::rename(
-  group_variable=!!rlang::sym(active_tab),
-  value_to_plot=!!rlang::sym("exposure_at_default")))
+qplot_boxplot(data_exposure_plot)
 ```
 
 Points distribution with violin
 
 ```{r}
-qplot_violin(data_exposure_plot|> dplyr::rename(
-  group_variable=!!rlang::sym(active_tab),
-  value_to_plot=!!rlang::sym("exposure_at_default")))
+qplot_violin(data_exposure_plot)
 ```
 
 ## PD changes
@@ -203,16 +188,6 @@ qplot_pd_sector(data_pd)
 qplot_pd_sector(data_pd, common_y_axis = TRUE)
 ```
 
-
-### Annual
-<!--
-Faceted - joint y-axis (easier to compare between sectors)
-
-```{r}
-qplot_pd_sector(data_pd_annual, annual_pds = TRUE)
-qplot_pd_sector(data_pd_annual, annual_pds = TRUE, common_y_axis = TRUE)
-```
--->
 
 ## EL changes
 

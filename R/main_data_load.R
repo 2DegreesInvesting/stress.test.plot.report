@@ -1,3 +1,29 @@
+#' Title
+#'
+#' The dataframe in output of this function should always be
+#' the one used as input for the plots preprocessing functions
+#'
+#'
+#' @param multi_crispy
+#' @param portfolio_data
+#' @param portfolio_crispy_merge_cols
+#'
+#' @return
+#' @export
+#'
+#' @examples
+main_load_analysis_data <-
+  function(multi_crispy_data,
+           portfolio_data = NULL,
+           portfolio_crispy_merge_cols = NULL) {
+    analysis_data <-
+      create_analysis_data(portfolio_data, multi_crispy_data, portfolio_crispy_merge_cols)
+
+    analysis_data <- compute_analysis_metrics(analysis_data)
+
+    return(analysis_data)
+
+  }
 
 
 
@@ -42,25 +68,3 @@ main_load_multi_crispy_data <-
   }
 
 
-#' Title
-#'
-#' @param portfolio_data
-#' @param multi_crispy
-#' @param portfolio_crispy_merge_cols
-#'
-#' @return
-#' @export
-#'
-#' @examples
-main_load_analysis_data <-
-  function(portfolio_data,
-           multi_crispy_data,
-           portfolio_crispy_merge_cols) {
-    analysis_data <-
-      create_analysis_data(portfolio_data, multi_crispy_data, portfolio_crispy_merge_cols)
-
-    analysis_data <- compute_analysis_metrics(analysis_data)
-
-    return(analysis_data)
-
-  }

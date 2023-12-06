@@ -1,3 +1,13 @@
+#' Title
+#'
+#' @param analysis_data_single_run
+#' @param group_variable_char
+#' @param value_to_plot_char
+#'
+#' @return
+#' @export
+#'
+#' @examples
 prepare_for_el_plots <-
   function(analysis_data_single_run,
            group_variable_char,

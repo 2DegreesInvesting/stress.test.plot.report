@@ -1,2 +1,4 @@
 ^stress\.test\.plot\.report\.Rproj$
 ^\.Rproj\.user$
+^doc$
+^Meta$

@@ -5,14 +5,15 @@
 \title{Title}
 \usage{
 main_load_analysis_data(
-  portfolio_data,
   multi_crispy_data,
-  portfolio_crispy_merge_cols
+  portfolio_data = NULL,
+  portfolio_crispy_merge_cols = NULL
 )
 }
 \arguments{
 \item{portfolio_crispy_merge_cols}{}
 }
 \description{
-Title
+The dataframe in output of this function should always be
+the one used as input for the plots preprocessing functions
 }

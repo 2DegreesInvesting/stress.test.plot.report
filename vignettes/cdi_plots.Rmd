@@ -2,7 +2,7 @@
 title: "cdi_plots"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{st_plots_using_functions}
+  %\VignetteIndexEntry{cdi_plots}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -158,7 +158,7 @@ data_cdi_el_plot <- analysis_data |>
 
 EL PLOTS
 
-```{r}
+```{r, fig.width = 8, fig.height = 12}
 
 
 for (run_id_name in unique(data_cdi_el_plot$crispy.run_id)) {
@@ -204,7 +204,7 @@ for (run_id_name in unique(data_cdi_el_plot$crispy.run_id)) {
 
 MEAN PD DIFF PLOTS
 
-```{r}
+```{r, fig.width = 8, fig.height = 12}
   for (scenario_name in unique(data_cdi_pd_plot$crispy.shock_scenario)) {
     plot_data <- data_cdi_pd_plot %>% dplyr::filter(crispy.shock_scenario == scenario_name )
   
@@ -217,7 +217,7 @@ MEAN PD DIFF PLOTS
 
 PD Diff plot Discount Rate
 
-```{r}
+```{r, fig.width = 8, fig.height = 12}
 
   for (scenario_name in unique(data_cdi_pd_plot$crispy.shock_scenario)) {
     plot_data <- data_cdi_pd_plot %>% dplyr::filter(crispy.shock_scenario == scenario_name )
@@ -231,7 +231,7 @@ PD Diff plot Discount Rate
 
 EL PLOTS DISCOUNT RATE
 
-```{r}
+```{r, fig.width = 8, fig.height = 12}
 
   for (scenario_name in unique(data_cdi_el_plot$crispy.shock_scenario)) {
     plot_data <- data_cdi_el_plot %>% dplyr::filter(crispy.shock_scenario == scenario_name )
@@ -250,7 +250,7 @@ DISTRIBUTION PLOTS
 
 SHOCK YEAR
 
-```{r}
+```{r, fig.width = 8, fig.height = 12}
 
 density_plot <- make_density_plots(data_cdi_pd_plot, density_var="crispy.shock_year")
 
@@ -259,7 +259,7 @@ print(density_plot)
 
 DISCOUNT RATE
 
-```{r}
+```{r, fig.width = 8, fig.height = 12}
 density_plot <- make_density_plots(data_cdi_pd_plot, density_var="crispy.discount_rate")
 
 print(density_plot)

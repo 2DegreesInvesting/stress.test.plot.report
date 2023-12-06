@@ -1,3 +1,12 @@
+#' Title
+#'
+#' @param data_val_change
+#' @param facet_chr
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qplot_val_change_facet <- function(data_val_change, facet_chr) {
   # prepare data for plots
   group_cols <-
@@ -28,6 +37,15 @@ qplot_val_change_facet <- function(data_val_change, facet_chr) {
     p
 }
 
+#' Title
+#'
+#' @param data
+#' @param is_percentage
+#'
+#' @return
+#' @export
+#'
+#' @examples
 plot_value_change_coloured <- function(data, is_percentage) {
   if (is_percentage) {
     labels <- scales::percent
