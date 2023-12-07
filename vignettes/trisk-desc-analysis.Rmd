@@ -1,0 +1,90 @@
+---
+title: "trisk-desc-analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{trisk-desc-analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(stress.test.plot.report)
+library(ggplot2)
+```
+
+```{r}
+crispy_outputs_dir <- here::here("data-raw", "synthetic_crispy")
+
+granularity <- c(
+  "company_name",
+  "ald_sector",
+  "ald_business_unit"
+)
+```
+
+
+```{r}
+analysis_data <-
+  load_input_plots_data(
+    crispy_outputs_dir = crispy_outputs_dir,
+    granularity = granularity
+  )
+
+analysis_data_1_run <- analysis_data %>% dplyr::filter(crispy.run_id == "NGFS2021_MESSAGE_B2DS_Global_no_carbon_tax")
+```
+
+- Heterogeneity in Transition Risk
+
+```{r, fig.width=10}
+agg_analysis_data <- analysis_data_1_run %>%
+  dplyr::filter(.data$net_present_value_difference != 0) %>%
+  dplyr::select(.data$portfolio.company_name, .data$crispy_perc_value_change, .data$pd_difference) %>%
+  dplyr::group_by(.data$portfolio.company_name) %>%
+  dplyr::summarise(
+    crispy_perc_value_change = stats::median(crispy_perc_value_change),
+    pd_difference = stats::median(pd_difference),
+    .groups = "drop"
+  )
+
+# Sorting categories based on value1 in descending order
+plot_data <- agg_analysis_data %>%
+  dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) %>%
+  dplyr::mutate(portfolio.company_name = factor(.data$portfolio.company_name, levels = .data$portfolio.company_name)) %>%
+  tidyr::pivot_longer(cols = c("crispy_perc_value_change", "pd_difference"), names_to = "variable", values_to = "value")
+
+
+custom_labeller <- c(crispy_perc_value_change = "Median company percent value change", pd_difference = "Median climate Transition-related PD difference")
+# Plotting
+ggplot(plot_data, aes(x = portfolio.company_name, y = value)) +
+  geom_bar(stat = "identity", fill = "blue", show.legend = FALSE) +
+  facet_wrap(~variable,
+    scales = "free_y", nrow = 2,
+    labeller = labeller(variable = custom_labeller)
+  ) +
+  scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    breaks = scales::pretty_breaks(n = 5)
+  ) +
+  r2dii.plot::theme_2dii() +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5),
+    axis.title.y = element_blank(),
+    strip.background = element_blank(),
+    strip.placement = "outside"
+  ) +
+  labs(x = NULL, y = NULL) +
+  guides(fill = FALSE)
+```
+
+- Annual average changes in the probability of default
+
+```{r}
+```
+
