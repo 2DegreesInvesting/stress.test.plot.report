@@ -4,10 +4,10 @@
 \alias{qplot_histogram_density}
 \title{Title}
 \usage{
-qplot_histogram_density(data_exposure_plot, plot_variable)
+qplot_histogram_density(data_exposure_plot)
 }
 \arguments{
-\item{plot_variable}{}
+\item{data_exposure_plot}{}
 }
 \description{
 Title

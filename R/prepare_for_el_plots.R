@@ -16,11 +16,12 @@ prepare_for_el_plots <-
 
     data_summary_plot <-
       prepare_for_summary_plot(analysis_data_single_run,
-                               group_variable = group_variable_char,
-                               value_to_plot = value_to_plot_char)
+        group_variable = group_variable_char,
+        value_to_plot = value_to_plot_char
+      )
 
     data_exp_per_sector <- data_summary_plot |>
-      dplyr::select(-c(perc_of_total))|>
+      dplyr::select(-c(perc_of_total)) |>
       dplyr::filter(agg_sum_name == "group_sum")
 
     st_expected_loss <- analysis_data_single_run |>
@@ -47,5 +48,4 @@ prepare_for_el_plots <-
       dplyr::mutate(el_as_perc_exposure = .data$expected_loss_value / .data$agg_sum_value)
 
     return(data_el)
-
   }

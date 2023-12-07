@@ -10,7 +10,7 @@ qplot_boxplot <- function(data_exposure_plot) {
   data_exposure_plot <- remove_outliers(data_exposure_plot)
   plot <- ggplot(data_exposure_plot, aes(x = .data$group_variable, y = .data$value_to_plot, fill = .data$group_mean)) +
     geom_boxplot() +
-    scale_y_continuous(labels = scales::unit_format(unit = "M", scale = 1e-6))+
+    scale_y_continuous(labels = scales::unit_format(unit = "M", scale = 1e-6)) +
     scale_fill_gradient(
       low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
       high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
@@ -27,6 +27,6 @@ qplot_boxplot <- function(data_exposure_plot) {
       x = "Sector",
       y = "Exposure (millions)"
     ) +
-    facet_wrap(~.data$group_variable, scales = "free")
+    facet_wrap(~ .data$group_variable, scales = "free")
   plot
 }

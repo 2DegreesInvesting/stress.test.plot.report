@@ -4,7 +4,11 @@
 \alias{create_analysis_data}
 \title{Title}
 \usage{
-create_analysis_data(portfolio_data, multi_crispy, portfolio_crispy_merge_cols)
+create_analysis_data(
+  portfolio_data,
+  multi_crispy_data,
+  portfolio_crispy_merge_cols
+)
 }
 \arguments{
 \item{multi_crispy}{}

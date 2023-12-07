@@ -19,14 +19,14 @@ qplot_pie_summaries <-
       )
 
     p1 <-
-    ggplot2::ggplot(
-      data_pie_summary_perc,
-      aes(
-        x = "" ,
-        y = .data$perc_of_total,
-        fill = .data$group_variable
-      )
-    ) +
+      ggplot2::ggplot(
+        data_pie_summary_perc,
+        aes(
+          x = "",
+          y = .data$perc_of_total,
+          fill = .data$group_variable
+        )
+      ) +
       ggplot2::geom_col(width = 1, color = 1) +
       ggplot2::coord_polar(theta = "y") +
       ggrepel::geom_label_repel(
@@ -42,8 +42,10 @@ qplot_pie_summaries <-
         nudge_x = 1,
         show.legend = FALSE
       ) +
-      ggplot2::scale_color_manual(breaks=data_summary_plot$group_variable,
-                                  values=r2dii.colours::palette_1in1000_plot[-c(1:2),][c(1:length(unique(data_summary_plot$group_variable))),]$hex )+
+      ggplot2::scale_color_manual(
+        breaks = data_summary_plot$group_variable,
+        values = r2dii.colours::palette_1in1000_plot[-c(1:2), ][c(1:length(unique(data_summary_plot$group_variable))), ]$hex
+      ) +
       # r2dii.colours::scale_fill_2dii("2dii", colour_groups = data_summary_plot$group_variable) +
       r2dii.plot::theme_2dii() +
       ggplot2::theme(
@@ -75,15 +77,17 @@ qplot_pie_summaries <-
       ggplot2::ggplot(
         data_pie_summary_sum,
         aes(
-          x = "" ,
+          x = "",
           y = .data$agg_sum_value,
           fill = .data$group_variable
         )
       ) +
       ggplot2::geom_col(width = 1, color = 1) +
-      ggplot2::coord_polar(theta = "y")  +
-      ggplot2::scale_color_manual(breaks=data_summary_plot$group_variable,
-                                  values=r2dii.colours::palette_1in1000_plot[-c(1:2),][c(1:length(unique(data_summary_plot$group_variable))),]$hex )+
+      ggplot2::coord_polar(theta = "y") +
+      ggplot2::scale_color_manual(
+        breaks = data_summary_plot$group_variable,
+        values = r2dii.colours::palette_1in1000_plot[-c(1:2), ][c(1:length(unique(data_summary_plot$group_variable))), ]$hex
+      ) +
 
       # r2dii.colours::scale_fill_2dii("pacta", colour_groups = data_summary_plot$group_variable) +
       r2dii.plot::theme_2dii() +
@@ -123,14 +127,15 @@ qplot_pie_summaries <-
       labs(title = paste("Summary pie charts", agg_sum_name_chr))
     p <-
       ggpubr::annotate_figure(p,
-                              top = ggpubr::text_grob(
-                                paste(
-                                  "Portfolio composition perc of total, counting type as",
-                                  agg_sum_name_chr
-                                ),
-                                color = "black",
-                                face = "bold",
-                                size = 14
-                              ))
+        top = ggpubr::text_grob(
+          paste(
+            "Portfolio composition perc of total, counting type as",
+            agg_sum_name_chr
+          ),
+          color = "black",
+          face = "bold",
+          size = 14
+        )
+      )
     return(p)
   }

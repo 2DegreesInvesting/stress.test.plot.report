@@ -16,8 +16,10 @@ prepare_for_pd_plot <-
       dplyr::rename(
         value_to_plot = !!rlang::sym(value_to_plot_char)
       ) |>
-    dplyr::group_by(!!! rlang::syms(group_variable_charvec)) |>
-      dplyr::summarise(value_to_plot = stats::median(.data$value_to_plot, na.rm = T),
-                       .groups = "drop")
+      dplyr::group_by(!!!rlang::syms(group_variable_charvec)) |>
+      dplyr::summarise(
+        value_to_plot = stats::median(.data$value_to_plot, na.rm = T),
+        .groups = "drop"
+      )
     return(data_pd_plot)
   }

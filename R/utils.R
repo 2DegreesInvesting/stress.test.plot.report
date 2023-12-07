@@ -1,4 +1,4 @@
-repeat_plot_in_a_grid <- function(data, plot_fun,  title = "", row_layout = TRUE) {
+repeat_plot_in_a_grid <- function(data, plot_fun, title = "", row_layout = TRUE) {
   plist <- list()
   plot_i <- 1
 
@@ -19,23 +19,26 @@ repeat_plot_in_a_grid <- function(data, plot_fun,  title = "", row_layout = TRUE
 
     plist[[plot_i]] <- cdi_plot
     plot_i <- plot_i + 1
-
   }
 
   top_title <- ggpubr::text_grob(title,
-                                 size = 15,
-                                 face = "bold")
+    size = 15,
+    face = "bold"
+  )
 
   if (row_layout == TRUE) {
-    plots_grid <- gridExtra::grid.arrange(grobs = plist,
-                                          nrow = length(plist),
-                                          top = top_title)
-  } else{
-    plots_grid <- gridExtra::grid.arrange(grobs = plist,
-                                          ncol = length(plist),
-                                          top = top_title)
+    plots_grid <- gridExtra::grid.arrange(
+      grobs = plist,
+      nrow = length(plist),
+      top = top_title
+    )
+  } else {
+    plots_grid <- gridExtra::grid.arrange(
+      grobs = plist,
+      ncol = length(plist),
+      top = top_title
+    )
   }
 
   return(plots_grid)
-
 }

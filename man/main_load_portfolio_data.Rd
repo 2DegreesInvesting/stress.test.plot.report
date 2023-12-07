@@ -5,8 +5,8 @@
 \title{Title}
 \usage{
 main_load_portfolio_data(
-  raw_portfolio_data,
-  maturity_month_term_bridge,
+  portfolio_data_path,
+  maturity_month_term_bridge_fp,
   max_portfolio_granularity,
   trisk_start_year
 )
