@@ -15,10 +15,10 @@ prepare_for_performers_plot <-
            performance_metric,
            n_performers = 10) {
     data_performers_plot <- analysis_data_single_run |>
-        dplyr::group_by_at(c(group_variable_vec, performer_variable_char)) |>
-        dplyr::summarise({{performance_metric}} := sum(!!rlang::sym(performance_metric))) |>
-        dplyr::slice_max(order_by = !!rlang::sym(performance_metric), n = n_performers) |>
-        ungroup()
+      dplyr::group_by_at(c(group_variable_vec, performer_variable_char)) |>
+      dplyr::summarise({{ performance_metric }} := sum(!!rlang::sym(performance_metric))) |>
+      dplyr::slice_max(order_by = !!rlang::sym(performance_metric), n = n_performers) |>
+      ungroup()
 
-      return(data_performers_plot)
+    return(data_performers_plot)
   }

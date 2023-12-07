@@ -12,15 +12,14 @@
 #' @examples
 qplot_worst_performers <-
   function(data_performers_plot, x_var, y_var, fill_var, facet_var) {
-
-    fill_colors <- r2dii.colours::palette_1in1000_plot[-c(1:2),][c(1:length(unique(data_performers_plot[,fill_var]))),]$hex
+    fill_colors <- r2dii.colours::palette_1in1000_plot[-c(1:2), ][c(1:length(unique(data_performers_plot[, fill_var]))), ]$hex
 
     # reorder_within
     p <- ggplot(
       data_performers_plot,
       aes(
         x = !!rlang::sym(x_var),
-        y =  !!rlang::sym(y_var),
+        y = !!rlang::sym(y_var),
         fill = !!rlang::sym(fill_var)
       )
     ) +
@@ -31,13 +30,17 @@ qplot_worst_performers <-
       ), stat = "identity") +
       scale_x_reordered() +
       scale_y_continuous(expand = expansion(mult = c(0, .1)), label = scales::unit_format(unit = "M", scale = 1e-6)) +
-      ggplot2::scale_color_manual(breaks=data_performers_plot[[facet_var]],
-                                  values= fill_colors)+
+      ggplot2::scale_color_manual(
+        breaks = data_performers_plot[[facet_var]],
+        values = fill_colors
+      ) +
       # scale_fill_2dii("pacta", colour_groups = data_worst_performers$group_variable) +
       coord_flip() +
       theme_2dii() +
-      theme(axis.title.y = element_blank(),
-            legend.position = "none") +
+      theme(
+        axis.title.y = element_blank(),
+        legend.position = "none"
+      ) +
       facet_wrap(
         ~ fct_reorder(
           .data[[x_var]],

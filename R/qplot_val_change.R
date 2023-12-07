@@ -7,33 +7,35 @@
 #'
 #' @examples
 qplot_val_change <- function(data_val_change) {
-
   # prepare data for plots
   group_cols <-
     colnames(data_val_change)[!colnames(data_val_change) %in% c("value_change_absolute", "value_change_percent")]
   data_plt <- data_val_change |>
     tidyr::unite("xaxis_values",
-                 all_of(group_cols),
-                 sep = "-",
-                 remove = TRUE)
+      all_of(group_cols),
+      sep = "-",
+      remove = TRUE
+    )
 
   # do plots
   p_perc <-
     plot_value_change(data_plt,
-                      is_percentage = TRUE) +
-    labs(title = "Analysed portfolio percentage value change",
-         y = "Value change (% points)")
+      is_percentage = TRUE
+    ) +
+    labs(
+      title = "Analysed portfolio percentage value change",
+      y = "Value change (% points)"
+    )
 
   p_abs <- plot_value_change(data_plt,
-                             is_percentage = FALSE)  +
-    labs(title = "Analysed portfolio absolute value change",
-         y = "Value change (currency)")
+    is_percentage = FALSE
+  ) +
+    labs(
+      title = "Analysed portfolio absolute value change",
+      y = "Value change (currency)"
+    )
 
-
-
-  p <-
-    (p_perc + patchwork::plot_spacer()) / (p_abs + patchwork::plot_spacer())
-  p
+  gridExtra::grid.arrange(p_perc + patchwork::plot_spacer(), p_abs + patchwork::plot_spacer(), ncol = 1)
 }
 
 #' Title
@@ -55,14 +57,16 @@ plot_value_change <- function(data_plt, is_percentage) {
   }
 
   p <-
-    ggplot(data_plt,
-           aes(x = xaxis_values, y = !!rlang::sym(y_val_name), fill = !!rlang::sym(y_val_name))) +
+    ggplot(
+      data_plt,
+      aes(x = xaxis_values, y = !!rlang::sym(y_val_name), fill = !!rlang::sym(y_val_name))
+    ) +
     geom_bar(stat = "identity") +
     geom_hline(yintercept = 0) +
     theme_2dii() +
     theme(
       legend.position = "right",
-      axis.text.x = element_text(angle = 45, hjust=1, size = 10),
+      axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
       # axis.ticks.x = element_blank(),
       axis.title.x = element_blank()
     ) +
@@ -76,7 +80,7 @@ plot_value_change <- function(data_plt, is_percentage) {
       # midpoint = min(data_plt[,y_val_name]),
       labels = labels,
       name = "Expected loss"
-    )  +
+    ) +
     scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = labels)
 
   p

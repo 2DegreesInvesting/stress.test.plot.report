@@ -14,7 +14,7 @@ qplot_el_change_sector <- function(data_el_plot) {
 
   p_perc <- qplot_el_change_sector_perc(data_change)
 
-  p_perc / p_abs
+  gridExtra::grid.arrange(p_perc, p_abs, ncol = 1)
 }
 
 #' Title
@@ -26,9 +26,8 @@ qplot_el_change_sector <- function(data_el_plot) {
 #'
 #' @examples
 qplot_el_change_sector_perc <- function(data_change) {
-
   p <- plot_el_coloured(data_change, "el_as_perc_exposure", is_percentage = TRUE) +
-    facet_wrap(~ group_variable, scales = "fixed") +
+    facet_wrap(~group_variable, scales = "fixed") +
     labs(
       title = "Expected loss shock as percentage of exposure per sector",
       y = "Expected Loss\n(% exposure)"
@@ -45,9 +44,8 @@ qplot_el_change_sector_perc <- function(data_change) {
 #'
 #' @examples
 qplot_el_change_sector_abs <- function(data_change) {
-
   p <- plot_el_coloured(data_change, "expected_loss_value") +
-    facet_wrap(~ group_variable, scales = "fixed") +
+    facet_wrap(~group_variable, scales = "fixed") +
     labs(
       title = "Expected loss shock per sector",
       y = "Expected Loss\n(currency)"

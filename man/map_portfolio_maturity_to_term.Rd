@@ -7,7 +7,7 @@
 map_portfolio_maturity_to_term(
   portfolio_data,
   maturity_month_term_bridge,
-  trisk_start_year = 2022
+  trisk_start_year
 )
 }
 \arguments{

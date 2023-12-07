@@ -24,7 +24,7 @@ qplot_el_sector <- function(data_el_plot, use_exp_loss_types) {
       y = "Expected Loss (% exposure)"
     )
 
-  p_perc / p_abs
+  gridExtra::grid.arrange(p_perc, p_abs, ncol = 1)
 }
 
 #' Title
@@ -37,7 +37,7 @@ qplot_el_sector <- function(data_el_plot, use_exp_loss_types) {
 #'
 #' @examples
 plot_el_coloured <- function(data, y_val_name, is_percentage = FALSE) {
-  if(is_percentage) {
+  if (is_percentage) {
     labels <- scales::percent
   } else {
     labels <- scales::unit_format(unit = "M", scale = 1e-6)
@@ -45,32 +45,32 @@ plot_el_coloured <- function(data, y_val_name, is_percentage = FALSE) {
 
   p <-
     ggplot(
-    data,
-    aes_string(x = "expected_loss_type", y = y_val_name, fill = y_val_name)
+      data,
+      aes_string(x = "expected_loss_type", y = y_val_name, fill = y_val_name)
     ) +
     geom_bar(stat = "identity", color = "grey") +
     scale_x_discrete(position = "bottom", labels = r2dii.plot::to_title) +
     scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = labels) +
     scale_fill_gradient2(
-        low = r2dii.colours::palette_1in1000_plot %>%
-          filter(.data$label == "red") %>%
-          pull(.data$hex),
-        high = r2dii.colours::palette_1in1000_plot %>%
-          filter(.data$label == "green") %>%
-          pull(.data$hex),
-        midpoint = 0,
-        labels = labels,
-        name = "Expected loss"
-      ) +
+      low = r2dii.colours::palette_1in1000_plot %>%
+        filter(.data$label == "red") %>%
+        pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>%
+        filter(.data$label == "green") %>%
+        pull(.data$hex),
+      midpoint = 0,
+      labels = labels,
+      name = "Expected loss"
+    ) +
     theme_2dii() +
     theme(
       legend.title = element_text(),
       axis.ticks.x = element_blank(),
       axis.title.x = element_blank(),
       strip.placement = "outside",
-      axis.text.x = element_text(angle = 45, hjust=1)
-    )+
-      facet_wrap(~ group_variable, scales = "fixed")
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+    facet_wrap(~group_variable, scales = "fixed")
 
 
   p

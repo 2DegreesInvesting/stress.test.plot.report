@@ -62,21 +62,25 @@ prepare_for_cdi_pd_plots <-
            weight_variable_char = NULL,
            metrics_pd) {
     stopifnot(all(
-      metrics_pd %in%  c("crispy.pd_baseline", "crispy.pd_shock", "pd_difference")
+      metrics_pd %in% c("crispy.pd_baseline", "crispy.pd_shock", "pd_difference")
     ))
 
     # TODO tests
     if (!is.null(weight_variable_char)) {
       aggregated_pds <- analysis_data %>%
         dplyr::group_by_at(group_variables_vec) %>%
-        dplyr::summarise_at(.vars = metrics_pd,
-                            .funs = stats::weighted.mean(., w = !!rlang::sym(weight_variable_char))) %>%
+        dplyr::summarise_at(
+          .vars = metrics_pd,
+          .funs = stats::weighted.mean(., w = !!rlang::sym(weight_variable_char))
+        ) %>%
         dplyr::ungroup()
     } else {
       aggregated_pds <- analysis_data %>%
         dplyr::group_by_at(group_variables_vec) %>%
-        dplyr::summarise_at(.vars = metrics_pd,
-                            .funs = mean) %>%
+        dplyr::summarise_at(
+          .vars = metrics_pd,
+          .funs = mean
+        ) %>%
         dplyr::ungroup()
     }
 
@@ -97,7 +101,7 @@ prepare_for_cdi_pd_plots <-
 #' @examples
 prepare_for_cdi_el_plots <- function(analysis_data,
                                      group_variables_vec = group_variables_vec,
-                                     metrics_el = metrics_el)    {
+                                     metrics_el = metrics_el) {
   stopifnot(all(
     metrics_el %in% c(
       "expected_loss_portfolio",
@@ -111,5 +115,4 @@ prepare_for_cdi_el_plots <- function(analysis_data,
     dplyr::group_by_at(group_variables_vec) %>%
     dplyr::summarise_at(.vars = metrics_el, .funs = sum) %>%
     dplyr::ungroup()
-
 }

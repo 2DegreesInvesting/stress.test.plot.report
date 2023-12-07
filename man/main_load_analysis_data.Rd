@@ -6,14 +6,13 @@
 \usage{
 main_load_analysis_data(
   multi_crispy_data,
-  portfolio_data = NULL,
-  portfolio_crispy_merge_cols = NULL
+  portfolio_data,
+  portfolio_crispy_merge_cols
 )
 }
 \arguments{
 \item{portfolio_crispy_merge_cols}{}
 }
 \description{
-The dataframe in output of this function should always be
-the one used as input for the plots preprocessing functions
+Title
 }
