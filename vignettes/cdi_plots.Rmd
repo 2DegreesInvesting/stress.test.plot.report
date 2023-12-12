@@ -19,7 +19,7 @@ library(stress.test.plot.report)
 library(dplyr)
 
 granularity <-
-  c("ald_sector", "ald_business_unit")
+  c("ald_sector")
 
 
 maturity_month_term_bridge_fp <-
@@ -63,7 +63,7 @@ analysis_data_single_run <- analysis_data |>
 # PLOTS
 
 ```{r}
-group_variables_vec <- c("portfolio.ald_sector", "portfolio.ald_business_unit", "crispy.shock_year", "crispy.baseline_scenario", "crispy.shock_scenario", "crispy.discount_rate")
+group_variables_vec <- c("portfolio.ald_sector", "crispy.shock_year", "crispy.baseline_scenario", "crispy.shock_scenario", "crispy.discount_rate")
 weight_variable <- "portfolio.exposure_value_usd"
 metrics_npv <- c("crispy.net_present_value_baseline", "crispy.net_present_value_shock", "net_present_value_difference")
 metrics_pd <- c("crispy.pd_baseline", "crispy.pd_shock", "pd_difference")
@@ -144,8 +144,7 @@ for (run_id_name in unique(data_cdi_el_plot$crispy.run_id)) {
       x_var = "crispy.shock_year",
       y_var = metric_el_name,
       fill_var = metric_el_name,
-      facet_rows_var = NULL,
-      facet_cols_var = "portfolio.ald_business_unit",
+      facet_var="portfolio.ald_sector",
       title = paste("With", metric_el_name)
     ) +
       ggplot2::theme(plot.title = ggplot2::element_text(size = 12, face = "bold"))
@@ -213,10 +212,37 @@ for (scenario_name in unique(data_cdi_el_plot$crispy.shock_scenario)) {
 
 DISTRIBUTION PLOTS
 
+Require the data to be at a higher level than ald_sector
+
+```{r}
+analysis_data_company <-
+  load_input_plots_data(
+    crispy_outputs_dir = crispy_outputs_dir,
+    portfolio_data_path = NULL,
+    granularity = c("company_id", "ald_sector"),
+    maturity_month_term_bridge_fp = maturity_month_term_bridge_fp,
+    trisk_start_year = trisk_start_year
+  )
+
+
+data_cdi_pd_plot_company <- analysis_data_company |>
+  dplyr::group_by(crispy.run_id) |>
+  dplyr::group_modify(
+    ~ prepare_for_cdi_pd_plots(
+      .,
+      group_variables_vec = c("portfolio.company_id", group_variables_vec),
+      metrics = metrics_pd,
+    )
+  ) |>
+  dplyr::ungroup()
+
+```
+
+
 SHOCK YEAR
 
 ```{r, fig.width = 8, fig.height = 12}
-density_plot <- make_density_plots(data_cdi_pd_plot, density_var = "crispy.shock_year")
+density_plot <- make_density_plots(data_cdi_pd_plot_company, density_var = "crispy.shock_year")
 
 print(density_plot)
 ```
@@ -224,7 +250,7 @@ print(density_plot)
 DISCOUNT RATE
 
 ```{r, fig.width = 8, fig.height = 12}
-density_plot <- make_density_plots(data_cdi_pd_plot, density_var = "crispy.discount_rate")
+density_plot <- make_density_plots(data_cdi_pd_plot_company, density_var = "crispy.discount_rate")
 
 print(density_plot)
 ```

@@ -21,6 +21,7 @@ load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
   data_list <- purrr::map(files_path, function(fp) {
     df <- readr::read_csv(fp,
       col_types = readr::cols_only(
+        run_id = "c",
         term = "d",
         scenario_geography = "c",
         company_id = "c",
@@ -40,10 +41,7 @@ load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
         pd_baseline = "d",
         pd_shock = "d"
       )
-    ) |>
-      dplyr::mutate(
-        run_id = sub("^crispy_output_standard_(.*)\\.csv", "\\1", basename(fp))
-      )
+    )
   })
 
   multi_crispy_data <- dplyr::bind_rows(data_list)
@@ -63,7 +61,6 @@ load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
 #' @param param_cols TODO the parameters should be stored in a dataframe other than crispy and use the run_id as key to join
 #'
 #' @return
-#' @export
 #'
 #' @examples
 aggregate_crispy_facts <- function(multi_crispy, group_cols, param_cols = c(

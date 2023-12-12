@@ -20,10 +20,11 @@ library(ggplot2)
 ```
 
 ```{r}
-crispy_outputs_dir <- here::here("data-raw", "synthetic_crispy")
+crispy_outputs_dir <- here::here("data-raw", "crispy_ref_toydata")
 
 granularity <- c(
   "company_name",
+  "company_id", 
   "ald_sector",
   "ald_business_unit"
 )
@@ -37,30 +38,51 @@ analysis_data <-
     granularity = granularity
   )
 
-analysis_data_1_run <- analysis_data %>% dplyr::filter(crispy.run_id == "NGFS2021_MESSAGE_B2DS_Global_no_carbon_tax")
 ```
+- Dataset description
+
+
+```{r}
+
+```
+
+
+- Impact of scenario choice
+
+For a given 
+
+```{r}
+
+```
+
+# Focus on a single scenario 
+
+```{r}
+analysis_data_1_run <- analysis_data |> dplyr::filter(crispy.run_id == "8a334259-1665-4c72-9c77-bc67e28927a9")
+```
+
 
 - Heterogeneity in Transition Risk
 
 ```{r, fig.width=10}
-agg_analysis_data <- analysis_data_1_run %>%
-  dplyr::filter(.data$net_present_value_difference != 0) %>%
-  dplyr::select(.data$portfolio.company_name, .data$crispy_perc_value_change, .data$pd_difference) %>%
-  dplyr::group_by(.data$portfolio.company_name) %>%
+agg_analysis_data <- analysis_data_1_run |>
+  dplyr::filter(.data$net_present_value_difference != 0) |>
+  dplyr::select(.data$portfolio.company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
+  dplyr::group_by(.data$portfolio.company_name) |>
   dplyr::summarise(
-    crispy_perc_value_change = stats::median(crispy_perc_value_change),
-    pd_difference = stats::median(pd_difference),
+    crispy_perc_value_change = mean(crispy_perc_value_change),
+    pd_difference = mean(pd_difference),
     .groups = "drop"
   )
 
 # Sorting categories based on value1 in descending order
-plot_data <- agg_analysis_data %>%
-  dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) %>%
-  dplyr::mutate(portfolio.company_name = factor(.data$portfolio.company_name, levels = .data$portfolio.company_name)) %>%
+plot_data <- agg_analysis_data |>
+  dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) |>
+  dplyr::mutate(portfolio.company_name = factor(.data$portfolio.company_name, levels = .data$portfolio.company_name)) |>
   tidyr::pivot_longer(cols = c("crispy_perc_value_change", "pd_difference"), names_to = "variable", values_to = "value")
 
 
-custom_labeller <- c(crispy_perc_value_change = "Median company percent value change", pd_difference = "Median climate Transition-related PD difference")
+custom_labeller <- c(crispy_perc_value_change = "Mean company percent value change", pd_difference = "Mean climate Transition-related PD difference")
 # Plotting
 ggplot(plot_data, aes(x = portfolio.company_name, y = value)) +
   geom_bar(stat = "identity", fill = "blue", show.legend = FALSE) +
@@ -74,17 +96,138 @@ ggplot(plot_data, aes(x = portfolio.company_name, y = value)) +
   ) +
   r2dii.plot::theme_2dii() +
   theme(
-    axis.text.x = element_text(angle = 90, vjust = 0.5),
+    axis.text.x = element_blank(),#element_text(angle = 90, vjust = 0.5),
     axis.title.y = element_blank(),
     strip.background = element_blank(),
     strip.placement = "outside"
   ) +
   labs(x = NULL, y = NULL) +
-  guides(fill = FALSE)
+  guides(fill = NULL)
 ```
+
+*Key points : *
+
+- There seems to be a threshold after ~80% loss in npv change, where the PD difference becomes significantly larger/wider/expands
+- A positive npv change can sometimes be associated with a negative PD difference, i.e. some companies become stronger after the shock
+- in the middle, PD difference are about constant, but still appear to point that companies become more at risk by about 10%. For those companies in the middle, high NPV loss is to be expected, but with a moderate PD change from baseline to shock.
+
+
+
+
+#### THROW AWAY BELOW
 
 - Annual average changes in the probability of default
 
 ```{r}
-```
 
+data_plot <- analysis_data_1_run |> 
+  # dplyr::group_by(portfolio.company_id, portfolio.term) |>  
+  # dplyr::summarise(crispy_perc_pd_change=stats::median(.data$crispy_perc_pd_change, na.rm=T), .groups="drop") |>
+  dplyr::group_by(portfolio.term) |>
+  dplyr::summarise(avg_pd_baseline=mean(crispy.pd_baseline),
+                   avg_pd_shock=mean(crispy.pd_shock)
+                   , .groups="drop") |>
+  dplyr::mutate(avg_pd_difference=avg_pd_shock-avg_pd_baseline) |>
+  tidyr::pivot_longer(
+    cols=c("avg_pd_shock", "avg_pd_baseline", "avg_pd_difference"),
+    names_to="value_type",
+    values_to = "value"
+  )
+
+data_plot
+
+ggplot(data_plot, aes(x=portfolio.term, y=value, group=value_type, color=value_type)) +
+  geom_line()
+
+```
+- Distribution of total NPV vs NPV change
+
+Shows how risky are companies with a high Production / "valuation"
+
+```{r}
+agg_analysis_data <- analysis_data_1_run |>
+  dplyr::filter(.data$net_present_value_difference != 0) |>
+  dplyr::select(
+    .data$portfolio.company_name,
+    .data$portfolio.ald_sector,
+    .data$crispy_perc_value_change,
+    .data$crispy.net_present_value_baseline
+  ) |>
+  dplyr::group_by(.data$portfolio.company_name, portfolio.ald_sector) |>
+  dplyr::summarise(
+    total_npv = sum(crispy.net_present_value_baseline),
+    crispy_perc_value_change = mean(crispy_perc_value_change),
+    .groups = "drop"
+  )
+
+
+for (sector in unique(agg_analysis_data$portfolio.ald_sector)){
+
+
+# Sorting categories based on value1 in descending order
+plot_data <- agg_analysis_data |>
+  dplyr::filter(.data$portfolio.ald_sector==sector) |>
+  dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) |>
+  dplyr::mutate(
+    portfolio.company_name = factor(
+      .data$portfolio.company_name,
+      levels = .data$portfolio.company_name
+    )
+  ) |>
+  tidyr::pivot_longer(
+    cols = c("crispy_perc_value_change", "total_npv"),
+    names_to = "variable",
+    values_to = "value"
+  )
+  
+  
+custom_labeller <-
+  c(crispy_perc_value_change = "Median company percent value change",
+    pd_difference = "Total company NPV")
+
+
+# Filter data for the percent plot
+plot_data_percent <- plot_data |> 
+  dplyr::filter(.data$variable == "crispy_perc_value_change")
+
+# Create percent plot
+percent_plot <- ggplot(plot_data_percent, aes(x = portfolio.company_name, y = value)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    breaks = scales::pretty_breaks(n = 5)
+  ) +
+  r2dii.plot::theme_2dii() +
+  theme(axis.text.x = element_blank(),
+        axis.title.y = element_blank(),
+        strip.background = element_blank(),
+        strip.placement = "outside") +
+  labs(x = NULL, y = NULL)
+
+# Filter data for the million plot
+plot_data_million <- plot_data |> 
+  dplyr::filter(.data$variable == "total_npv")
+
+# Create million plot
+million_plot <- ggplot(plot_data_million, aes(x = portfolio.company_name, y = value)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  scale_y_continuous(
+    labels = scales::label_number(scale = 1e-6, suffix = "M"),
+    breaks = scales::pretty_breaks(n = 5)
+  ) +
+  r2dii.plot::theme_2dii() +
+  theme(axis.text.x = element_blank(),
+        axis.title.y = element_blank(),
+        strip.background = element_blank(),
+        strip.placement = "outside") +
+  labs(x = NULL, y = NULL)
+
+# Combine the plots
+combined_plot <- cowplot::plot_grid(percent_plot, million_plot, nrow = 2, align = "v") 
+print(sector)
+print(combined_plot)
+}
+```
+  
+  
+  

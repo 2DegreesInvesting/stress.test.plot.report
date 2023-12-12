@@ -20,8 +20,7 @@ make_expected_loss_plot <-
            x_var,
            y_var,
            fill_var,
-           facet_rows_var,
-           facet_cols_var,
+           facet_var,
            title) {
     # Create plot
     plotEL <-
@@ -36,12 +35,12 @@ make_expected_loss_plot <-
       geom_bar(stat = "identity") +
       ggplot2::scale_y_continuous(labels = scales::unit_format(unit = "M", scale = 1e-6)) +
       scale_fill_gradient(
-        low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
-        high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
+        low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
+        high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
       ) +
       facet_wrap(
-        c(facet_rows_var, facet_cols_var),
-        scales = "free_y"
+        facet_var,
+        scales = "fixed"
       ) +
       theme_2dii() +
       labs(
@@ -69,7 +68,7 @@ make_expected_loss_plot <-
 #' @examples
 make_mean_pd_diff_plot <- function(data_cdi_pd_plot, scenario_name_for_title) {
   # Create plot
-  plotsy <- ggplot(data = data_cdi_pd_plot, aes(x = crispy.shock_year, group = factor(crispy.shock_year), y = pd_difference, fill = pd_difference)) +
+  plotsy <- ggplot(data = data_cdi_pd_plot, aes(x = factor(crispy.shock_year), group = factor(crispy.shock_year), y = pd_difference, fill = pd_difference)) +
     geom_bar(stat = "identity") +
     scale_fill_gradientn(
       colors = color_gradient,
@@ -78,7 +77,7 @@ make_mean_pd_diff_plot <- function(data_cdi_pd_plot, scenario_name_for_title) {
       labels = scales::comma,
       name = "Mean pd_difference"
     ) +
-    facet_grid(portfolio.ald_business_unit ~ portfolio.ald_sector, scales = "free_y") + # Allow separate scales for y-axis
+    facet_grid( ~ portfolio.ald_sector, scales = "free_y") + # Allow separate scales for y-axis
     theme_2dii() +
     labs(x = "Shock_Year", y = "Mean pd_difference", title = paste("Mean PD Difference by Shock Year -", scenario_name_for_title))
   # theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 28),  # Adjust title size
@@ -107,7 +106,7 @@ make_mean_pd_diff_plot <- function(data_cdi_pd_plot, scenario_name_for_title) {
 #' @examples
 make_discount_rate_plot <- function(plot_data, scenario_name_for_title, y_var) {
   # Create plot
-  plotsy <- ggplot(data = plot_data, aes(x = crispy.discount_rate, group = factor(crispy.discount_rate), y = !!rlang::sym(y_var), fill = !!rlang::sym(y_var))) +
+  plotsy <- ggplot(data = plot_data, aes(x = factor(crispy.discount_rate), group = factor(crispy.discount_rate), y = !!rlang::sym(y_var), fill = !!rlang::sym(y_var))) +
     geom_bar(stat = "identity") +
     scale_fill_gradientn(
       colors = color_gradient,
@@ -116,7 +115,7 @@ make_discount_rate_plot <- function(plot_data, scenario_name_for_title, y_var) {
       labels = scales::comma,
       name = "Mean pd_difference"
     ) +
-    facet_grid(portfolio.ald_business_unit ~ portfolio.ald_sector, scales = "free_y") + # Allow separate scales for y-axis
+    facet_grid( ~ portfolio.ald_sector, scales = "free_y") + # Allow separate scales for y-axis
     theme_2dii() +
     labs(x = "Discount Rate", y = "Mean pd_difference", title = paste("Mean PD Difference by Discount Rate -", scenario_name_for_title))
   # theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 24),  # Adjust title size
