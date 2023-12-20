@@ -17,52 +17,235 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(stress.test.plot.report)
 library(ggplot2)
-```
-
-```{r}
-crispy_outputs_dir <- here::here("data-raw", "crispy_ref_toydata")
-
-granularity <- c(
-  "company_name",
-  "company_id", 
-  "ald_sector",
-  "ald_business_unit"
-)
+library(dplyr)
+library(ggpubr)
 ```
 
 
 ```{r}
-analysis_data <-
-  load_input_plots_data(
-    crispy_outputs_dir = crispy_outputs_dir,
-    granularity = granularity
+analysis_data_full <- load_input_plots_data(
+  crispy_outputs_dir = here::here("workspace", "methodology_paper", "st_outputs"),
+  granularity = c(
+    "company_name",
+    "company_id",
+    "ald_sector",
+    "ald_business_unit"
+  )
+) 
+ 
+abcd_full_global <-
+  readr::read_csv(here::here(
+    "workspace",
+    "methodology_paper",
+    "abcd_stress_test_input.csv"
+  )) %>%
+  filter(scenario_geography == "Global",
+         ald_sector != "Automotive")
+
+
+raw_asset_impact <-
+  readxl::read_excel(
+    here::here(
+      "workspace",
+      "methodology_paper",
+      "AR-Company-Indicators_2022Q4.xlsx"
+    ),
+    sheet = "Company Activities"
   )
 
 ```
-- Dataset description
 
 
 ```{r}
+all_values_equal <- function(abcd_data) {
+  abcd_equal_tagged <- abcd_data %>%
+    dplyr::group_by(dplyr::across(
+      c(
+        -year,
+        -plan_tech_prod,
+        -plan_emission_factor,
+        -plan_sec_prod
+      )
+    )) %>%
+    dplyr::summarise(
+      all_equals = length(unique(plan_tech_prod)) == 1,
+      all_zero = sum(plan_tech_prod) == 0,
+      mostly_zeros = (sum(plan_tech_prod == 0)/length(plan_tech_prod)) > 0.5,
+      .groups = "drop"
+    )
+  return(abcd_equal_tagged)
+}
+
+the_constant_prods <- abcd_full_global %>% 
+  all_values_equal() %>%
+  distinct(company_id, ald_sector, ald_business_unit, all_equals)
+
+# identify companies having constant production on all of their business units
+constant_identifiers <- abcd_full_global %>% 
+  all_values_equal() %>% 
+  group_by(company_id) %>% 
+  summarise(all_bu_constant=all(all_equals)) %>% 
+  dplyr::filter((all_bu_constant == TRUE)) %>% 
+  distinct(company_id)
+```
+
+OBSERVATION : 
+- On the MW production unit, it happens a lot that the production is constant on all years. However, the MWh production is non-constant. In TRISK, we use the MW production that we then convert into MWh using the capacity factors. However, the productions will remain constant as the capacity factors are uniformly applied on all companies.
+This is most visible on Power companies
+  => TODO find a way to use the MWh production in input, and then apply the capacity factors on it
+
+Remove companies having constant production on all of their business units
+```{r}
+abcd_data <- abcd_full_global %>%  anti_join(constant_identifiers)
+analysis_data <- analysis_data_full %>%  
+  # anti_join(constant_identifiers%>%mutate(company_id = as.character(company_id)), by=c("portfolio.company_id"="company_id")) %>% 
+  filter(crispy.scenario_geography == "Global")
+```
+
+
+# Dataset description
+
+### N companies
+
+```{r}
+n_companies <- length(unique(abcd_data$company_id))
+print(paste("Number of companies :", n_companies))
+```
+
+### N companies per sector & BU
+
+```{r}
+inner_join(
+  abcd_full_global%>% 
+  dplyr::distinct(ald_sector, ald_business_unit, company_id) %>% # remove duplicates on year 
+  dplyr::group_by(ald_sector, ald_business_unit) %>%
+  dplyr::summarise(n_companies_full=n())
+  , 
+  abcd_data %>% 
+  dplyr::distinct(ald_sector, ald_business_unit, company_id) %>% # remove duplicates on year 
+  dplyr::group_by(ald_sector, ald_business_unit) %>%
+  dplyr::summarise(n_companies=n())
+  )
+```
+
+### Relative production per unit
+
+```{r}
+
+# inner_join(
+# inner_join(
+#   abcd_full_global%>% 
+#   group_by(ald_sector, ald_business_unit, ald_production_unit) %>%
+#   summarise(total_prod = sum(plan_tech_prod), .groups="drop") %>%
+#   group_by(ald_production_unit) %>%
+#   mutate(perc_prod_total_full = as.integer(total_prod/sum(total_prod) * 100)) %>%
+#   ungroup() %>%
+#   select(-c(total_prod))
+#   , 
+#   abcd_data%>% 
+#   group_by(ald_sector, ald_business_unit, ald_production_unit) %>%
+#   summarise(total_prod = sum(plan_tech_prod), .groups="drop") %>%
+#   group_by(ald_production_unit) %>%
+#   mutate(perc_prod_total = as.integer(total_prod/sum(total_prod) * 100)) %>%
+#   ungroup() 
+# 
+#   ),
+#   
+#     abcd_data %>% 
+#   dplyr::distinct(ald_sector, ald_business_unit, company_id) %>% # remove duplicates on year 
+#   dplyr::group_by(ald_sector, ald_business_unit) %>%
+#   dplyr::summarise(n_companies=n())
+# )%>%
+#   mutate(
+#     prod_company_provided = round(total_prod/n_companies, 3),
+#     prod_company_provided_perc = prod_company_provided/total_prod
+#   )
+
+
+
+inner_join(
+  abcd_data %>% 
+  dplyr::distinct(ald_sector, ald_business_unit, company_id) %>% # remove duplicates on year 
+  dplyr::group_by(ald_sector, ald_business_unit) %>%
+  dplyr::summarise(n_companies=n())
+  , 
+  abcd_data%>% 
+  group_by(ald_sector, ald_business_unit, ald_production_unit) %>%
+  summarise(bu_prod = sum(plan_tech_prod), .groups="drop") %>%
+  group_by(ald_production_unit) %>%
+  mutate(
+    unit_prod = sum(bu_prod),
+    perc_bu_prod = as.integer(bu_prod/unit_prod * 100)
+    ) %>%
+  ungroup() 
+
+  ) %>%
+  mutate(
+    prod_company_in_bu = bu_prod/n_companies,
+    prod_company_in_unit = round(prod_company_in_bu/unit_prod * 100, 3)
+  )
+
+
+```
+ *Key points*
+ 
+ - High carbon Power production technologies (CoalCap, GasCap, OilCap) represent 24+31+4=59% of the total production today
+ - Low carbon Power production technologies represent (HydroCap, NuclearCap, RenewablesCap) represent 41% of the total production today
+
+Taking the subset of non-constant does not change the repartition much
+
+### Regions repartition // companies can be duplicated in a region if they exist in multiple countries in this region
+
+```{r}
+raw_asset_impact %>% 
+  distinct(`Company ID`, `Asset Region` , `Asset Country` ) %>%
+  inner_join(abcd_data %>% distinct(company_id), by=c("Company ID"="company_id")) %>%
+  group_by(`Asset Region`) %>%
+  summarise(n_companies=n(), .groups="drop") %>%
+  arrange(desc(n_companies))
+
+```
+
+### Countries repartition 
+
+```{r}
+
+raw_asset_impact %>% 
+  distinct(`Company ID`, `Asset Region` , `Asset Country` ) %>%
+  inner_join(abcd_data %>% distinct(company_id), by=c("Company ID"="company_id")) %>%
+  group_by(`Asset Country`) %>%
+  summarise(n_companies=n(), .groups="drop") %>%
+  arrange(desc(n_companies))
+  
 
 ```
 
 
-- Impact of scenario choice
 
-For a given 
 
+The analysis data is then filtered no this subset of abcd to reflect the same outputs in analysis
 ```{r}
-
-```
-
-# Focus on a single scenario 
-
-```{r}
-analysis_data_1_run <- analysis_data |> dplyr::filter(crispy.run_id == "8a334259-1665-4c72-9c77-bc67e28927a9")
+analysis_data <-
+  analysis_data %>% inner_join(
+    abcd_data %>% mutate(company_id = as.character(company_id)) %>% distinct(company_id),
+    by = c("portfolio.company_id" = "company_id")
+  )
 ```
 
 
-- Heterogeneity in Transition Risk
+# Crispy focus 1 scenario
+
+```{r}
+analysis_data_1_run <- analysis_data_full |> dplyr::filter(crispy.run_id == "e801bbb2-9fbc-488c-80af-4e5065c607ec")
+
+```
+
+```{r}
+# analysis_data_1_run <- analysis_data_1_run %>% filter(portfolio.company_name %in% interesting_sample)
+```
+
+
+### Heterogeneity in Transition Risk
 
 ```{r, fig.width=10}
 agg_analysis_data <- analysis_data_1_run |>
@@ -77,157 +260,414 @@ agg_analysis_data <- analysis_data_1_run |>
 
 # Sorting categories based on value1 in descending order
 plot_data <- agg_analysis_data |>
+  # sample_frac(0.1) |>
   dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) |>
   dplyr::mutate(portfolio.company_name = factor(.data$portfolio.company_name, levels = .data$portfolio.company_name)) |>
   tidyr::pivot_longer(cols = c("crispy_perc_value_change", "pd_difference"), names_to = "variable", values_to = "value")
 
 
-custom_labeller <- c(crispy_perc_value_change = "Mean company percent value change", pd_difference = "Mean climate Transition-related PD difference")
+ 
 # Plotting
-ggplot(plot_data, aes(x = portfolio.company_name, y = value)) +
-  geom_bar(stat = "identity", fill = "blue", show.legend = FALSE) +
-  facet_wrap(~variable,
-    scales = "free_y", nrow = 2,
-    labeller = labeller(variable = custom_labeller)
+p1 <- ggplot(plot_data %>% filter(variable == "crispy_perc_value_change"), aes(x = factor(portfolio.company_name), y = value, group=variable)) +
+  geom_step(color="#5D9324", size=1) +
+    scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    breaks = scales::pretty_breaks(n = 5)
   ) +
-  scale_y_continuous(
+  geom_hline(yintercept=0, color="lightgray", linetype = "dashed", size = 0.5)+
+  r2dii.plot::theme_2dii() +
+  theme(
+    axis.text.x = element_blank(),#element_text(angle = 90, vjust = 0.5),
+    axis.ticks.x = element_blank(),
+    axis.title.y = element_text(size = 11),
+    strip.background = element_blank(),
+    strip.placement = "outside", 
+    legend.position="none"
+  ) +
+  labs(x = NULL, y = NULL) +
+  guides(fill = NULL)  +
+  ylab("Mean company percent value change")
+
+
+# Function to create bins every 10 observations
+bin_data <- function(data, bin_size) {
+  data <- data %>%
+    mutate(bin = (as.numeric(row_number()) - 1) %/% bin_size) %>%
+    group_by(bin) %>%
+    summarise(
+      avg = mean(value),
+      min = min(value),
+      max = max(value)
+    ) %>%
+    ungroup()
+  return(data)
+}
+
+# Bin data every 10 observations
+binned_data <- bin_data(plot_data%>% filter(variable == "pd_difference"), 200)
+
+# Create the plot
+p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
+  geom_col(fill = "#5D9324") +
+  geom_errorbar(aes(ymin = min, ymax = max), width = 0.2) +
+    scale_y_continuous(
     labels = scales::percent_format(accuracy = 1),
     breaks = scales::pretty_breaks(n = 5)
   ) +
   r2dii.plot::theme_2dii() +
   theme(
-    axis.text.x = element_blank(),#element_text(angle = 90, vjust = 0.5),
-    axis.title.y = element_blank(),
-    strip.background = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+  axis.title.y = element_text(size = 11),
+  strip.background = element_blank(),
     strip.placement = "outside"
   ) +
   labs(x = NULL, y = NULL) +
-  guides(fill = NULL)
+  guides(fill = NULL) +
+  ylab("Mean climate Transition-related PD difference")
+
+cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
+
+
 ```
 
 *Key points : *
 
-- There seems to be a threshold after ~80% loss in npv change, where the PD difference becomes significantly larger/wider/expands
 - A positive npv change can sometimes be associated with a negative PD difference, i.e. some companies become stronger after the shock
-- in the middle, PD difference are about constant, but still appear to point that companies become more at risk by about 10%. For those companies in the middle, high NPV loss is to be expected, but with a moderate PD change from baseline to shock.
+- On average, a decreasing NPV change will lead to an increasing PD difference. This global trend is not necessarily reflected at the company level. We can see on the PD difference barplots, where the vertical lines indicate that a company can have a high NPV change but a small PD difference. This is due to the input financial data that impacts the PD computations
+- However, a positive NPV change would hardly end up in a high PD difference on the company level.
 
 
 
-
-#### THROW AWAY BELOW
-
-- Annual average changes in the probability of default
+### Annual average changes in the probability of default
 
 ```{r}
 
 data_plot <- analysis_data_1_run |> 
   # dplyr::group_by(portfolio.company_id, portfolio.term) |>  
   # dplyr::summarise(crispy_perc_pd_change=stats::median(.data$crispy_perc_pd_change, na.rm=T), .groups="drop") |>
-  dplyr::group_by(portfolio.term) |>
+  dplyr::group_by(portfolio.term, portfolio.ald_sector, portfolio.ald_business_unit) |>
   dplyr::summarise(avg_pd_baseline=mean(crispy.pd_baseline),
                    avg_pd_shock=mean(crispy.pd_shock)
                    , .groups="drop") |>
   dplyr::mutate(avg_pd_difference=avg_pd_shock-avg_pd_baseline) |>
+  rename(`Shock`=avg_pd_shock,
+         `Baseline`=avg_pd_baseline, 
+         `PD difference`=avg_pd_difference) |>
   tidyr::pivot_longer(
-    cols=c("avg_pd_shock", "avg_pd_baseline", "avg_pd_difference"),
-    names_to="value_type",
-    values_to = "value"
+    cols=c("Shock", "Baseline"),#, "PD difference"),
+    names_to="PD type",
+    values_to = "Average PD"
   )
 
-data_plot
 
-ggplot(data_plot, aes(x=portfolio.term, y=value, group=value_type, color=value_type)) +
-  geom_line()
+ggplot(data_plot, aes(x=portfolio.term, y=`Average PD`, group=`PD type`, color=`PD type`)) +
+  geom_line() +
+  labs(x = "Years from now")+ 
+  scale_x_continuous(breaks = c(1, 2, 3, 4, 5), labels = c(1.5, 2.5, 3.5, 4.5, 5.5)) +
+  scale_y_continuous(labels = scales::percent_format(scale = 100)) +
+  r2dii.plot::theme_2dii() +
+  facet_wrap(~portfolio.ald_sector+portfolio.ald_business_unit, scales = "fixed") +
+  theme(panel.grid.major.y = element_line(color = "gray", linetype = "dashed", linewidth=0.3))
+
 
 ```
-- Distribution of total NPV vs NPV change
+
+*Key points*
+
+- The more a technology has a high carbon cost, the more its PD increases as time passes
+- 
+
+
+### Distribution of total NPV vs NPV change
 
 Shows how risky are companies with a high Production / "valuation"
 
 ```{r}
-agg_analysis_data <- analysis_data_1_run |>
-  dplyr::filter(.data$net_present_value_difference != 0) |>
-  dplyr::select(
-    .data$portfolio.company_name,
-    .data$portfolio.ald_sector,
-    .data$crispy_perc_value_change,
-    .data$crispy.net_present_value_baseline
-  ) |>
-  dplyr::group_by(.data$portfolio.company_name, portfolio.ald_sector) |>
-  dplyr::summarise(
-    total_npv = sum(crispy.net_present_value_baseline),
-    crispy_perc_value_change = mean(crispy_perc_value_change),
-    .groups = "drop"
-  )
-
-
-for (sector in unique(agg_analysis_data$portfolio.ald_sector)){
-
-
-# Sorting categories based on value1 in descending order
-plot_data <- agg_analysis_data |>
-  dplyr::filter(.data$portfolio.ald_sector==sector) |>
-  dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) |>
-  dplyr::mutate(
-    portfolio.company_name = factor(
-      .data$portfolio.company_name,
-      levels = .data$portfolio.company_name
-    )
-  ) |>
-  tidyr::pivot_longer(
-    cols = c("crispy_perc_value_change", "total_npv"),
-    names_to = "variable",
-    values_to = "value"
-  )
-  
-  
-custom_labeller <-
-  c(crispy_perc_value_change = "Median company percent value change",
-    pd_difference = "Total company NPV")
-
-
-# Filter data for the percent plot
-plot_data_percent <- plot_data |> 
-  dplyr::filter(.data$variable == "crispy_perc_value_change")
-
-# Create percent plot
-percent_plot <- ggplot(plot_data_percent, aes(x = portfolio.company_name, y = value)) +
-  geom_bar(stat = "identity", fill = "blue") +
-  scale_y_continuous(
-    labels = scales::percent_format(accuracy = 1),
-    breaks = scales::pretty_breaks(n = 5)
-  ) +
-  r2dii.plot::theme_2dii() +
-  theme(axis.text.x = element_blank(),
-        axis.title.y = element_blank(),
-        strip.background = element_blank(),
-        strip.placement = "outside") +
-  labs(x = NULL, y = NULL)
-
-# Filter data for the million plot
-plot_data_million <- plot_data |> 
-  dplyr::filter(.data$variable == "total_npv")
-
-# Create million plot
-million_plot <- ggplot(plot_data_million, aes(x = portfolio.company_name, y = value)) +
-  geom_bar(stat = "identity", fill = "blue") +
-  scale_y_continuous(
-    labels = scales::label_number(scale = 1e-6, suffix = "M"),
-    breaks = scales::pretty_breaks(n = 5)
-  ) +
-  r2dii.plot::theme_2dii() +
-  theme(axis.text.x = element_blank(),
-        axis.title.y = element_blank(),
-        strip.background = element_blank(),
-        strip.placement = "outside") +
-  labs(x = NULL, y = NULL)
-
-# Combine the plots
-combined_plot <- cowplot::plot_grid(percent_plot, million_plot, nrow = 2, align = "v") 
-print(sector)
-print(combined_plot)
-}
+# agg_analysis_data <- analysis_data_1_run |>
+#   dplyr::filter(.data$net_present_value_difference != 0) |>
+#   dplyr::select(
+#     .data$portfolio.company_name,
+#     .data$portfolio.ald_sector,
+#     .data$crispy_perc_value_change,
+#     .data$crispy.net_present_value_baseline
+#   ) |>
+#   dplyr::group_by(.data$portfolio.company_name, portfolio.ald_sector) |>
+#   dplyr::summarise(
+#     total_npv = sum(crispy.net_present_value_baseline),
+#     crispy_perc_value_change = mean(crispy_perc_value_change),
+#     .groups = "drop"
+#   )
+# 
+# 
+# for (sector in unique(agg_analysis_data$portfolio.ald_sector)){
+# 
+# 
+# # Sorting categories based on value1 in descending order
+# plot_data <- agg_analysis_data |>
+#   dplyr::filter(.data$portfolio.ald_sector==sector) |>
+#   dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) |>
+#   dplyr::mutate(
+#     portfolio.company_name = factor(
+#       .data$portfolio.company_name,
+#       levels = .data$portfolio.company_name
+#     )
+#   ) |>
+#   tidyr::pivot_longer(
+#     cols = c("crispy_perc_value_change", "total_npv"),
+#     names_to = "variable",
+#     values_to = "value"
+#   )
+# 
+# 
+# custom_labeller <-
+#   c(crispy_perc_value_change = "Median company percent value change",
+#     pd_difference = "Total company NPV")
+# 
+# 
+# # Filter data for the percent plot
+# plot_data_percent <- plot_data |>
+#   dplyr::filter(.data$variable == "crispy_perc_value_change")
+# 
+# # Create percent plot
+# percent_plot <- ggplot(plot_data_percent, aes(x = portfolio.company_name, y = value)) +
+#   geom_bar(stat = "identity", fill = "blue") +
+#   scale_y_continuous(
+#     labels = scales::percent_format(accuracy = 1),
+#     breaks = scales::pretty_breaks(n = 5)
+#   ) +
+#   r2dii.plot::theme_2dii() +
+#   theme(axis.text.x = element_blank(),
+#         axis.title.y = element_blank(),
+#         strip.background = element_blank(),
+#         strip.placement = "outside") +
+#   labs(x = NULL, y = NULL)
+# 
+# # Filter data for the million plot
+# plot_data_million <- plot_data |>
+#   dplyr::filter(.data$variable == "total_npv")
+# 
+# # Create million plot
+# million_plot <- ggplot(plot_data_million, aes(x = portfolio.company_name, y = value)) +
+#   geom_bar(stat = "identity", fill = "blue") +
+#   scale_y_continuous(
+#     labels = scales::label_number(scale = 1e-6, suffix = "M"),
+#     breaks = scales::pretty_breaks(n = 5)
+#   ) +
+#   r2dii.plot::theme_2dii() +
+#   theme(axis.text.x = element_blank(),
+#         axis.title.y = element_blank(),
+#         strip.background = element_blank(),
+#         strip.placement = "outside") +
+#   labs(x = NULL, y = NULL)
+# 
+# # Combine the plots
+# combined_plot <- cowplot::plot_grid(percent_plot, million_plot, nrow = 2, align = "v")
+# print(sector)
+# print(combined_plot)
+# }
 ```
   
   
+
+
+
+
+
+
+
+# Crispy sensitivity analysis
+
+- Impact of scenario choice
+
+
+```{r}
+# Calculate the average ROC per company for the second plot
+df_summary <-  analysis_data |>
+    dplyr::group_by(portfolio.company_name, crispy.run_id, portfolio.ald_business_unit, crispy.shock_scenario)  |>
+    dplyr::summarise(average_roc = mean(crispy_perc_value_change))
+
+# The first plot: individual ROC values
+p1 <- ggplot(data = df_summary, aes(x = technology, y = average_roc, fill = technology)) +
+    geom_col() +
+    coord_flip() +
+    theme_minimal() +
+    theme(legend.position = "none",
+          axis.title.x = element_blank(),
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          strip.text.y.left = element_text(angle = 0)) +
+    labs(x = NULL, y = "ROC", fill = NULL) +
+    facet_grid(company_name ~ ., scales = "free", space = "free_y", switch = "y")
+```
+
+
+- Impact of shock_year on PD
+
+```{r, fig.height=7, fig.width=9}
+
+data_cdi_pd_plot <- analysis_data_full |>
+  dplyr::group_by(crispy.run_id, crispy.shock_scenario, crispy.shock_year) |>
+  dplyr::group_modify(~ prepare_for_cdi_pd_plots(
+    .,
+    group_variables_vec = c(
+      "portfolio.company_id",
+      "portfolio.ald_business_unit"
+    ),
+    metrics = c("crispy.pd_baseline", "crispy.pd_shock", "pd_difference"),
+  )) |>
+  dplyr::ungroup()
+
+for (shock_scenario in unique(data_cdi_pd_plot$crispy.shock_scenario)){
   
+  density_plot <- make_density_plots(
+    data_cdi_pd_plot %>% filter(crispy.shock_scenario == shock_scenario),
+                    numeric_values = "pd_difference",
+                       density_var = "crispy.shock_year",
+                       group_variable = "portfolio.ald_business_unit") + ggtitle(
+                         paste("Distribution of PD difference -", shock_scenario)) +
+  theme(plot.title = element_text(face = "bold", size = 14))
+  
+  
+  print(density_plot)
+}
+
+
+```
+*Key Points*
+
+- Low carbon Power production technologies see almost no change in the PD difference, and sometimes even leads to significant negative PD difference, on NuclearCap and RenewablesCap.
+- For high carbon Power production technologies, the tail of PD differences distribution appears to  become heavier, indicating that while most companies remain in the 
+- the Impact of the shock year is most visible on Coal production, which indicates that the longer the wait to transition this production, the higher will be the risk to see it defaulted, and this risk reaches very high PDs for all companies. Meaning that all companies in the ones we analyse are at a high risk there.
+
+
+- Impact of shock_year on NPV
+
+```{r}
+
+# data_cdi_npv_plot <- analysis_data |>
+#   dplyr::group_by(crispy.run_id, crispy.shock_scenario, crispy.shock_year) |>
+#   dplyr::group_modify(~ prepare_for_cdi_npv_plots(
+#     .,
+#     group_variables_vec = c(
+#       "portfolio.company_id",
+#       "portfolio.ald_business_unit"
+#     ),
+#     metrics_npv = c("crispy.net_present_value_baseline", "crispy.net_present_value_shock", "net_present_value_difference")
+#   )) |>
+#   dplyr::ungroup()
+# 
+# for (shock_scenario in unique(data_cdi_npv_plot$crispy.shock_scenario)){
+#   
+#   density_plot <- make_density_plots(
+#     data_cdi_npv_plot %>% filter(crispy.shock_scenario == shock_scenario),
+#     numeric_values = "net_present_value_difference",
+#                        density_var = "crispy.shock_year",
+#                        group_variable = "portfolio.ald_business_unit") +
+#     ggtitle("Distribution of NPV difference") 
+#   print(density_plot)
+# }
+
+```
+
+
+
+### company level variance
+
+```{r}
+
+company_crispy_variance <- analysis_data_full %>%
+  filter(crispy.shock_year == 2032) %>%
+  group_by(portfolio.company_id,
+           portfolio.ald_sector,
+           portfolio.ald_business_unit) %>%
+  summarise(
+    npv_change_var = var(crispy_perc_value_change),
+    pd_diff_var = var(pd_difference),
+    .groups = "drop"
+  ) %>%
+  inner_join(
+    the_constant_prods %>%
+      mutate(company_id = as.character(company_id)),
+    by = c(
+      "portfolio.company_id" = "company_id",
+      "portfolio.ald_sector" = "ald_sector",
+      "portfolio.ald_business_unit" = "ald_business_unit"
+    )
+  )
+
+
+
+```
+
+
+
+
+
+```{r}
+
+
+# Create a tibble (data frame) directly in R
+df <- tibble(
+    company_name = c('A2A Spa', 'A2A Spa', 'A2A Spa', 
+                     'E.On Se', 'E.On Se', 'E.On Se', 
+                     'Qatar Electricity & Water Co', 'Qatar Electricity & Water Co', 'Qatar Electricity & Water Co', 
+                     'Rwe Ag', 'Rwe Ag', 'Rwe Ag', 
+                     'Duke Energy Corp', 'Duke Energy Corp', 'Duke Energy Corp', 
+                     'Saudi Electricity Co', 'Saudi Electricity Co', 'Saudi Electricity Co'),
+    technology = c('GasCap', 'HydroCap', 'RenewablesCap', 
+                   'GasCap', 'CoalCap', 'OilCap', 
+                   'GasCap', 'CoalCap', 'RenewablesCap', 
+                   'GasCap', 'HydroCap', 'CoalCap', 
+                   'NuclearCap', 'HydroCap', 'RenewablesCap', 
+                   'GasCap', 'OilCap', 'CoalCap'),
+    roc = c(-10.57, 20.31, -2.86, 
+            -27.43, 13.27, -34.67, 
+            5, 10, -15, 
+            20, -25, 30, 
+            -35, 40, -45, 
+            50, -55, 60)
+)
+
+# Calculate the average ROC per company for the second plot
+df_summary <- df %>%
+    group_by(company_name) %>%
+    summarise(average_roc = mean(roc))
+
+# The first plot: individual ROC values
+p1 <- ggplot(data = df, aes(x = technology, y = roc, fill = technology)) +
+    geom_col() +
+    coord_flip() +
+    theme_minimal() +
+    theme(legend.position = "none",
+          axis.title.x = element_blank(),
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          strip.text.y.left = element_text(angle = 0)) +
+    labs(x = NULL, y = "ROC", fill = NULL) +
+    facet_grid(company_name ~ ., scales = "free", space = "free_y", switch = "y")
+
+# The second plot: average ROC values as horizontal lines within each facet
+p2 <- ggplot(data = df_summary, aes(x = average_roc, y = company_name)) +
+    geom_segment(aes(x = 0, xend = average_roc, y = company_name, yend = company_name), color = "blue", size = 1) +
+    theme_minimal() +
+    theme(axis.title.x = element_blank(),
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(),
+          axis.line = element_blank(),
+          strip.text.y = element_blank(),
+          strip.background = element_blank()) +
+    facet_grid(company_name ~ ., scales = "free_y", space = "free_y")
+
+# Combine the two plots side by side with patchwork
+combined_plot <- p1 + p2 + plot_layout(ncol = 2)
+
+# Print the combined plot
+print(combined_plot)
+
+```
+
+

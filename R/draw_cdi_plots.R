@@ -141,11 +141,12 @@ make_discount_rate_plot <- function(plot_data, scenario_name_for_title, y_var) {
 #' @export
 #'
 #' @examples
-make_density_plots <- function(data_cdi_pd_plot, density_var) {
+make_density_plots <- function(data_cdi_pd_plot, numeric_values, density_var, group_variable="portfolio.ald_sector") {
+
   density_var_values <- unique(data_cdi_pd_plot[[density_var]])
   plots <- list()
   # Create plots for each sector
-  for (sector in unique(plot_data$portfolio.ald_sector)) {
+  for (grouper in unique(data_cdi_pd_plot[[group_variable]])) {
     # Create an empty data frame to store computed density values
     density_data <- data.frame()
 
@@ -153,30 +154,34 @@ make_density_plots <- function(data_cdi_pd_plot, density_var) {
     for (i in 1:length(density_var_values)) {
       pm <- density_var_values[i]
       data <- data_cdi_pd_plot %>% dplyr::filter(
-        portfolio.ald_sector == sector,
+        !!rlang::sym(group_variable) == grouper,
         !!rlang::sym(density_var) == pm
       )
-      label <- paste(density_var, pm)
+      label <- paste(pm)
 
-      density_values <- density(data$pd_difference)
-      density_df <- data.frame(x = density_values$x, y = density_values$y, label = label)
+      density_values <- density(data[[numeric_values]])
+
+      density_values$y <- density_values$y * diff(density_values$x[1:2]) # scale to area under the curve = 1
+
+      density_df <- data.frame(x = density_values$x, y = density_values$y, setNames(list(label), density_var))
 
       density_data <- rbind(density_data, density_df)
     }
 
     # Create the plot with lines and different colors
-    density_plot <- ggplot(density_data, aes(x = x, y = y, color = label)) +
+    density_plot <- ggplot(density_data, aes(x = x, y = y, color = !!rlang::sym(density_var))) +
       geom_line(size = 1) +
       # scale_color_manual(values = colors) +
-      labs(x = "PD Difference", y = "Density") +
-      ggtitle(paste("", "-", sector)) +
+      labs(x = numeric_values, y = "Density") +
+      ggtitle(grouper) +
       scale_x_continuous(labels = scales::percent_format()) +
       theme(
-        plot.title = element_text(size = 17, face = "bold", hjust = 0.5),
+        plot.title = element_text(size = 11, face = "bold", hjust = 0.5),
         axis.text = element_text(size = 13),
-        axis.title.x = element_text(size = 13),
+        axis.text.x = element_text(size = 10, angle = 45, vjust = 0.5),
+        axis.title.x = element_blank(),#element_text(size = 13),
         axis.title.y = element_text(size = 13),
-        legend.title = element_blank(),
+        # legend.title = element_blank(),
         legend.text = element_text(size = 10),
         legend.position = "top",
         plot.background = element_rect(fill = "white"),
@@ -188,23 +193,27 @@ make_density_plots <- function(data_cdi_pd_plot, density_var) {
         # panel.grid.minor = element_line(color = "lightgray")
       )
 
-    plots[[sector]] <- density_plot
+    plots[[grouper]] <- density_plot
   }
 
-  # Combine plots into a grid
-  combined_plot <- cowplot::plot_grid(plotlist = plots, nrow = 2, ncol = 2)
 
-  # Add a title to the combined plot
-  # Change here to the relevant scenario
-  title <- cowplot::ggdraw() + cowplot::draw_label(paste(scenario_name, "- Distribution of PD Difference - ", density_var), size = 18)
-  combined_plot <- cowplot::plot_grid(title, combined_plot, ncol = 1, rel_heights = c(0.1, 1))
 
-  # Modify the plot title element to have a white background
-  combined_plot <- combined_plot +
-    theme(
-      plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
-      plot.background = element_rect(fill = "white")
+  combined_plot <-
+    ggpubr::ggarrange(
+      plotlist = plots,
+      widths = c(2, 2),
+      common.legend = TRUE,
+      legend = "right"
     )
+
+  combined_plot <- ggpubr::annotate_figure(combined_plot
+                                           # ,top = ggpubr::text_grob(
+                                           #   paste("Distribution of ",numeric_values," - ", group_variable),
+                                           #   face = "bold",
+                                           #   size = 14
+                                           # )
+
+                                           )
 
   return(combined_plot)
 }
