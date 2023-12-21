@@ -32,7 +32,7 @@ analysis_data_full <- load_input_plots_data(
     "ald_business_unit"
   )
 ) 
- 
+
 abcd_full_global <-
   readr::read_csv(here::here(
     "workspace",
@@ -98,8 +98,7 @@ Remove companies having constant production on all of their business units
 ```{r}
 abcd_data <- abcd_full_global %>%  anti_join(constant_identifiers)
 analysis_data <- analysis_data_full %>%  
-  # anti_join(constant_identifiers%>%mutate(company_id = as.character(company_id)), by=c("portfolio.company_id"="company_id")) %>% 
-  filter(crispy.scenario_geography == "Global")
+  anti_join(constant_identifiers%>%mutate(company_id = as.character(company_id)), by=c("portfolio.company_id"="company_id")) 
 ```
 
 
@@ -225,18 +224,132 @@ raw_asset_impact %>%
 
 The analysis data is then filtered no this subset of abcd to reflect the same outputs in analysis
 ```{r}
-analysis_data <-
-  analysis_data %>% inner_join(
-    abcd_data %>% mutate(company_id = as.character(company_id)) %>% distinct(company_id),
-    by = c("portfolio.company_id" = "company_id")
-  )
+# sample analysis data
+
+
+  # Define the desired uniform ratio
+  uniform_ratio <- 0.3
+  
+  sum_total_prod_volume <- function(abcd_data){
+    abcd_data%>%
+    group_by(ald_sector, ald_business_unit, ald_production_unit) %>%
+    summarise(plan_tech_prod=sum(plan_tech_prod), .groups="drop")
+  }
+
+
+  # Calculate production volume for the full dataset
+  volume_prod_full <- sum_total_prod_volume(abcd_full_global)
+  
+  
+  sum_yearly_prod_volume <- function(abcd_data){
+  abcd_data %>%
+  group_by(year, ald_sector, ald_business_unit, ald_production_unit) %>%
+  summarise(plan_tech_prod=sum(plan_tech_prod), .groups="drop")
+  }
+  
+  # Function to calculate RMSE between two curves
+  calculate_rmse <- function(curve1, curve2) {
+    # Assuming curve1 and curve2 are data frames with columns 'year' and 'plan_tech_prod'
+    # Merge the two dataframes on 'year'
+    merged_curves <- merge(curve1, curve2, by = "year")
+    
+    # Calculate the RMSE
+    rmse <-sqrt(mean((merged_curves$plan_tech_prod.x - merged_curves$plan_tech_prod.y) ^ 2))
+    return(rmse)
+  }
+  
+  # Function for greedy search to sample companies
+  sample_companies_greedy <-
+    function(noconst_data,
+             prod_volume_full,
+             uniform_ratio,
+             n_sampling_attempts = 5,
+             greedy_lr = 0.02) {
+      best_sample <- NULL
+      best_ratio_diff <- Inf
+      best_rmse <- Inf
+      greedy_sampling_ratio <- 1
+      
+      while (greedy_sampling_ratio > greedy_lr * 2) {
+        current_samples <- list()
+        
+        for (i in 1:n_sampling_attempts) {
+          sampled_companies <-
+            sample_frac(distinct(noconst_data, company_id),
+                        greedy_sampling_ratio)
+          sampled_data <-
+            noconst_data %>% filter(company_id %in% sampled_companies$company_id)
+          
+          new_total_prod <- sum_total_prod_volume(sampled_data)
+          new_ratio <-
+            inner_join(
+              new_total_prod,
+              prod_volume_full,
+              by = c(
+                "ald_sector",
+                "ald_business_unit",
+                "ald_production_unit"
+              )
+            ) %>%
+            mutate(perc_prod_kept = plan_tech_prod.x / plan_tech_prod.y)
+          
+          rmse <- calculate_rmse(
+            sum_yearly_prod_volume(sampled_data),
+            sum_yearly_prod_volume(noconst_data)
+          )
+          
+          current_samples[[i]] <-
+            list(
+              data = sampled_data,
+              ratio_diff = abs(new_ratio$perc_prod_kept - uniform_ratio),
+              rmse = rmse
+            )
+        }
+        
+        # Find the best sample in this iteration according to the rmse
+        best_sample_in_iteration <- sapply(current_samples, function(x) x$rmse)
+        min_diff_index <- which.min(best_sample_in_iteration)
+        
+        print(current_samples[[min_diff_index]]$ratio_diff)
+        
+        # select the sample having best RMSE in the sample, if it is better than last ratio_diff
+        if (current_samples[[min_diff_index]]$ratio_diff < best_ratio_diff) {
+            
+            best_sample <- current_samples[[min_diff_index]]$data
+            best_ratio_diff <- current_samples[[min_diff_index]]$ratio_diff
+            best_rmse <- current_samples[[min_diff_index]]$rmse
+          
+        }
+        
+        greedy_sampling_ratio <- greedy_sampling_ratio - greedy_lr
+      }
+      return(best_sample %>% select(-c(ald_sector, ald_business_unit)))
+    }
+  
+  # Group by ald_sector and ald_business_unit, then apply sampling
+  abcd_toydata <- abcd_full_global %>%
+    group_by(ald_sector, ald_business_unit) %>%
+    group_modify(~ sample_companies_greedy(.x, volume_prod_full, uniform_ratio),
+                 .keep = T) %>%
+    ungroup()
+  
+
+```
+
+
+```{r}
+analysis_data <- analysis_data_full %>%
+  inner_join(abcd_toydata %>% distinct(company_id, ald_sector, ald_business_unit) %>% mutate(company_id=as.character(company_id)),
+             by = c("portfolio.company_id"="company_id",
+                    "portfolio.ald_sector"="ald_sector", 
+                    "portfolio.ald_business_unit"="ald_business_unit"))
 ```
 
 
 # Crispy focus 1 scenario
 
 ```{r}
-analysis_data_1_run <- analysis_data_full |> dplyr::filter(crispy.run_id == "e801bbb2-9fbc-488c-80af-4e5065c607ec")
+analysis_data_1_run <- analysis_data |> dplyr::filter(crispy.run_id == "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f")
 
 ```
 
@@ -249,7 +362,7 @@ analysis_data_1_run <- analysis_data_full |> dplyr::filter(crispy.run_id == "e80
 
 ```{r, fig.width=10}
 agg_analysis_data <- analysis_data_1_run |>
-  dplyr::filter(.data$net_present_value_difference != 0) |>
+  # dplyr::filter(.data$net_present_value_difference != 0) |>
   dplyr::select(.data$portfolio.company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
   dplyr::group_by(.data$portfolio.company_name) |>
   dplyr::summarise(
@@ -471,6 +584,95 @@ Shows how risky are companies with a high Production / "valuation"
   
 
 
+# Impact of sampling on crispy results
+
+```{r}
+n_samples <- 150
+
+all_samples <- list()
+for (i in 1:n_samples) {
+  companies_sample <-  analysis_data_1_run %>%
+    distinct(portfolio.company_id) %>%
+    sample_frac(0.1) %>%
+    pull()
+  
+  all_samples[[i]] <- companies_sample
+}
+
+crispy_samples <- list()
+for (i in 1:length(all_samples)) {
+  companies_sample <- all_samples[[i]]
+  crispy_indicators <- analysis_data_1_run %>%
+    filter(portfolio.company_id %in% companies_sample) %>%
+    group_by(portfolio.ald_sector, portfolio.ald_business_unit) %>%
+    summarise(
+      npv_change = mean(
+        (
+          crispy.net_present_value_shock - crispy.net_present_value_baseline
+        ) / crispy.net_present_value_baseline
+        ,
+        na.rm = T
+      ),
+      pd_diff = mean(
+        crispy.pd_shock - crispy.pd_baseline
+        ,
+        na.rm = T
+      ),
+      .groups="drop"
+    )
+  crispy_samples[[i]] <- crispy_indicators
+}
+
+
+
+# Combine all dataframes into one
+combined_data <- bind_rows(crispy_samples)
+
+# Calculate means and confidence intervals
+data_summary <- combined_data %>%
+  group_by(portfolio.ald_business_unit, portfolio.ald_sector) %>%
+  summarise(
+    mean_npv = mean(npv_change),
+    mean_pd = mean(pd_diff),
+    sd_npv = sd(npv_change),
+    sd_pd = sd(pd_diff),
+    count = n(),
+    .groups = 'drop'
+  ) %>%
+  mutate(
+    se_npv = sd_npv / sqrt(count),
+    se_pd = sd_pd / sqrt(count),
+    ci_npv = qt(0.975, df = count - 1) * se_npv,
+    ci_pd = qt(0.975, df = count - 1) * se_pd
+  )
+
+# Reshape data to long format for plotting
+data_long <- data_summary %>%
+  pivot_longer(
+    cols = c(mean_npv, mean_pd),
+    names_to = "value_type",
+    values_to = "mean_value"
+  ) %>%
+  mutate(
+    ci = case_when(
+      value_type == "mean_npv" ~ ci_npv,
+      value_type == "mean_pd" ~ ci_pd
+    )
+  )
+
+
+# Faceted Bar Plot with different colors for value types
+ggplot(data_long, aes(x = portfolio.ald_business_unit, y = mean_value, fill = value_type)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  geom_errorbar(aes(ymin = mean_value - ci, ymax = mean_value + ci), width = 0.2, position = position_dodge()) +
+  facet_wrap(value_type~., scales="free_y") +
+  scale_fill_manual(values = c("mean_npv" = "blue", "mean_pd" = "red")) +
+  labs(y = "Value", x = "Business Unit", fill = "Variable Type") +
+  theme_minimal()
+
+
+
+```
 
 
 
@@ -506,7 +708,7 @@ p1 <- ggplot(data = df_summary, aes(x = technology, y = average_roc, fill = tech
 
 ```{r, fig.height=7, fig.width=9}
 
-data_cdi_pd_plot <- analysis_data_full |>
+data_cdi_pd_plot <- analysis_data |>
   dplyr::group_by(crispy.run_id, crispy.shock_scenario, crispy.shock_year) |>
   dplyr::group_modify(~ prepare_for_cdi_pd_plots(
     .,
@@ -572,15 +774,14 @@ for (shock_scenario in unique(data_cdi_pd_plot$crispy.shock_scenario)){
 
 
 
-### company level variance
+### company level impact
 
 ```{r}
 
 company_crispy_variance <- analysis_data_full %>%
   filter(crispy.shock_year == 2032) %>%
   group_by(portfolio.company_id,
-           portfolio.ald_sector,
-           portfolio.ald_business_unit) %>%
+           portfolio.ald_sector) %>%
   summarise(
     npv_change_var = var(crispy_perc_value_change),
     pd_diff_var = var(pd_difference),
@@ -588,14 +789,42 @@ company_crispy_variance <- analysis_data_full %>%
   ) %>%
   inner_join(
     the_constant_prods %>%
-      mutate(company_id = as.character(company_id)),
+      mutate(company_id = as.character(company_id)) %>%
+      group_by(company_id, ald_sector) %>%
+      summarise(all_equals=all(all_equals)),
     by = c(
       "portfolio.company_id" = "company_id",
-      "portfolio.ald_sector" = "ald_sector",
-      "portfolio.ald_business_unit" = "ald_business_unit"
+      "portfolio.ald_sector" = "ald_sector"
     )
   )
 
+
+topvar_companies_sample <- company_crispy_variance %>%
+  group_by(portfolio.company_id) %>% 
+  mutate(n_bu=n()) %>% 
+  ungroup()%>% 
+  filter(n_bu >= max(n_bu)-1) %>% 
+  arrange(desc(npv_change_var)) %>%
+  top_n(100) %>% 
+  sample_n(6) %>% 
+  distinct(portfolio.company_id) %>% pull()
+
+
+data_plot <- analysis_data_full %>%
+  filter(portfolio.company_id %in% topvar_companies_sample) %>%
+  
+
+ggplot(data = data_plot, aes(x = portfolio.ald_business_unit, y = crispy_perc_value_change, fill = portfolio.ald_business_unit)) +
+    geom_col() +
+    coord_flip() +
+    theme_minimal() +
+    theme(legend.position = "none",
+          axis.title.x = element_blank(),
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          strip.text.y.left = element_text(angle = 0)) +
+    labs(x = NULL, y = "ROC", fill = NULL) +
+    facet_grid(company_name ~ ., scales = "free", space = "free_y", switch = "y")
 
 
 ```
