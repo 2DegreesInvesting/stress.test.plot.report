@@ -111,7 +111,10 @@ print(le_plot)
 ```
 
 ```{r}
-analysis_data_full_global_term_5 <- analysis_data_full_global %>% filter(portfolio.term == 5)
+analysis_data_full_global_term_5 <- analysis_data_full_global %>% 
+  filter(portfolio.term == 5) %>%
+  mutate(crispy_perc_value_change=if_else(is.infinite(crispy_perc_value_change), NA, crispy_perc_value_change))%>%
+  filter(!is.na(crispy_perc_value_change))
 ```
 
 
@@ -209,6 +212,12 @@ p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
   ylab("Mean climate Transition-related PD difference")
 
 le_plot <- cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
+le_plot <- cowplot::ggdraw() +
+  cowplot::draw_label(paste(analysis_data_1_run[1, "crispy.shock_scenario"] %>% pull(),
+              " - shock year :",
+              analysis_data_1_run[1, "crispy.shock_year"] %>% pull()), x = 0.5, hjust = 0.5) +
+  cowplot::draw_plot(le_plot, y = 0.1, height = 0.9)
+
 print(le_plot)
 }
 
@@ -229,8 +238,10 @@ remove_outliers <- function(df, column) {
   # Calculate the Z-scores for the column
   z_scores <- (df[[column]] - mean_value) / sd_value
   
+  outlier_companies <- unique(df[abs(z_scores) > 3, "portfolio.company_id"])
+  
   # Filter out rows where the absolute z-score is greater than 3
-  df_filtered <- df[abs(z_scores) <= 3, ]
+  df_filtered <- df %>% filter(!(portfolio.company_id %in% outlier_companies))
   
   return(df_filtered)
 }
@@ -331,7 +342,7 @@ binned_data <- bin_data(plot_data%>% filter(variable == "pd_difference"), 500)
 # Create the plot
 p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
   geom_col(fill = "#5D9324") +
-  geom_errorbar(aes(ymin = min, ymax = max), width = 0.2) +
+  geom_errorbar(aes(ymin = min, ymax = max), width = 0.1) +
     scale_y_continuous(
     labels = scales::percent_format(accuracy = 1),
     breaks = scales::pretty_breaks(n = 5)
