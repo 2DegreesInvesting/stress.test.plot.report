@@ -60,7 +60,57 @@ raw_asset_impact <-
 
 
 
+
+
 # Crispy focus 1 scenario
+
+
+### Annual average changes in the probability of default
+
+```{r}
+
+for (run_id in c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f", 
+                 "663fa2de-e808-457b-b234-dca8e736b8a0", "eb594eb8-13a7-461e-b8fb-7cad52a7167b")){
+analysis_data_1_run <- analysis_data_full_global |> dplyr::filter(crispy.run_id == run_id)
+
+data_plot <- analysis_data_1_run |> 
+  # dplyr::group_by(portfolio.company_id, portfolio.term) |>  
+  # dplyr::summarise(crispy_perc_pd_change=stats::median(.data$crispy_perc_pd_change, na.rm=T), .groups="drop") |>
+  dplyr::group_by(portfolio.term, portfolio.ald_sector, portfolio.ald_business_unit) |>
+  dplyr::summarise(avg_pd_baseline=mean(crispy.pd_baseline),
+                   avg_pd_shock=mean(crispy.pd_shock)
+                   , .groups="drop") |>
+  dplyr::mutate(avg_pd_difference=avg_pd_shock-avg_pd_baseline) |>
+  rename(`Shock`=avg_pd_shock,
+         `Baseline`=avg_pd_baseline, 
+         `PD difference`=avg_pd_difference) |>
+  tidyr::pivot_longer(
+    cols=c("Shock", "Baseline"),#, "PD difference"),
+    names_to="PD type",
+    values_to = "Average PD"
+  )
+
+
+le_plot <- ggplot(data_plot, aes(x=portfolio.term, y=`Average PD`, group=`PD type`, color=`PD type`)) +
+  geom_line() +
+  labs(x = "Years from now")+ 
+  scale_x_continuous(breaks = c(1, 2, 3, 4, 5), labels = c(1.5, 2.5, 3.5, 4.5, 5.5)) +
+  scale_y_continuous(labels = scales::percent_format(scale = 100), breaks=scales::pretty_breaks(n=3)) +
+  r2dii.plot::theme_2dii() +
+  facet_wrap(~portfolio.ald_sector+portfolio.ald_business_unit, scales = "fixed") +
+  theme(panel.grid.major.y = element_line(color = "gray", linetype = "dashed", linewidth=0.3)) +
+  ggtitle(paste(analysis_data_1_run[1, "crispy.shock_scenario"] %>% pull(),
+              " - shock year :",
+              analysis_data_1_run[1, "crispy.shock_year"] %>% pull()))
+
+print(le_plot)
+
+}
+
+
+```
+
+
 
 ### Heterogeneity in Transition Risk
 
@@ -69,11 +119,11 @@ raw_asset_impact <-
 
 # 5776a4b8-476f-48ba-91ae-b83a178d4331 // filter(crispy.shock_scenario=="NGFS2021_GCAM_NZ2050", crispy.shock_year==2032)
 # 24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f // filter(crispy.shock_scenario=="Oxford2021_fast", crispy.shock_year==2032)
-# 38959531-8127-4235-bcef-28177b923158 // filter(crispy.shock_scenario=="NGFS2021_MESSAGE_B2DS", crispy.shock_year==2032) 
-
+# 663fa2de-e808-457b-b234-dca8e736b8a0 // filter(crispy.shock_scenario=="NGFS2021_REMIND_B2DS", crispy.shock_year==2032) 
+# eb594eb8-13a7-461e-b8fb-7cad52a7167b // filter(crispy.shock_scenario=="NGFS2021_GCAM_NZ2050", crispy.shock_year==2027)
 
 for (run_id in c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f", 
-                 "38959531-8127-4235-bcef-28177b923158")){
+                 "663fa2de-e808-457b-b234-dca8e736b8a0", "eb594eb8-13a7-461e-b8fb-7cad52a7167b")){
 analysis_data_1_run <- analysis_data_full_global |> dplyr::filter(crispy.run_id == run_id)
 
 agg_analysis_data <- analysis_data_1_run |>
@@ -192,14 +242,8 @@ analysis_data_full_global_no_outlier <- analysis_data_full_global %>%
 
 ```{r}
 
-
-# 5776a4b8-476f-48ba-91ae-b83a178d4331 // filter(crispy.shock_scenario=="NGFS2021_GCAM_NZ2050", crispy.shock_year==2032)
-# 24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f // filter(crispy.shock_scenario=="Oxford2021_fast", crispy.shock_year==2032)
-# 38959531-8127-4235-bcef-28177b923158 // filter(crispy.shock_scenario=="NGFS2021_MESSAGE_B2DS", crispy.shock_year==2032) 
-
-
 for (run_id in c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f", 
-                 "38959531-8127-4235-bcef-28177b923158")){
+                 "663fa2de-e808-457b-b234-dca8e736b8a0", "eb594eb8-13a7-461e-b8fb-7cad52a7167b")){
 analysis_data_1_run <- analysis_data_full_global_no_outlier |> dplyr::filter(crispy.run_id == run_id)
 
 agg_analysis_data <- analysis_data_1_run |>
@@ -258,7 +302,7 @@ bin_data <- function(data, bin_size) {
 }
 
 # Bin data every 10 observations
-binned_data <- bin_data(plot_data%>% filter(variable == "pd_difference"), 100)
+binned_data <- bin_data(plot_data%>% filter(variable == "pd_difference"), 500)
 
 # Create the plot
 p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
@@ -294,39 +338,6 @@ print(le_plot)
 
 
 
-### Annual average changes in the probability of default
-
-```{r}
-
-data_plot <- analysis_data_1_run |> 
-  # dplyr::group_by(portfolio.company_id, portfolio.term) |>  
-  # dplyr::summarise(crispy_perc_pd_change=stats::median(.data$crispy_perc_pd_change, na.rm=T), .groups="drop") |>
-  dplyr::group_by(portfolio.term, portfolio.ald_sector, portfolio.ald_business_unit) |>
-  dplyr::summarise(avg_pd_baseline=mean(crispy.pd_baseline),
-                   avg_pd_shock=mean(crispy.pd_shock)
-                   , .groups="drop") |>
-  dplyr::mutate(avg_pd_difference=avg_pd_shock-avg_pd_baseline) |>
-  rename(`Shock`=avg_pd_shock,
-         `Baseline`=avg_pd_baseline, 
-         `PD difference`=avg_pd_difference) |>
-  tidyr::pivot_longer(
-    cols=c("Shock", "Baseline"),#, "PD difference"),
-    names_to="PD type",
-    values_to = "Average PD"
-  )
-
-
-ggplot(data_plot, aes(x=portfolio.term, y=`Average PD`, group=`PD type`, color=`PD type`)) +
-  geom_line() +
-  labs(x = "Years from now")+ 
-  scale_x_continuous(breaks = c(1, 2, 3, 4, 5), labels = c(1.5, 2.5, 3.5, 4.5, 5.5)) +
-  scale_y_continuous(labels = scales::percent_format(scale = 100)) +
-  r2dii.plot::theme_2dii() +
-  facet_wrap(~portfolio.ald_sector+portfolio.ald_business_unit, scales = "fixed") +
-  theme(panel.grid.major.y = element_line(color = "gray", linetype = "dashed", linewidth=0.3))
-
-
-```
 
 *Key points*
 
@@ -441,19 +452,19 @@ add_company_diversity_col <- function(abcd_data){
       return(best_sample %>% select(-c(ald_sector, ald_business_unit, n_bu)))
     }
   
-  
-  # Define the desired uniform ratio
-  uniform_ratio <- 0.3
-  
-  # Calculate production volume for the full dataset
-  volume_prod_full <- sum_total_prod_volume(abcd_full_global)
-  
-  # Group by ald_sector and ald_business_unit, then apply sampling
-  abcd_toydata <- abcd_full_global %>%
-    group_by(ald_sector, ald_business_unit) %>%
-    group_modify(~ sample_companies_greedy(.x, volume_prod_full, uniform_ratio),
-                 .keep = T) %>%
-    ungroup()
+  # 
+  # # Define the desired uniform ratio
+  # uniform_ratio <- 0.3
+  # 
+  # # Calculate production volume for the full dataset
+  # volume_prod_full <- sum_total_prod_volume(abcd_full_global)
+  # 
+  # # Group by ald_sector and ald_business_unit, then apply sampling
+  # abcd_toydata <- abcd_full_global %>%
+  #   group_by(ald_sector, ald_business_unit) %>%
+  #   group_modify(~ sample_companies_greedy(.x, volume_prod_full, uniform_ratio),
+  #                .keep = T) %>%
+  #   ungroup()
   
 ```
 
@@ -474,7 +485,7 @@ for (uniform_ratio in c(0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9)){
                  .keep = T) %>%
     ungroup()
   
-  sampled_rows[[as.character(uniform_ratio)]] <- abcd_toydata%>% distinct(company_id, ald_sector, ald_business_unit)
+  sampled_rows[[as.character(uniform_ratio)]] <- abcd_toydata %>% distinct(company_id, ald_sector, ald_business_unit)
 }
 
 ```
