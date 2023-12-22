@@ -529,7 +529,7 @@ for (uniform_ratio in c(0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9)){
 
 analysis_data_samples <- list()
 for (ratio_value in names(sampled_rows)){
-  analysis_data_sampled <- analysis_data_full_global %>%
+  analysis_data_sampled <- analysis_data_full_global_no_outlier %>%
     inner_join(
       sampled_rows[[ratio_value]] %>% mutate(company_id = as.character(company_id)),
       by = c(
@@ -580,6 +580,51 @@ bound_analysis_samples <- bind_dataframes_with_listname(analysis_data_samples)
 ```
 
 
+```{r}
+symlog_trans <- function(spread = 1) {
+  scales::trans_new(
+    name = 'symlog',
+    transform = function(x) sign(x) * log1p(abs(x) * spread),
+    inverse = function(x) sign(x) * (exp(abs(x) / spread) - 1),
+    domain = c(-Inf, Inf)
+  )
+}
+
+
+
+plot_data_sample_effect <- bound_analysis_samples %>%
+  rename(`NPV rate of change`=crispy_perc_value_change, `PD Difference` = pd_difference) %>%
+  tidyr::pivot_longer(cols=c(`NPV rate of change`, `PD Difference`), names_to="value_type", values_to="values")
+
+ggplot(
+  plot_data_sample_effect,
+  aes(
+    x = as.numeric(list_name),
+    y = values,
+    group = crispy.run_id,
+    color = portfolio.ald_sector
+  )
+) +
+  geom_line() +
+  facet_wrap(value_type ~ portfolio.ald_sector, scales = "free_y", nrow=2) +
+  r2dii.plot::theme_2dii() +
+  theme(legend.position = 'none',
+        axis.text.x = element_text(angle = 45, hjust = 1, size=8),
+        axis.title.y = element_blank()) +
+  scale_y_continuous(
+    # trans = symlog_trans(),
+    breaks = scales::pretty_breaks(n = 5),
+    # Specify desired breaks including negative and positive values
+    labels = scales::percent_format(accuracy = 0.001)
+  ) +
+  scale_x_continuous(
+    breaks = unique(as.numeric(plot_data_sample_effect$list_name))
+  ) +
+  labs(x="Sampling Ratio")
+```
+
+
+
 
 
 OBSERVATION : 
@@ -587,13 +632,16 @@ OBSERVATION :
 This is most visible on Power companies
   => TODO find a way to use the MWh production in input, and then apply the capacity factors on it
 
-Remove companies having constant production on all of their business units
 ```{r}
-abcd_data <- abcd_toydata
+abcd_data <- abcd_data_no_outliers %>%
+    group_by(ald_sector, ald_business_unit) %>%
+    group_modify(~ sample_companies_greedy(.x, volume_prod_full, uniform_ratio=0.5),
+                 .keep = T) %>%
+    ungroup()
 
-analysis_data <- analysis_data_full_global %>%
+analysis_data <- analysis_data_full_global_no_outlier %>%
   inner_join(
-  abcd_data %>%distinct(company_id, ald_sector, ald_business_unit) %>%mutate(company_id = as.character(company_id)),
+  abcd_data %>% distinct(company_id, ald_sector, ald_business_unit) %>% mutate(company_id = as.character(company_id)),
   by = c(
     "portfolio.company_id" = "company_id",
     "portfolio.ald_sector" = "ald_sector",
@@ -601,6 +649,95 @@ analysis_data <- analysis_data_full_global %>%
   )
 )
   
+```
+
+```{r}
+
+for (run_id in c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f", 
+                 "663fa2de-e808-457b-b234-dca8e736b8a0", "eb594eb8-13a7-461e-b8fb-7cad52a7167b")){
+analysis_data_1_run <- analysis_data |> dplyr::filter(crispy.run_id == run_id)
+
+agg_analysis_data <- analysis_data_1_run |>
+  # dplyr::filter(.data$net_present_value_difference != 0) |>
+  dplyr::select(.data$portfolio.company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
+  dplyr::group_by(.data$portfolio.company_name) |>
+  dplyr::summarise(
+    crispy_perc_value_change = mean(crispy_perc_value_change),
+    pd_difference = mean(pd_difference),
+    .groups = "drop"
+  )
+
+# Sorting categories based on value1 in descending order
+plot_data <- agg_analysis_data |>
+  # sample_frac(0.1) |>
+  dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) |>
+  dplyr::mutate(portfolio.company_name = factor(.data$portfolio.company_name, levels = .data$portfolio.company_name)) |>
+  tidyr::pivot_longer(cols = c("crispy_perc_value_change", "pd_difference"), names_to = "variable", values_to = "value")
+
+
+ 
+# Plotting
+p1 <- ggplot(plot_data %>% filter(variable == "crispy_perc_value_change"), aes(x = factor(portfolio.company_name), y = value, group=variable)) +
+  geom_step(color="#5D9324", size=1) +
+    scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    breaks = scales::pretty_breaks(n = 5)
+  ) +
+  geom_hline(yintercept=0, color="lightgray", linetype = "dashed", size = 0.5)+
+  r2dii.plot::theme_2dii() +
+  theme(
+    axis.text.x = element_blank(),#element_text(angle = 90, vjust = 0.5),
+    axis.ticks.x = element_blank(),
+    axis.title.y = element_text(size = 11),
+    strip.background = element_blank(),
+    strip.placement = "outside", 
+    legend.position="none"
+  ) +
+  labs(x = NULL, y = NULL) +
+  guides(fill = NULL)  +
+  ylab("Mean company percent value change")
+
+
+# Function to create bins every 10 observations
+bin_data <- function(data, bin_size) {
+  data <- data %>%
+    mutate(bin = (as.numeric(row_number()) - 1) %/% bin_size) %>%
+    group_by(bin) %>%
+    summarise(
+      avg = mean(value),
+      min = min(value),
+      max = max(value)
+    ) %>%
+    ungroup()
+  return(data)
+}
+
+# Bin data every 10 observations
+binned_data <- bin_data(plot_data%>% filter(variable == "pd_difference"), 250)
+
+# Create the plot
+p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
+  geom_col(fill = "#5D9324") +
+  geom_errorbar(aes(ymin = min, ymax = max), width = 0.2) +
+    scale_y_continuous(
+    labels = scales::percent_format(accuracy = 1),
+    breaks = scales::pretty_breaks(n = 5)
+  ) +
+  r2dii.plot::theme_2dii() +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+  axis.title.y = element_text(size = 11),
+  strip.background = element_blank(),
+    strip.placement = "outside"
+  ) +
+  labs(x = NULL, y = NULL) +
+  guides(fill = NULL) +
+  ylab("Mean climate Transition-related PD difference")
+
+le_plot <- cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
+print(le_plot)
+}
 ```
 
 
@@ -757,6 +894,7 @@ p1 <- ggplot(data = df_summary, aes(x = technology, y = average_roc, fill = tech
           strip.text.y.left = element_text(angle = 0)) +
     labs(x = NULL, y = "ROC", fill = NULL) +
     facet_grid(company_name ~ ., scales = "free", space = "free_y", switch = "y")
+
 ```
 
 
