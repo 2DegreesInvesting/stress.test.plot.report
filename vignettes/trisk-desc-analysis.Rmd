@@ -71,7 +71,9 @@ raw_asset_impact <-
 
 for (run_id in c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f", 
                  "663fa2de-e808-457b-b234-dca8e736b8a0", "eb594eb8-13a7-461e-b8fb-7cad52a7167b")){
-analysis_data_1_run <- analysis_data_full_global |> dplyr::filter(crispy.run_id == run_id)
+analysis_data_1_run <- analysis_data_full_global |> 
+  dplyr::filter(crispy.run_id == run_id) |>
+  dplyr::inner_join(analysis_data %>% distinct(portfolio.company_id, portfolio.ald_sector, portfolio.ald_business_unit))
 
 data_plot <- analysis_data_1_run |> 
   # dplyr::group_by(portfolio.company_id, portfolio.term) |>  
@@ -117,7 +119,7 @@ analysis_data_full_global_term_5 <- analysis_data_full_global %>%
   filter(!is.na(crispy_perc_value_change))
 ```
 
-
+TODO why are there Inf values
 
 ### Heterogeneity in Transition Risk
 
@@ -150,7 +152,6 @@ plot_data <- agg_analysis_data |>
   dplyr::mutate(portfolio.company_name = factor(.data$portfolio.company_name, levels = .data$portfolio.company_name)) |>
   tidyr::pivot_longer(cols = c("crispy_perc_value_change", "pd_difference"), names_to = "variable", values_to = "value")
 
-
  
 # Plotting
 p1 <- ggplot(plot_data %>% filter(variable == "crispy_perc_value_change"), aes(x = factor(portfolio.company_name), y = value, group=variable)) +
@@ -174,6 +175,7 @@ p1 <- ggplot(plot_data %>% filter(variable == "crispy_perc_value_change"), aes(x
   ylab("Mean company percent value change")
 
 
+
 # Function to create bins every 10 observations
 bin_data <- function(data, bin_size) {
   data <- data %>%
@@ -193,7 +195,7 @@ binned_data <- bin_data(plot_data%>% filter(variable == "pd_difference"), 500)
 
 # Create the plot
 p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
-  geom_col(fill = "#5D9324") +
+  geom_col(fill = "#BAB6B5") +
   geom_errorbar(aes(ymin = min, ymax = max), width = 0.2) +
     scale_y_continuous(
     labels = scales::percent_format(accuracy = 1),
@@ -212,13 +214,31 @@ p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
   ylab("Mean climate Transition-related PD difference")
 
 le_plot <- cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
-le_plot <- cowplot::ggdraw() +
-  cowplot::draw_label(paste(analysis_data_1_run[1, "crispy.shock_scenario"] %>% pull(),
+
+title <- cowplot::ggdraw() + 
+  cowplot::draw_label(
+    paste(analysis_data_1_run[1, "crispy.shock_scenario"] %>% pull(),
               " - shock year :",
-              analysis_data_1_run[1, "crispy.shock_year"] %>% pull()), x = 0.5, hjust = 0.5) +
-  cowplot::draw_plot(le_plot, y = 0.1, height = 0.9)
+              analysis_data_1_run[1, "crispy.shock_year"] %>% pull()),
+    fontface = 'bold',
+    x = 0.5,
+    hjust = 0.5
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+le_plot <- cowplot::plot_grid(
+  title, le_plot,
+  ncol = 1,
+  # rel_heights values control vertical title margins
+  rel_heights = c(0.1, 1)
+)
 
 print(le_plot)
+
 }
 
 ```
@@ -276,92 +296,92 @@ analysis_data_full_global_no_outlier <- analysis_data_full_global_no_outlier_per
 
 
 ```{r}
-
-for (run_id in c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f", 
-                 "663fa2de-e808-457b-b234-dca8e736b8a0", "eb594eb8-13a7-461e-b8fb-7cad52a7167b")){
-analysis_data_1_run <- analysis_data_full_global_no_outlier |> dplyr::filter(crispy.run_id == run_id)
-
-agg_analysis_data <- analysis_data_1_run |>
-  # dplyr::filter(.data$net_present_value_difference != 0) |>
-  dplyr::select(.data$portfolio.company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
-  dplyr::group_by(.data$portfolio.company_name) |>
-  dplyr::summarise(
-    crispy_perc_value_change = mean(crispy_perc_value_change),
-    pd_difference = mean(pd_difference),
-    .groups = "drop"
-  )
-
-# Sorting categories based on value1 in descending order
-plot_data <- agg_analysis_data |>
-  # sample_frac(0.1) |>
-  dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) |>
-  dplyr::mutate(portfolio.company_name = factor(.data$portfolio.company_name, levels = .data$portfolio.company_name)) |>
-  tidyr::pivot_longer(cols = c("crispy_perc_value_change", "pd_difference"), names_to = "variable", values_to = "value")
-
-
- 
-# Plotting
-p1 <- ggplot(plot_data %>% filter(variable == "crispy_perc_value_change"), aes(x = factor(portfolio.company_name), y = value, group=variable)) +
-  geom_step(color="#5D9324", size=1) +
-    scale_y_continuous(
-    labels = scales::percent_format(accuracy = 1),
-    breaks = scales::pretty_breaks(n = 5)
-  ) +
-  geom_hline(yintercept=0, color="lightgray", linetype = "dashed", size = 0.5)+
-  r2dii.plot::theme_2dii() +
-  theme(
-    axis.text.x = element_blank(),#element_text(angle = 90, vjust = 0.5),
-    axis.ticks.x = element_blank(),
-    axis.title.y = element_text(size = 11),
-    strip.background = element_blank(),
-    strip.placement = "outside", 
-    legend.position="none"
-  ) +
-  labs(x = NULL, y = NULL) +
-  guides(fill = NULL)  +
-  ylab("Mean company percent value change")
-
-
-# Function to create bins every 10 observations
-bin_data <- function(data, bin_size) {
-  data <- data %>%
-    mutate(bin = (as.numeric(row_number()) - 1) %/% bin_size) %>%
-    group_by(bin) %>%
-    summarise(
-      avg = mean(value),
-      min = min(value),
-      max = max(value)
-    ) %>%
-    ungroup()
-  return(data)
-}
-
-# Bin data every 10 observations
-binned_data <- bin_data(plot_data%>% filter(variable == "pd_difference"), 500)
-
-# Create the plot
-p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
-  geom_col(fill = "#5D9324") +
-  geom_errorbar(aes(ymin = min, ymax = max), width = 0.1) +
-    scale_y_continuous(
-    labels = scales::percent_format(accuracy = 1),
-    breaks = scales::pretty_breaks(n = 5)
-  ) +
-  r2dii.plot::theme_2dii() +
-  theme(
-    axis.text.x = element_blank(),
-    axis.ticks.x = element_blank(),
-  axis.title.y = element_text(size = 11),
-  strip.background = element_blank(),
-    strip.placement = "outside"
-  ) +
-  labs(x = NULL, y = NULL) +
-  guides(fill = NULL) +
-  ylab("Mean climate Transition-related PD difference")
-
-le_plot <- cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
-print(le_plot)
-}
+# 
+# for (run_id in c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f", 
+#                  "663fa2de-e808-457b-b234-dca8e736b8a0", "eb594eb8-13a7-461e-b8fb-7cad52a7167b")){
+# analysis_data_1_run <- analysis_data_full_global_no_outlier |> dplyr::filter(crispy.run_id == run_id)
+# 
+# agg_analysis_data <- analysis_data_1_run |>
+#   # dplyr::filter(.data$net_present_value_difference != 0) |>
+#   dplyr::select(.data$portfolio.company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
+#   dplyr::group_by(.data$portfolio.company_name) |>
+#   dplyr::summarise(
+#     crispy_perc_value_change = mean(crispy_perc_value_change),
+#     pd_difference = mean(pd_difference),
+#     .groups = "drop"
+#   )
+# 
+# # Sorting categories based on value1 in descending order
+# plot_data <- agg_analysis_data |>
+#   # sample_frac(0.1) |>
+#   dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) |>
+#   dplyr::mutate(portfolio.company_name = factor(.data$portfolio.company_name, levels = .data$portfolio.company_name)) |>
+#   tidyr::pivot_longer(cols = c("crispy_perc_value_change", "pd_difference"), names_to = "variable", values_to = "value")
+# 
+# 
+#  
+# # Plotting
+# p1 <- ggplot(plot_data %>% filter(variable == "crispy_perc_value_change"), aes(x = factor(portfolio.company_name), y = value, group=variable)) +
+#   geom_step(color="#5D9324", size=1) +
+#     scale_y_continuous(
+#     labels = scales::percent_format(accuracy = 1),
+#     breaks = scales::pretty_breaks(n = 5)
+#   ) +
+#   geom_hline(yintercept=0, color="lightgray", linetype = "dashed", size = 0.5)+
+#   r2dii.plot::theme_2dii() +
+#   theme(
+#     axis.text.x = element_blank(),#element_text(angle = 90, vjust = 0.5),
+#     axis.ticks.x = element_blank(),
+#     axis.title.y = element_text(size = 11),
+#     strip.background = element_blank(),
+#     strip.placement = "outside", 
+#     legend.position="none"
+#   ) +
+#   labs(x = NULL, y = NULL) +
+#   guides(fill = NULL)  +
+#   ylab("Mean company percent value change")
+# 
+# 
+# # Function to create bins every 10 observations
+# bin_data <- function(data, bin_size) {
+#   data <- data %>%
+#     mutate(bin = (as.numeric(row_number()) - 1) %/% bin_size) %>%
+#     group_by(bin) %>%
+#     summarise(
+#       avg = mean(value),
+#       min = min(value),
+#       max = max(value)
+#     ) %>%
+#     ungroup()
+#   return(data)
+# }
+# 
+# # Bin data every 10 observations
+# binned_data <- bin_data(plot_data%>% filter(variable == "pd_difference"), 500)
+# 
+# # Create the plot
+# p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
+#   geom_col(fill = "#5D9324") +
+#   geom_errorbar(aes(ymin = min, ymax = max), width = 0.1) +
+#     scale_y_continuous(
+#     labels = scales::percent_format(accuracy = 1),
+#     breaks = scales::pretty_breaks(n = 5)
+#   ) +
+#   r2dii.plot::theme_2dii() +
+#   theme(
+#     axis.text.x = element_blank(),
+#     axis.ticks.x = element_blank(),
+#   axis.title.y = element_text(size = 11),
+#   strip.background = element_blank(),
+#     strip.placement = "outside"
+#   ) +
+#   labs(x = NULL, y = NULL) +
+#   guides(fill = NULL) +
+#   ylab("Mean climate Transition-related PD difference")
+# 
+# le_plot <- cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
+# print(le_plot)
+# }
 ```
 
 
@@ -448,7 +468,7 @@ add_company_diversity_col <- function(abcd_data){
         for (i in 1:n_sampling_attempts) {
           sampled_companies <-noconst_data %>%
             distinct(company_id, n_bu) %>%
-            sample_frac(greedy_sampling_ratio, weight=.data$n_bu)
+            sample_frac(greedy_sampling_ratio, weight=.data$n_bu) # TODO remove the weight to see if it improves the production repartition
           
           sampled_data <-
             noconst_data %>% filter(company_id %in% sampled_companies$company_id)
@@ -595,10 +615,11 @@ symlog_trans <- function(spread = 1) {
 }
 
 
-
 plot_data_sample_effect <- bound_analysis_samples %>%
   rename(`NPV rate of change`=crispy_perc_value_change, `PD Difference` = pd_difference) %>%
   tidyr::pivot_longer(cols=c(`NPV rate of change`, `PD Difference`), names_to="value_type", values_to="values")
+
+
 
 ggplot(
   plot_data_sample_effect,
@@ -606,7 +627,7 @@ ggplot(
     x = as.numeric(list_name),
     y = values,
     group = crispy.run_id,
-    color = portfolio.ald_sector
+    color = value_type
   )
 ) +
   geom_line() +
@@ -614,7 +635,8 @@ ggplot(
   r2dii.plot::theme_2dii() +
   theme(legend.position = 'none',
         axis.text.x = element_text(angle = 45, hjust = 1, size=8),
-        axis.title.y = element_blank()) +
+        axis.title.y = element_blank(),
+        plot.title = element_text(size = 11)) +
   scale_y_continuous(
     # trans = symlog_trans(),
     breaks = scales::pretty_breaks(n = 5),
@@ -624,7 +646,13 @@ ggplot(
   scale_x_continuous(
     breaks = unique(as.numeric(plot_data_sample_effect$list_name))
   ) +
-  labs(x="Sampling Ratio")
+    geom_vline(xintercept = 0.5, color = "#F53D3F", alpha = 0.5, size = 1) +
+  labs(x="Sampling Ratio") +
+  scale_color_manual(
+    values= c("NPV rate of change"="#5D9324", "PD Difference"="#BAB6B5")
+    # values = c("Coal" = "#4e3b37", "Oil&Gas" = "#181716", "Power" = "#a63603" )
+    ) +
+  ggtitle("Evolution of PD and NPV indicators, across different samples of companies production")
 ```
 
 
@@ -701,16 +729,6 @@ company_volume_prod_toydata <- sum_company_prod_volume(abcd_data)
 ```
 
 
-#  diff companies, production,  between full and toydata
-
-```{r}
-comp_n_companies <- inner_join(n_companies_full, n_companies_toydata, by=c("ald_sector", "ald_business_unit"), suffix=c(".fulldata", ".toydata"))
-
-comp_total_volume_prod <-  inner_join(total_volume_prod_full, total_volume_prod_toydata, by=c("ald_sector", "ald_business_unit", "ald_production_unit"), suffix=c(".fulldata", ".toydata")) %>% mutate(perc_prod_kept = plan_tech_prod.toydata / plan_tech_prod.fulldata)
-
-inner_join(comp_n_companies, comp_total_volume_prod, by=c("ald_sector", "ald_business_unit"))
-  
-```
 
 
 ### redo heterogeneity plots
@@ -781,7 +799,7 @@ binned_data <- bin_data(plot_data%>% filter(variable == "pd_difference"), 100)
 
 # Create the plot
 p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
-  geom_col(fill = "#5D9324") +
+  geom_col(fill = "#BAB6B5") +
   geom_errorbar(aes(ymin = min, ymax = max), width = 0.2) +
     scale_y_continuous(
     labels = scales::percent_format(accuracy = 1),
@@ -800,6 +818,28 @@ p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
   ylab("Mean climate Transition-related PD difference")
 
 le_plot <- cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
+
+title <- cowplot::ggdraw() + 
+  cowplot::draw_label(
+    paste(analysis_data_1_run[1, "crispy.shock_scenario"] %>% pull(),
+              " - shock year :",
+              analysis_data_1_run[1, "crispy.shock_year"] %>% pull()),
+    fontface = 'bold',
+    x = 0.5,
+    hjust = 0.5
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+
+le_plot <- cowplot::plot_grid(
+  title, le_plot,
+  ncol = 1,
+  # rel_heights values control vertical title margins
+  rel_heights = c(0.1, 1)
+)
 print(le_plot)
 }
 ```
@@ -832,7 +872,16 @@ inner_join(
 
 ### Relative production per unit
 
+#  diff companies, production,  between full and toydata
+
 ```{r}
+comp_n_companies <- inner_join(n_companies_full, n_companies_toydata, by=c("ald_sector", "ald_business_unit"), suffix=c(".fulldata", ".toydata"))
+
+comp_total_volume_prod <-  inner_join(total_volume_prod_full, total_volume_prod_toydata, by=c("ald_sector", "ald_business_unit", "ald_production_unit"), suffix=c(".fulldata", ".toydata")) %>% mutate(perc_prod_kept = plan_tech_prod.toydata / plan_tech_prod.fulldata)
+
+o <- inner_join(comp_n_companies, comp_total_volume_prod, by=c("ald_sector", "ald_business_unit")) %>%
+  select(ald_sector, ald_business_unit, n_companies.fulldata, n_companies.toydata, perc_prod_kept)
+  
 
 # inner_join(
 # inner_join(
@@ -864,30 +913,51 @@ inner_join(
 #   )
 
 
-
-inner_join(
-  abcd_data %>% 
-  dplyr::distinct(ald_sector, ald_business_unit, company_id) %>% # remove duplicates on year 
-  dplyr::group_by(ald_sector, ald_business_unit) %>%
-  dplyr::summarise(n_companies=n())
-  , 
-  abcd_data%>% 
-  group_by(ald_sector, ald_business_unit, ald_production_unit) %>%
-  summarise(bu_prod = sum(plan_tech_prod), .groups="drop") %>%
-  group_by(ald_production_unit) %>%
-  mutate(
-    unit_prod = sum(bu_prod),
-    perc_bu_prod = as.integer(bu_prod/unit_prod * 100)
+ladata <- inner_join(
+abcd_full_global %>%
+    group_by(ald_sector, ald_business_unit, ald_production_unit) %>%
+    summarise(bu_prod_full = sum(plan_tech_prod), .groups = "drop") %>%
+    group_by(ald_production_unit) %>%
+    mutate(
+      unit_prod_full = sum(bu_prod_full),
+      perc_bu_prod_full = as.integer(bu_prod_full / unit_prod_full * 100)
     ) %>%
-  ungroup() 
-
-  ) %>%
+    ungroup()
+  
+  ,
+inner_join(
+  abcd_data %>%
+    dplyr::distinct(ald_sector, ald_business_unit, company_id) %>% # remove duplicates on year
+    dplyr::group_by(ald_sector, ald_business_unit) %>%
+    dplyr::summarise(n_companies = n())
+  ,
+  abcd_data %>%
+    group_by(ald_sector, ald_business_unit, ald_production_unit) %>%
+    summarise(bu_prod = sum(plan_tech_prod), .groups = "drop") %>%
+    group_by(ald_production_unit) %>%
+    mutate(
+      unit_prod = sum(bu_prod),
+      perc_bu_prod = as.integer(bu_prod / unit_prod * 100)
+    ) %>%
+    ungroup()
+  
+) %>%
   mutate(
-    prod_company_in_bu = bu_prod/n_companies,
-    prod_company_in_unit = round(prod_company_in_bu/unit_prod * 100, 3)
+    prod_company_in_bu = bu_prod / n_companies,
+    prod_company_in_unit = round(prod_company_in_bu / unit_prod * 100, 3)
   )
 
+)%>% 
+  select(ald_sector,
+               ald_business_unit,
+               perc_bu_prod,
+         perc_bu_prod_full,
+               prod_company_in_unit) %>%
+  inner_join(o) %>%
+  mutate(perc_companies_kept = n_companies.toydata / n_companies.fulldata)
 
+
+ladata
 ```
  *Key points*
  
@@ -942,22 +1012,81 @@ The analysis data is then filtered no this subset of abcd to reflect the same ou
 
 ```{r}
 # Calculate the average ROC per company for the second plot
-df_summary <-  analysis_data |>
-    dplyr::group_by(portfolio.company_name, crispy.run_id, portfolio.ald_business_unit, crispy.shock_scenario)  |>
-    dplyr::summarise(average_roc = mean(crispy_perc_value_change))
+df_averages <-  analysis_data |>
+  dplyr::group_by(
+    portfolio.company_name,
+    crispy.run_id,
+    portfolio.ald_business_unit,
+    crispy.shock_scenario,
+    crispy.shock_year
+  )  |>
+  dplyr::summarise(
+    average_roc = mean(crispy_perc_value_change),
+    average_pd_diff = mean(pd_difference)
+  ) %>%
+  rename(`Average PD Difference` = average_pd_diff,
+         `Average NPV Rate of change` = average_roc)
 
-# The first plot: individual ROC values
-p1 <- ggplot(data = df_summary, aes(x = technology, y = average_roc, fill = technology)) +
-    geom_col() +
-    coord_flip() +
-    theme_minimal() +
-    theme(legend.position = "none",
-          axis.title.x = element_blank(),
-          axis.text.x = element_blank(),
-          axis.ticks.x = element_blank(),
-          strip.text.y.left = element_text(angle = 0)) +
-    labs(x = NULL, y = "ROC", fill = NULL) +
-    facet_grid(company_name ~ ., scales = "free", space = "free_y", switch = "y")
+# Reshape data to long format
+long_data <- df_averages %>%
+  tidyr::pivot_longer(
+    cols = c(`Average PD Difference`, `Average NPV Rate of change`),
+    names_to = "metric",
+    values_to = "value"
+  )
+
+# Calculate means and confidence intervals
+data_summary <- long_data %>%
+  group_by(
+    crispy.run_id,
+    crispy.shock_scenario,
+    crispy.shock_year,
+    portfolio.ald_business_unit,
+    metric
+  ) %>%
+  summarise(
+    mean = mean(value),
+    se = sd(value) / sqrt(n()),
+    ci_upper = mean + qt(0.975, df = n() - 1) * se,
+    ci_lower = mean - qt(0.975, df = n() - 1) * se
+  ) %>%
+  ungroup()
+
+
+
+
+for (run_id in c(
+  "5776a4b8-476f-48ba-91ae-b83a178d4331",
+  "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f",
+  "663fa2de-e808-457b-b234-dca8e736b8a0",
+  "eb594eb8-13a7-461e-b8fb-7cad52a7167b"
+)) {
+  plot_data <- data_summary %>% filter(crispy.run_id == run_id)
+  
+  p1 <-
+    ggplot(plot_data,
+           aes(x = portfolio.ald_business_unit, y = mean, fill = metric)) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),
+                  width = 0.2,
+                  position = position_dodge(0.9)) +
+    facet_wrap( ~ metric, scales = "free_y") +
+    scale_fill_manual(values = c(
+      "Average NPV Rate of change" = "#5D9324",
+      "Average PD Difference" = "#BAB6B5"
+    )) +
+    scale_y_continuous(labels = scales::label_percent(accuracy = 1)) +
+    r2dii.plot::theme_2dii() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.position = 'none') +
+    labs(y = "Average Value", x = "Business Unit") +
+    ggtitle(paste(plot_data[1, "crispy.shock_scenario"] %>% pull(),
+                  " - shock year :",
+                  plot_data[1, "crispy.shock_year"] %>% pull())) 
+  
+  print(p1)
+  
+}
 
 ```
 
@@ -1018,13 +1147,13 @@ for (shock_scenario in unique(data_cdi_pd_plot$crispy.shock_scenario)){
 #   dplyr::ungroup()
 # 
 # for (shock_scenario in unique(data_cdi_npv_plot$crispy.shock_scenario)){
-#   
+# 
 #   density_plot <- make_density_plots(
 #     data_cdi_npv_plot %>% filter(crispy.shock_scenario == shock_scenario),
 #     numeric_values = "net_present_value_difference",
 #                        density_var = "crispy.shock_year",
 #                        group_variable = "portfolio.ald_business_unit") +
-#     ggtitle("Distribution of NPV difference") 
+#     ggtitle("Distribution of NPV difference")
 #   print(density_plot)
 # }
 
@@ -1036,7 +1165,9 @@ for (shock_scenario in unique(data_cdi_pd_plot$crispy.shock_scenario)){
 
 ```{r}
 
-company_var_accross_scenarios <- analysis_data_full_global %>%
+company_var_accross_scenarios <- analysis_data %>%
+  filter(crispy.run_id %in% c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f", 
+                 "663fa2de-e808-457b-b234-dca8e736b8a0", "eb594eb8-13a7-461e-b8fb-7cad52a7167b")) %>%
   group_by(
     portfolio.company_id,
     portfolio.ald_sector,
@@ -1049,14 +1180,36 @@ company_var_accross_scenarios <- analysis_data_full_global %>%
     .groups = "drop"
   ) %>%
   filter(crispy.shock_year == 2032) %>%
-  inner_join(
-    the_constant_prods %>% mutate(company_id = as.character(company_id)),
-    by = c(
-      "portfolio.company_id" = "company_id",
-      "portfolio.ald_sector" = "ald_sector",
-      "portfolio.ald_business_unit" = "ald_business_unit"
-    )
-  )
+  group_by(portfolio.company_id) %>%
+  mutate(n_bu = n())%>%
+  ungroup() %>%
+  filter(n_bu >= (max(n_bu)-1)) %>%
+  group_by(portfolio.company_id) %>%
+  summarise(
+    npv_change_var=mean(npv_change_var),
+   pd_diff_var=mean(pd_diff_var) ,
+   .groups="drop"
+  ) %>%
+  arrange(desc(npv_change_var))
+
+top_var_companies <- company_var_accross_scenarios[1:4,]$portfolio.company_id
+
+top_plot_companies <- analysis_data %>% 
+  filter(portfolio.company_id %in% top_var_companies)
+
+
+# The first plot: individual ROC values
+p1 <- ggplot(data = df, aes(x = technology, y = roc, fill = technology)) +
+    geom_col() +
+    coord_flip() +
+    theme_minimal() +
+    theme(legend.position = "none",
+          axis.title.x = element_blank(),
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          strip.text.y.left = element_text(angle = 0)) +
+    labs(x = NULL, y = "ROC", fill = NULL) +
+    facet_grid(company_name ~ ., scales = "free", space = "free_y", switch = "y")
 
 ```
 
