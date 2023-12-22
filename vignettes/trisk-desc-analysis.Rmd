@@ -400,7 +400,7 @@ sum_total_prod_volume <- function(abcd_data){
 
 sum_yearly_prod_volume <- function(abcd_data){
   abcd_data %>%
-  group_by(year, ald_sector, ald_business_unit, ald_production_unit) %>%
+  group_by(year) %>%
   summarise(plan_tech_prod=sum(plan_tech_prod), .groups="drop")
 }
 
@@ -417,7 +417,7 @@ add_company_diversity_col <- function(abcd_data){
   calculate_rmse <- function(curve1, curve2) {
     # Assuming curve1 and curve2 are data frames with columns 'year' and 'plan_tech_prod'
     # Merge the two dataframes on 'year'
-    merged_curves <- merge(curve1, curve2, by = "year")
+    merged_curves <- merge(curve1, curve2, by = c("ald_sector", "ald_business_unit", "year"))
     
     # Calculate the RMSE
     rmse <-sqrt(mean((merged_curves$plan_tech_prod.x - merged_curves$plan_tech_prod.y) ^ 2))
@@ -427,10 +427,12 @@ add_company_diversity_col <- function(abcd_data){
   # Function for greedy search to sample companies
   sample_companies_greedy <-
     function(noconst_data,
-             prod_volume_full,
              uniform_ratio,
              n_sampling_attempts = 5,
              greedy_lr = 0.02) {
+      
+      prod_volume_full_per_bu <- sum_total_prod_volume(noconst_data)
+      
       best_sample <- NULL
       best_ratio_diff <- Inf
       best_rmse <- Inf
@@ -455,7 +457,7 @@ add_company_diversity_col <- function(abcd_data){
           new_ratio <-
             inner_join(
               new_total_prod,
-              prod_volume_full,
+              prod_volume_full_per_bu,
               by = c(
                 "ald_sector",
                 "ald_business_unit",
@@ -464,15 +466,25 @@ add_company_diversity_col <- function(abcd_data){
             ) %>%
             mutate(perc_prod_kept = plan_tech_prod.x / plan_tech_prod.y)
           
+          original_yearly_prod <- noconst_data%>% 
+            group_by(ald_sector, ald_business_unit) %>%
+            group_modify(~ sum_yearly_prod_volume(.x)) %>%
+            ungroup()
+          
+          sample_yearly_prod <- sampled_data %>% 
+            group_by(ald_sector, ald_business_unit) %>%
+            group_modify(~ sum_yearly_prod_volume(.x)) %>%
+            ungroup()
+          
           rmse <- calculate_rmse(
-            sum_yearly_prod_volume(sampled_data),
-            sum_yearly_prod_volume(noconst_data)
+            original_yearly_prod,
+            sample_yearly_prod
           )
           
           current_samples[[i]] <-
             list(
               data = sampled_data,
-              ratio_diff = abs(new_ratio$perc_prod_kept - uniform_ratio),
+              ratio_diff = mean(abs(new_ratio$perc_prod_kept - uniform_ratio)),
               rmse = rmse
             )
         }
@@ -481,7 +493,7 @@ add_company_diversity_col <- function(abcd_data){
         best_sample_in_iteration <- sapply(current_samples, function(x) x$rmse)
         min_diff_index <- which.min(best_sample_in_iteration)
         
-        # print(current_samples[[min_diff_index]]$ratio_diff)
+        print(current_samples[[min_diff_index]]$ratio_diff)
         
         # select the sample having best RMSE in the sample, if it is better than last ratio_diff
         if (current_samples[[min_diff_index]]$ratio_diff < best_ratio_diff) {
@@ -494,29 +506,14 @@ add_company_diversity_col <- function(abcd_data){
         
         greedy_sampling_ratio <- greedy_sampling_ratio - greedy_lr
       }
-      return(best_sample %>% select(-c(ald_sector, ald_business_unit, n_bu)))
+      return(best_sample %>% select(-c(n_bu)))
     }
   
-  # 
-  # # Define the desired uniform ratio
-  # uniform_ratio <- 0.3
-  # 
-  # # Calculate production volume for the full dataset
-  # volume_prod_full <- sum_total_prod_volume(abcd_full_global)
-  # 
-  # # Group by ald_sector and ald_business_unit, then apply sampling
-  # abcd_toydata <- abcd_full_global %>%
-  #   group_by(ald_sector, ald_business_unit) %>%
-  #   group_modify(~ sample_companies_greedy(.x, volume_prod_full, uniform_ratio),
-  #                .keep = T) %>%
-  #   ungroup()
-  
+
 ```
 
 
 ```{r}
-
-volume_prod_full <- sum_total_prod_volume(abcd_data_no_outliers)
 
 
 sampled_rows <- list()
@@ -524,11 +521,7 @@ for (uniform_ratio in c(0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9)){
   cat(uniform_ratio)
 
     # Group by ald_sector and ald_business_unit, then apply sampling
-  abcd_toydata <- abcd_data_no_outliers %>%
-    group_by(ald_sector, ald_business_unit) %>%
-    group_modify(~ sample_companies_greedy(.x, volume_prod_full, uniform_ratio),
-                 .keep = T) %>%
-    ungroup()
+  abcd_toydata <- sample_companies_greedy(abcd_data_no_outliers, uniform_ratio)
   
   sampled_rows[[as.character(uniform_ratio)]] <- abcd_toydata %>% distinct(company_id, ald_sector, ald_business_unit)
 }
@@ -644,23 +637,83 @@ This is most visible on Power companies
   => TODO find a way to use the MWh production in input, and then apply the capacity factors on it
 
 ```{r}
-abcd_data <- abcd_data_no_outliers %>%
-    group_by(ald_sector, ald_business_unit) %>%
-    group_modify(~ sample_companies_greedy(.x, volume_prod_full, uniform_ratio=0.5),
-                 .keep = T) %>%
-    ungroup()
+abcd_data <- sample_companies_greedy(
+  abcd_data_no_outliers, 
+  uniform_ratio = 0.5)
 
 analysis_data <- analysis_data_full_global_no_outlier %>%
   inner_join(
-  abcd_data %>% distinct(company_id, ald_sector, ald_business_unit) %>% mutate(company_id = as.character(company_id)),
-  by = c(
-    "portfolio.company_id" = "company_id",
-    "portfolio.ald_sector" = "ald_sector",
-    "portfolio.ald_business_unit" = "ald_business_unit"
+    abcd_data %>% distinct(company_id, ald_sector, ald_business_unit) %>% mutate(company_id = as.character(company_id)),
+    by = c(
+      "portfolio.company_id" = "company_id",
+      "portfolio.ald_sector" = "ald_sector",
+      "portfolio.ald_business_unit" = "ald_business_unit"
+    )
   )
-)
   
 ```
+
+
+
+# Compute statdesc dataframes
+
+
+```{r}
+
+count_n_companies <- function(abcd_data){
+  abcd_data %>%
+  distinct(company_id, ald_sector, ald_business_unit) %>%
+  group_by(ald_sector, ald_business_unit) %>%
+  summarise(n_companies = dplyr::n(), .groups="drop")
+}
+
+sum_total_prod_volume <- function(abcd_data){
+  abcd_data%>%
+  group_by(ald_sector, ald_business_unit, ald_production_unit) %>%
+  summarise(plan_tech_prod=sum(plan_tech_prod), .groups="drop")
+}
+
+sum_yearly_prod_volume <- function(abcd_data){
+  abcd_data %>%
+  group_by(year, ald_sector, ald_business_unit, ald_production_unit) %>%
+  summarise(plan_tech_prod=sum(plan_tech_prod), .groups="drop")
+}
+
+sum_company_prod_volume <- function(abcd_data){
+  abcd_data %>%
+    group_by(company_id, ald_sector, ald_business_unit, ald_production_unit) %>%
+    summarise(plan_tech_prod=sum(plan_tech_prod), .groups="drop")
+}
+
+## Aggregations fulldata
+
+n_companies_full <- count_n_companies(abcd_data_no_outliers)
+total_volume_prod_full <- sum_total_prod_volume(abcd_data_no_outliers)
+company_volume_prod_full <- sum_company_prod_volume(abcd_data_no_outliers)
+
+
+## Aggregations toydata
+
+n_companies_toydata <- count_n_companies(abcd_data)
+total_volume_prod_toydata <- sum_total_prod_volume(abcd_data)
+company_volume_prod_toydata <- sum_company_prod_volume(abcd_data)
+
+```
+
+
+#  diff companies, production,  between full and toydata
+
+```{r}
+comp_n_companies <- inner_join(n_companies_full, n_companies_toydata, by=c("ald_sector", "ald_business_unit"), suffix=c(".fulldata", ".toydata"))
+
+comp_total_volume_prod <-  inner_join(total_volume_prod_full, total_volume_prod_toydata, by=c("ald_sector", "ald_business_unit", "ald_production_unit"), suffix=c(".fulldata", ".toydata")) %>% mutate(perc_prod_kept = plan_tech_prod.toydata / plan_tech_prod.fulldata)
+
+inner_join(comp_n_companies, comp_total_volume_prod, by=c("ald_sector", "ald_business_unit"))
+  
+```
+
+
+### redo heterogeneity plots
 
 ```{r}
 
@@ -724,7 +777,7 @@ bin_data <- function(data, bin_size) {
 }
 
 # Bin data every 10 observations
-binned_data <- bin_data(plot_data%>% filter(variable == "pd_difference"), 250)
+binned_data <- bin_data(plot_data%>% filter(variable == "pd_difference"), 100)
 
 # Create the plot
 p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
