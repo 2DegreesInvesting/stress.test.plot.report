@@ -110,6 +110,10 @@ print(le_plot)
 
 ```
 
+```{r}
+analysis_data_full_global_term_5 <- analysis_data_full_global %>% filter(portfolio.term == 5)
+```
+
 
 
 ### Heterogeneity in Transition Risk
@@ -124,10 +128,10 @@ print(le_plot)
 
 for (run_id in c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f", 
                  "663fa2de-e808-457b-b234-dca8e736b8a0", "eb594eb8-13a7-461e-b8fb-7cad52a7167b")){
-analysis_data_1_run <- analysis_data_full_global |> dplyr::filter(crispy.run_id == run_id)
+analysis_data_1_run <- analysis_data_full_global_term_5 |> dplyr::filter(crispy.run_id == run_id)
 
 agg_analysis_data <- analysis_data_1_run |>
-  dplyr::filter(.data$net_present_value_difference != 0) |>
+  # dplyr::filter(.data$net_present_value_difference != 0) |>
   dplyr::select(.data$portfolio.company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
   dplyr::group_by(.data$portfolio.company_name) |>
   dplyr::summarise(
@@ -232,12 +236,32 @@ remove_outliers <- function(df, column) {
 }
 
 # Assuming your list of dataframes is named 'list_of_dfs'
-analysis_data_full_global_no_outlier <- analysis_data_full_global %>%
+analysis_data_full_global_no_outlier_per_run <- analysis_data_full_global_term_5 %>%
   group_by(crispy.run_id) %>%
   group_modify(~remove_outliers(.x, column = "crispy_perc_value_change")) %>%
   ungroup()
 
 ```
+
+Only use companies that exist in all runs to be able to compare them 
+
+```{r}
+
+common_rows <- analysis_data_full_global_no_outlier_per_run %>%
+  group_by(portfolio.company_id, portfolio.ald_sector, portfolio.ald_business_unit) %>%
+  summarise(count = n_distinct(crispy.run_id)) %>%
+  filter(count == max(count)) %>%
+  ungroup()
+
+
+# Filtering the original dataframe
+analysis_data_full_global_no_outlier <- analysis_data_full_global_no_outlier_per_run %>%
+  inner_join(common_rows, by = c("portfolio.company_id", 
+                                 "portfolio.ald_sector", 
+                                 "portfolio.ald_business_unit"))
+
+```
+
 
 
 ```{r}
@@ -247,7 +271,7 @@ for (run_id in c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4
 analysis_data_1_run <- analysis_data_full_global_no_outlier |> dplyr::filter(crispy.run_id == run_id)
 
 agg_analysis_data <- analysis_data_1_run |>
-  dplyr::filter(.data$net_present_value_difference != 0) |>
+  # dplyr::filter(.data$net_present_value_difference != 0) |>
   dplyr::select(.data$portfolio.company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
   dplyr::group_by(.data$portfolio.company_name) |>
   dplyr::summarise(
@@ -336,6 +360,16 @@ print(le_plot)
 - On average, a decreasing NPV change will lead to an increasing PD difference. This global trend is not necessarily reflected at the company level. We can see on the PD difference barplots, where the vertical lines indicate that a company can have a high NPV change but a small PD difference. This is due to the input financial data that impacts the PD computations
 - However, a positive NPV change would hardly end up in a high PD difference on the company level.
 
+
+Filter abcd data to remove crispy outliers:
+```{r}
+abcd_data_no_outliers <- abcd_full_global %>% inner_join(
+  analysis_data_full_global_no_outlier %>% distinct(portfolio.company_id, portfolio.ald_sector, portfolio.ald_business_unit) %>% mutate(portfolio.company_id=as.numeric(portfolio.company_id)),
+  by=c("company_id"="portfolio.company_id",
+       "ald_sector"="portfolio.ald_sector",
+       "ald_business_unit"="portfolio.ald_business_unit")
+)
+```
 
 
 
@@ -471,7 +505,7 @@ add_company_diversity_col <- function(abcd_data){
 
 ```{r}
 
-volume_prod_full <- sum_total_prod_volume(abcd_full_global)
+volume_prod_full <- sum_total_prod_volume(abcd_data_no_outliers)
 
 
 sampled_rows <- list()
@@ -479,7 +513,7 @@ for (uniform_ratio in c(0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9)){
   cat(uniform_ratio)
 
     # Group by ald_sector and ald_business_unit, then apply sampling
-  abcd_toydata <- abcd_full_global %>%
+  abcd_toydata <- abcd_data_no_outliers %>%
     group_by(ald_sector, ald_business_unit) %>%
     group_modify(~ sample_companies_greedy(.x, volume_prod_full, uniform_ratio),
                  .keep = T) %>%
