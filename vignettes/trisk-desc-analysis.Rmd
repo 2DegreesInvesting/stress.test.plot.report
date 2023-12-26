@@ -76,8 +76,7 @@ analysis_data_1_run <- analysis_data_full_global |>
   dplyr::inner_join(analysis_data %>% distinct(portfolio.company_id, portfolio.ald_sector, portfolio.ald_business_unit))
 
 data_plot <- analysis_data_1_run |> 
-  # dplyr::group_by(portfolio.company_id, portfolio.term) |>  
-  # dplyr::summarise(crispy_perc_pd_change=stats::median(.data$crispy_perc_pd_change, na.rm=T), .groups="drop") |>
+  
   dplyr::group_by(portfolio.term, portfolio.ald_sector, portfolio.ald_business_unit) |>
   dplyr::summarise(avg_pd_baseline=mean(crispy.pd_baseline),
                    avg_pd_shock=mean(crispy.pd_shock)
@@ -250,7 +249,7 @@ Remove the outliers in roc NPV :
 
 ```{r}
 # Function to remove outliers based on z-score
-remove_outliers <- function(df, column) {
+remove_outliers <- function(df, column, max_zscore=3) {
   # Compute the mean and standard deviation of the column
   mean_value <- mean(df[[column]], na.rm = TRUE)
   sd_value <- sd(df[[column]], na.rm = TRUE)
@@ -258,7 +257,7 @@ remove_outliers <- function(df, column) {
   # Calculate the Z-scores for the column
   z_scores <- (df[[column]] - mean_value) / sd_value
   
-  outlier_companies <- unique(df[abs(z_scores) > 3, "portfolio.company_id"])
+  outlier_companies <- unique(df[abs(z_scores) > max_zscore, "portfolio.company_id"])%>%pull()
   
   # Filter out rows where the absolute z-score is greater than 3
   df_filtered <- df %>% filter(!(portfolio.company_id %in% outlier_companies))
@@ -279,10 +278,16 @@ Only use companies that exist in all runs to be able to compare them
 ```{r}
 
 common_rows <- analysis_data_full_global_no_outlier_per_run %>%
-  group_by(portfolio.company_id, portfolio.ald_sector, portfolio.ald_business_unit) %>%
-  summarise(count = n_distinct(crispy.run_id)) %>%
+  group_by(portfolio.company_id,
+           portfolio.ald_sector,
+           portfolio.ald_business_unit) %>%
+  mutate(count = n_distinct(crispy.run_id)) %>%
+  ungroup() %>%
   filter(count == max(count)) %>%
-  ungroup()
+  distinct(portfolio.company_id,
+           portfolio.ald_sector,
+           portfolio.ald_business_unit)
+  
 
 
 # Filtering the original dataframe
@@ -877,7 +882,7 @@ inner_join(
 ```{r}
 comp_n_companies <- inner_join(n_companies_full, n_companies_toydata, by=c("ald_sector", "ald_business_unit"), suffix=c(".fulldata", ".toydata"))
 
-comp_total_volume_prod <-  inner_join(total_volume_prod_full, total_volume_prod_toydata, by=c("ald_sector", "ald_business_unit", "ald_production_unit"), suffix=c(".fulldata", ".toydata")) %>% mutate(perc_prod_kept = plan_tech_prod.toydata / plan_tech_prod.fulldata)
+comp_total_volume_prod <- inner_join(total_volume_prod_full, total_volume_prod_toydata, by=c("ald_sector", "ald_business_unit", "ald_production_unit"), suffix=c(".fulldata", ".toydata")) %>% mutate(perc_prod_kept = plan_tech_prod.toydata / plan_tech_prod.fulldata)
 
 o <- inner_join(comp_n_companies, comp_total_volume_prod, by=c("ald_sector", "ald_business_unit")) %>%
   select(ald_sector, ald_business_unit, n_companies.fulldata, n_companies.toydata, perc_prod_kept)
@@ -1290,9 +1295,9 @@ for (shock_scenario in unique(data_cdi_pd_plot$crispy.shock_scenario)){
 
 
 
-```{r}
+```{r, fig.width=9, fig.height=6}
 
-a_shock_scenario <- "IPR2021_FPS"
+a_shock_scenario <- "NGFS2021_GCAM_B2DS"
 # c(
 #          # "NGFS2021_REMIND_NZ2050",
 #          # "NGFS2021_GCAM_B2DS",
@@ -1330,17 +1335,11 @@ company_bu_var_accross_sy <- analysis_data %>%
 company_var_accross_sy <- company_bu_var_accross_sy %>%
   group_by(portfolio.ald_business_unit) %>% 
   filter(pd_diff_var >= quantile(pd_diff_var, 0.9)) 
-# 
-#   group_by(portfolio.company_id) %>%
-#   summarise(
-#     npv_change_var = var(npv_change_var, na.rm=T),
-#     pd_diff_var = var(pd_diff_var, na.rm=T) ,
-#     .groups = "drop"
-#   ) %>%
-#   arrange(desc(npv_change_var))
 
-top_var_companies <-company_var_accross_sy$portfolio.company_id
+# top_var_companies <-company_var_accross_sy$portfolio.company_id
 
+top_var_companies <-
+  company_bu_var_accross_sy %>% distinct(portfolio.company_id) %>% sample_n(size = 10) %>% pull()
 
 
 top_plot_companies <- analysis_data %>%
@@ -1374,10 +1373,10 @@ create_plot <- function(data_subset, strip_color) {
     geom_bar(stat = "identity", width = .5, position = "dodge") +
     r2dii.plot::theme_2dii() +
     theme(
-      legend.position = "bottom",
+      legend.position = "right",
       axis.title.x = element_blank(),
       axis.title.y = element_blank(),
-      strip.text = element_text(color = strip_color) # Set the strip text color
+      strip.text = element_text(color = strip_color, face="bold", size=12) # Set the strip text color
     ) +
     scale_y_continuous(labels = scales::label_percent(accuracy = 1)) +
     coord_flip() +
@@ -1388,12 +1387,13 @@ create_plot <- function(data_subset, strip_color) {
 data1 <- filter(plot_data, value_name == "NPV Rate of Change")
 data2 <- filter(plot_data, value_name == "PD Difference")
 
-p1 <- create_plot(data1, "#5D9324") # Color for "NPV Rate of Change"
+p1 <- create_plot(data1, "#5D9324") + theme(legend.position = "none")# Color for "NPV Rate of Change"
 p2 <- create_plot(data2, "#BAB6B5") # Color for "PD Difference"
 
 # Combine the plots
 combined_plot <- patchwork::wrap_plots(p1, p2, ncol = 2)+
-                   patchwork::plot_annotation(title = paste(a_company_name, '- scenario', a_shock_scenario))
+                   patchwork::plot_annotation(title = paste(a_company_name, '- scenario', a_shock_scenario))+ patchwork::plot_layout(guides = 'collect') +
+                 theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm"))
 
 
 # Print the combined plot
