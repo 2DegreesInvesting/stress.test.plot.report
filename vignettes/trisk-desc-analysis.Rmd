@@ -1098,7 +1098,93 @@ for (run_id in c(
 
 #### company level analysis
 
-```{r}
+```{r, fig.height=6}
+
+a_company_id <- 498443
+
+# a_company_id <- 5612
+# a_company_id <- 65096
+
+# a_company_id <- 1990
+# a_company_id <- 919
+
+company_data <- analysis_data%>%filter(portfolio.company_id==a_company_id)
+
+
+
+
+for (run_id in c(
+  "5776a4b8-476f-48ba-91ae-b83a178d4331",
+  "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f",
+  "663fa2de-e808-457b-b234-dca8e736b8a0",
+  "eb594eb8-13a7-461e-b8fb-7cad52a7167b"
+)) {
+  plot_data <- company_data %>% filter(crispy.run_id == run_id)  %>%
+    select(
+      crispy.shock_scenario,
+      crispy.shock_year,
+      portfolio.company_name,
+      portfolio.ald_sector,
+      portfolio.ald_business_unit,
+      crispy.net_present_value_baseline,
+      crispy.net_present_value_shock,
+      crispy.pd_baseline,
+      crispy.pd_shock
+    )
+  
+  a_shock_scenario <-  unique(plot_data$crispy.shock_scenario)
+  a_company_name <-  unique(plot_data$portfolio.company_name)
+  a_shock_year <-  unique(plot_data$crispy.shock_year)
+  
+  
+# Reshape the data for NPV
+npv_data <- plot_data %>%
+    pivot_longer(cols = starts_with("crispy.net_present_value"), 
+                 names_to = "type", 
+                 values_to = "value") %>%
+    mutate(type = ifelse(type == "crispy.net_present_value_baseline", "Baseline", "Shock"))
+
+# Reshape the data for PD
+pd_data <- plot_data %>%
+    pivot_longer(cols = starts_with("crispy.pd"), 
+                 names_to = "type", 
+                 values_to = "value") %>%
+    mutate(type = ifelse(type == "crispy.pd_baseline", "Baseline", "Shock"))
+
+# Plot for NPV
+npv_plot <- ggplot(npv_data, aes(x = portfolio.ald_business_unit, y = value, color=type)) +
+    geom_bar(stat = "identity", position = position_dodge(), fill="#5D9324") +
+    scale_y_continuous(labels = scales::label_number(scale = 1e-6, suffix = "M$"))+
+    facet_wrap(~ portfolio.ald_sector, scales = "free") +
+    labs(y = "NPV Value", fill = "Type") +
+    scale_color_manual(values = c("Baseline" = "blue", "Shock" = "red")) +
+    r2dii.plot::theme_2dii()+
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          axis.title.x = element_blank())
+
+# Plot for PD
+pd_plot <- ggplot(pd_data, aes(x = portfolio.ald_business_unit, y = value, color=type)) +
+    geom_bar(stat = "identity", position = position_dodge(), fill = "#BAB6B5") +
+    facet_wrap(~ portfolio.ald_sector, scales = "free") +
+    labs(y = "PD Value", fill = "Type", x="Business Unit") +
+    scale_color_manual(values = c("Baseline" = "blue", "Shock" = "red")) +
+    scale_y_continuous(labels = scales::label_percent(accuracy = 0.001)) +
+    r2dii.plot::theme_2dii()+
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+# Combine the plots
+combined_plot <- patchwork::wrap_plots(npv_plot, pd_plot, nrow = 2) +
+  patchwork::plot_annotation(title = paste(a_company_name, '- scenario', a_shock_scenario, "- shock year", a_shock_year)) +
+  patchwork::plot_layout(guides = 'collect') +
+  theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm"))
+
+# Display the combined plot
+print(combined_plot)
+
+}
+
+
 
 ```
 
@@ -1327,7 +1413,7 @@ company_bu_var_accross_sy <- analysis_data %>%
     .groups = "drop"
   )   %>%
   inner_join(count_company_bu) %>%
-  filter(n_bu >= (max(n_bu) - 2))  
+  filter(n_bu >= (max(n_bu) - 1))  
 
 
 
@@ -1391,9 +1477,10 @@ p1 <- create_plot(data1, "#5D9324") + theme(legend.position = "none")# Color for
 p2 <- create_plot(data2, "#BAB6B5") # Color for "PD Difference"
 
 # Combine the plots
-combined_plot <- patchwork::wrap_plots(p1, p2, ncol = 2)+
-                   patchwork::plot_annotation(title = paste(a_company_name, '- scenario', a_shock_scenario))+ patchwork::plot_layout(guides = 'collect') +
-                 theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm"))
+combined_plot <- patchwork::wrap_plots(p1, p2, ncol = 2) +
+  patchwork::plot_annotation(title = paste(a_company_name, '- scenario', a_shock_scenario)) +
+  patchwork::plot_layout(guides = 'collect') +
+  theme(plot.margin = margin(5.5, 5.5, 5.5, 5.5, "mm"))
 
 
 # Print the combined plot
