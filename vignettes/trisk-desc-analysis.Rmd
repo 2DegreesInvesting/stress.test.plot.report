@@ -1188,6 +1188,84 @@ print(combined_plot)
 
 ```
 
+#### showing the EL :
+
+```{r}
+
+group_variables_vec <- c("portfolio.company_name", "portfolio.company_id","portfolio.ald_sector", "crispy.shock_year", "crispy.baseline_scenario", "crispy.shock_scenario", "crispy.discount_rate")
+metrics_el <- c("expected_loss_baseline", "expected_loss_shock")
+
+
+
+
+data_cdi_el_plot <- analysis_data |>
+  mutate( # THIS MUTATE ONLY IF NO PORTFOLIO PROVIDED
+    loss_given_default=0.35,
+    exposure_at_default = .data$crispy.net_present_value_baseline * .data$loss_given_default,
+    expected_loss_baseline = .data$exposure_at_default * .data$crispy.pd_baseline,
+    expected_loss_shock = .data$exposure_at_default * .data$crispy.pd_shock
+  ) |>
+  dplyr::group_by(crispy.run_id) |>
+  dplyr::group_modify(
+    ~ prepare_for_cdi_el_plots(
+      .,
+      group_variables_vec = group_variables_vec,
+      metrics = metrics_el
+    )
+  ) |>
+  dplyr::ungroup()
+
+
+
+for (run_id_name in  c(
+  "5776a4b8-476f-48ba-91ae-b83a178d4331",
+  "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f",
+  "663fa2de-e808-457b-b234-dca8e736b8a0",
+  "eb594eb8-13a7-461e-b8fb-7cad52a7167b"
+)) {
+  for (company_id in c(65096, 1990)){
+  plist <- list()
+  plot_i <- 1
+
+  data_cdi_el_plot_filtered <- data_cdi_el_plot |> 
+    filter(crispy.run_id == run_id_name, portfolio.company_id == company_id)
+  
+  
+  a_shock_scenario <-  unique(data_cdi_el_plot_filtered$crispy.shock_scenario)
+  a_company_name <-  unique(data_cdi_el_plot_filtered$portfolio.company_name)
+  a_shock_year <-  unique(data_cdi_el_plot_filtered$crispy.shock_year)
+  
+  for (metric_el_name in metrics_el) {
+    cdi_plot <- make_expected_loss_plot(
+      data_cdi_el_plot = data_cdi_el_plot_filtered,
+      x_var = "crispy.shock_year",
+      y_var = metric_el_name,
+      fill_var = metric_el_name,
+      facet_var="portfolio.ald_sector",
+      title = paste("With", metric_el_name)
+    ) +
+      ggplot2::theme(plot.title = ggplot2::element_text(size = 12, face = "bold"))
+
+    plist[[plot_i]] <- cdi_plot
+    plot_i <- plot_i + 1
+  }
+
+  top_title <-
+    ggpubr::text_grob(
+      paste(a_company_name, '- scenario', a_shock_scenario, "- shock year", a_shock_year),
+      size = 10,
+      face = "bold"
+    )
+  plots_grid <- gridExtra::grid.arrange(
+    grobs = plist,
+    nrow = length(plist),
+    top = top_title
+  )
+
+  print(plots_grid)
+  }
+}
+```
 
 
 # Sensitivity analysis
