@@ -33,16 +33,17 @@ make_expected_loss_plot <-
         )
       ) +
       geom_bar(stat = "identity") +
+      theme_2dii() +
       ggplot2::scale_y_continuous(labels = scales::unit_format(unit = "M", scale = 1e-6)) +
       scale_fill_gradient(
         low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
         high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+        labels = scales::unit_format(unit = "M", scale = 1e-6)
       ) +
       facet_wrap(
         facet_var,
-        scales = "fixed"
+        scales = "free_y"
       ) +
-      theme_2dii() +
       labs(
         x = x_var,
         y = "Sum of EL (in millions)",
