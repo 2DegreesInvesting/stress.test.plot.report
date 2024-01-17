@@ -67,10 +67,11 @@ load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
 #'
 #' @examples
 aggregate_crispy_facts <- function(multi_crispy, group_cols, param_cols = c(
-                                     "run_id", "roll_up_type", "baseline_scenario", "shock_scenario",
-                                     "risk_free_rate", "discount_rate", "dividend_rate", "growth_rate",
-                                     "shock_year"
-                                   )) {
+                                     "run_id", "roll_up_type","scenario_geography","baseline_scenario",
+                                     "shock_scenario","lgd","risk_free_rate","discount_rate","div_netprofit_prop_coef",
+                                     "carbon_price_model","market_passthrough","financial_stimulus","start_year",
+                                     "growth_rate","shock_year")
+                                     ) {
   multi_crispy <- multi_crispy |>
     dplyr::group_by_at(c(group_cols, param_cols)) |>
     dplyr::summarise(
