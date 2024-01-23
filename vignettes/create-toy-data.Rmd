@@ -29,35 +29,34 @@ if (!file.exists(here::here("data-raw", "st_inputs", "abcd_stress_test_input.csv
 set.seed(42)
 
 toy_data_type <- "for_app" # "for_app" or "to_share"
-
 ```
 
 ```{r}
 # Aggregation functions
 
-count_n_companies <- function(abcd_data){
+count_n_companies <- function(abcd_data) {
   abcd_data %>%
-  distinct(company_id, ald_sector, ald_business_unit) %>%
-  group_by(ald_sector, ald_business_unit) %>%
-  summarise(n_companies = dplyr::n(), .groups="drop")
+    distinct(company_id, ald_sector, ald_business_unit) %>%
+    group_by(ald_sector, ald_business_unit) %>%
+    summarise(n_companies = dplyr::n(), .groups = "drop")
 }
 
-sum_total_prod_volume <- function(abcd_data){
-  abcd_data%>%
-  group_by(ald_sector, ald_business_unit, ald_production_unit) %>%
-  summarise(plan_tech_prod=sum(plan_tech_prod), .groups="drop")
-}
-
-sum_yearly_prod_volume <- function(abcd_data){
+sum_total_prod_volume <- function(abcd_data) {
   abcd_data %>%
-  group_by(year, ald_sector, ald_business_unit, ald_production_unit) %>%
-  summarise(plan_tech_prod=sum(plan_tech_prod), .groups="drop")
+    group_by(ald_sector, ald_business_unit, ald_production_unit) %>%
+    summarise(plan_tech_prod = sum(plan_tech_prod), .groups = "drop")
 }
 
-sum_company_prod_volume <- function(abcd_data){
+sum_yearly_prod_volume <- function(abcd_data) {
+  abcd_data %>%
+    group_by(year, ald_sector, ald_business_unit, ald_production_unit) %>%
+    summarise(plan_tech_prod = sum(plan_tech_prod), .groups = "drop")
+}
+
+sum_company_prod_volume <- function(abcd_data) {
   abcd_data %>%
     group_by(company_id, ald_sector, ald_business_unit, ald_production_unit) %>%
-    summarise(plan_tech_prod=sum(plan_tech_prod), .groups="drop")
+    summarise(plan_tech_prod = sum(plan_tech_prod), .groups = "drop")
 }
 ```
 
@@ -91,40 +90,39 @@ all_values_equal <- function(abcd_data) {
 }
 
 constant_identifiers <- abcd_full_global %>% all_values_equal()
-abcd_full_noconstant <- abcd_full_global %>% 
+abcd_full_noconstant <- abcd_full_global %>%
   right_join(constant_identifiers %>% dplyr::filter(all_equals == FALSE))
 ```
 
 2a. sample per number of companies
 
 ```{r}
-
 if (toy_data_type == "to_share") {
   companies_diversity <- abcd_full_noconstant %>%
     distinct(company_id, ald_sector, ald_business_unit) %>%
     group_by(company_id) %>%
     summarise(n_bu = n())
-  
+
   # companies_diversity_w_sector <- abcd_full_noconstant %>%
   #   distinct(company_id, ald_sector, ald_business_unit) %>%
   #   inner_join(companies_diversity)
-  
+
   sample_n_companies <- function(abcd_data, n_companies) {
     unique_companies <- abcd_data %>% distinct(company_id, n_bu)
-    
+
     total_companies <- length(unique_companies %>% pull(company_id))
     if (total_companies < n_companies) {
       n_companies <- total_companies
     }
-    
+
     # gives priority in the sampling to companies that cover multiple sectors
     sample_companies <- unique_companies %>%
-      sample_n(n_companies, weight = .data$n_bu ** 3)
-    
+      sample_n(n_companies, weight = .data$n_bu**3)
+
     abcd_sampled <- abcd_data %>% inner_join(sample_companies)
     return(abcd_sampled)
   }
-  
+
   # Group by ald_sector and ald_business_unit, then apply sampling
   abcd_toydata <- abcd_full_noconstant %>%
     inner_join(companies_diversity) %>%
@@ -138,26 +136,24 @@ if (toy_data_type == "to_share") {
 2b. sample to reach the same amount of production lost as the highest loss from the constant productions removal
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
-
-if (toy_data_type == "for_app"){
-
+if (toy_data_type == "for_app") {
   # Define the desired uniform ratio
   uniform_ratio <- 0.2
-  
+
   # Calculate production volume for the full dataset
   volume_prod_full <- sum_total_prod_volume(abcd_full_noconstant)
-  
+
   # Function to calculate RMSE between two curves
   calculate_rmse <- function(curve1, curve2) {
     # Assuming curve1 and curve2 are data frames with columns 'year' and 'plan_tech_prod'
     # Merge the two dataframes on 'year'
     merged_curves <- merge(curve1, curve2, by = "year")
-    
+
     # Calculate the RMSE
-    rmse <-sqrt(mean((merged_curves$plan_tech_prod.x - merged_curves$plan_tech_prod.y) ^ 2))
+    rmse <- sqrt(mean((merged_curves$plan_tech_prod.x - merged_curves$plan_tech_prod.y)^2))
     return(rmse)
   }
-  
+
   # Function for greedy search to sample companies
   sample_companies_greedy <-
     function(noconst_data,
@@ -169,17 +165,19 @@ if (toy_data_type == "for_app"){
       best_ratio_diff <- Inf
       best_rmse <- Inf
       greedy_sampling_ratio <- 1
-      
+
       while (greedy_sampling_ratio > greedy_lr * 2) {
         current_samples <- list()
-        
+
         for (i in 1:n_sampling_attempts) {
           sampled_companies <-
-            sample_frac(distinct(noconst_data, company_id),
-                        greedy_sampling_ratio)
+            sample_frac(
+              distinct(noconst_data, company_id),
+              greedy_sampling_ratio
+            )
           sampled_data <-
             noconst_data %>% filter(company_id %in% sampled_companies$company_id)
-          
+
           new_total_prod <- sum_total_prod_volume(sampled_data)
           new_ratio <-
             inner_join(
@@ -192,12 +190,12 @@ if (toy_data_type == "for_app"){
               )
             ) %>%
             mutate(perc_prod_kept = plan_tech_prod.x / plan_tech_prod.y)
-          
+
           rmse <- calculate_rmse(
             sum_yearly_prod_volume(sampled_data),
             sum_yearly_prod_volume(noconst_data)
           )
-          
+
           current_samples[[i]] <-
             list(
               data = sampled_data,
@@ -205,34 +203,32 @@ if (toy_data_type == "for_app"){
               rmse = rmse
             )
         }
-        
+
         # Find the best sample in this iteration according to the rmse
         best_sample_in_iteration <- sapply(current_samples, function(x) x$rmse)
         min_diff_index <- which.min(best_sample_in_iteration)
-        
+
         print(current_samples[[min_diff_index]]$ratio_diff)
-        
+
         # select the sample having best RMSE in the sample, if it is better than last ratio_diff
         if (current_samples[[min_diff_index]]$ratio_diff < best_ratio_diff) {
-            
-            best_sample <- current_samples[[min_diff_index]]$data
-            best_ratio_diff <- current_samples[[min_diff_index]]$ratio_diff
-            best_rmse <- current_samples[[min_diff_index]]$rmse
-          
+          best_sample <- current_samples[[min_diff_index]]$data
+          best_ratio_diff <- current_samples[[min_diff_index]]$ratio_diff
+          best_rmse <- current_samples[[min_diff_index]]$rmse
         }
-        
+
         greedy_sampling_ratio <- greedy_sampling_ratio - greedy_lr
       }
       return(best_sample %>% select(-c(ald_sector, ald_business_unit)))
     }
-  
+
   # Group by ald_sector and ald_business_unit, then apply sampling
   abcd_toydata <- abcd_full_noconstant %>%
     group_by(ald_sector, ald_business_unit) %>%
     group_modify(~ sample_companies_greedy(.x, volume_prod_full, uniform_ratio),
-                 .keep = T) %>%
+      .keep = T
+    ) %>%
     ungroup()
-  
 }
 ```
 
@@ -241,7 +237,6 @@ if (toy_data_type == "for_app"){
 
 
 ```{r}
-
 ## Aggregations fulldata
 
 n_companies_full <- count_n_companies(abcd_full_noconstant)
@@ -256,28 +251,26 @@ n_companies_toydata <- count_n_companies(abcd_toydata)
 total_volume_prod_toydata <- sum_total_prod_volume(abcd_toydata)
 yearly_volume_prod_toydata <- sum_yearly_prod_volume(abcd_toydata)
 company_volume_prod_toydata <- sum_company_prod_volume(abcd_toydata)
-
 ```
 
 
 #  diff companies, production,  between full and toydata
 
 ```{r}
-comp_n_companies <- inner_join(n_companies_full, n_companies_toydata, by=c("ald_sector", "ald_business_unit"), suffix=c(".fulldata", ".toydata"))
+comp_n_companies <- inner_join(n_companies_full, n_companies_toydata, by = c("ald_sector", "ald_business_unit"), suffix = c(".fulldata", ".toydata"))
 
-comp_total_volume_prod <-  inner_join(total_volume_prod_full, total_volume_prod_toydata, by=c("ald_sector", "ald_business_unit", "ald_production_unit"), suffix=c(".fulldata", ".toydata")) %>% mutate(perc_prod_kept = plan_tech_prod.toydata / plan_tech_prod.fulldata)
+comp_total_volume_prod <- inner_join(total_volume_prod_full, total_volume_prod_toydata, by = c("ald_sector", "ald_business_unit", "ald_production_unit"), suffix = c(".fulldata", ".toydata")) %>% mutate(perc_prod_kept = plan_tech_prod.toydata / plan_tech_prod.fulldata)
 
-inner_join(comp_n_companies, comp_total_volume_prod, by=c("ald_sector", "ald_business_unit")) %>% gt()
-  
+inner_join(comp_n_companies, comp_total_volume_prod, by = c("ald_sector", "ald_business_unit")) %>% gt()
 ```
 
 # diff yearly prod full vs toy
 
 ```{r echo=FALSE, fig.height=4, fig.width=6}
-comp_yearly_volume_prod <-  inner_join(yearly_volume_prod_full, yearly_volume_prod_toydata, by=c("year" ,"ald_sector", "ald_business_unit", "ald_production_unit"), suffix=c(".fulldata", ".toydata"))
+comp_yearly_volume_prod <- inner_join(yearly_volume_prod_full, yearly_volume_prod_toydata, by = c("year", "ald_sector", "ald_business_unit", "ald_production_unit"), suffix = c(".fulldata", ".toydata"))
 
 
-long_data <- comp_yearly_volume_prod %>% 
+long_data <- comp_yearly_volume_prod %>%
   tidyr::pivot_longer(
     cols = starts_with("plan_tech_prod"),
     names_to = "production_type",
@@ -287,25 +280,27 @@ long_data <- comp_yearly_volume_prod %>%
 combinations <- unique(long_data[c("ald_sector", "ald_business_unit", "ald_production_unit")])
 
 # Loop through each combination and create a plot
-for(i in 1:nrow(combinations)) {
+for (i in 1:nrow(combinations)) {
   # Subset the data for the current combination
   subset_data <- long_data %>%
-    filter(ald_sector == combinations$ald_sector[i],
-           ald_business_unit == combinations$ald_business_unit[i],
-           ald_production_unit == combinations$ald_production_unit[i])
+    filter(
+      ald_sector == combinations$ald_sector[i],
+      ald_business_unit == combinations$ald_business_unit[i],
+      ald_production_unit == combinations$ald_production_unit[i]
+    )
 
   # Create the plot
   p <- ggplot(subset_data, aes(x = year, y = production_value, color = production_type, group = production_type)) +
-    geom_line(aes(linetype=production_type)) +
+    geom_line(aes(linetype = production_type)) +
     theme_minimal() +
     labs(
-      title = paste("Production Comparison:", combinations$ald_sector[i], "&", combinations$ald_business_unit[i], "&",combinations$ald_production_unit[i]),
+      title = paste("Production Comparison:", combinations$ald_sector[i], "&", combinations$ald_business_unit[i], "&", combinations$ald_production_unit[i]),
       x = "Year",
       y = "Production Value",
       color = "Production Type"
     ) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-   scale_linetype_manual(values=c("twodash", "dotted"))
+    scale_linetype_manual(values = c("twodash", "dotted"))
 
   # Print the plot
   print(p)
@@ -326,22 +321,22 @@ for(i in 1:nrow(combinations)) {
 #       filter(ald_sector == sector, ald_business_unit == business_unit, ald_production_unit == production_unit) %>%
 #       mutate(dataset = "Toy")
 #   )
-# 
+#
 #   # Sorting company_id based on plan_tech_prod in the full dataset
 #   ordered_ids <- full_data %>%
 #     filter(ald_sector == sector, ald_business_unit == business_unit, ald_production_unit == production_unit) %>%
 #     arrange(plan_tech_prod) %>%
 #     pull(company_id)
-# 
+#
 #   # Ensure unique and ordered company_id factor levels
 #   combined_data$company_id <- factor(combined_data$company_id, levels = unique(ordered_ids))
-# 
+#
 #   # Calculate cumulative production
 #   combined_data <- combined_data %>%
 #     arrange(company_id) %>%
 #     group_by(dataset) %>%
 #     mutate(cumulative_prod = cumsum(plan_tech_prod))
-# 
+#
 # # Plotting
 # ggplot(combined_data, aes(x = company_id, y = cumulative_prod, color = dataset, group = dataset)) +
 #   geom_line() +
@@ -352,35 +347,31 @@ for(i in 1:nrow(combinations)) {
 #        subtitle = "Sorted by increasing plan tech production in Full dataset") +
 #   scale_color_manual(values = c("Full" = "blue", "Toy" = "red")) +
 #   theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
-# 
+#
 # }
-# 
+#
 # # Loop over each unique combination
 # unique_combinations <- unique(abcd_full[c("ald_sector", "ald_business_unit", "ald_production_unit")])
-# 
+#
 # for (i in seq_len(nrow(unique_combinations))) {
 #   combination <- unique_combinations[i, ]
 #   sector <- combination$ald_sector
 #   business_unit <- combination$ald_business_unit
 #   production_unit <- combination$ald_production_unit
-# 
+#
 #   # Check if the combination exists in both data frames
 #   if (any(abcd_toydata$ald_sector == sector & abcd_toydata$ald_business_unit == business_unit & abcd_toydata$ald_production_unit == production_unit)) {
 #     plot <- create_cumsum_plot(company_volume_prod_full, company_volume_prod_toydata, sector, business_unit, production_unit)
 #     print(plot)
 #   }
 # }
-
-
 ```
 # Write data
 
 ```{r}
-
-
 financial_data <- readr::read_csv(here::here("data-raw", "st_inputs", "prewrangled_financial_data_stress_test.csv"))
 financial_toydata <- financial_data %>%
-  filter(company_id %in% (abcd_toydata%>% distinct(company_id) %>% pull(company_id)))
+  filter(company_id %in% (abcd_toydata %>% distinct(company_id) %>% pull(company_id)))
 
 
 dir.create(here::here("data-raw", "toydata"), showWarnings = FALSE, recursive = TRUE)
@@ -390,17 +381,16 @@ readr::write_csv(
   abcd_full %>%
     inner_join(abcd_toydata %>% distinct(company_id, ald_sector, ald_business_unit)) %>% rowwise() %>%
     mutate(
-      company_name=digest(.data$company_name, algo = "md5"),
-      company_id=(.data$company_id - 4) * 3
-      ),
+      company_name = digest(.data$company_name, algo = "md5"),
+      company_id = (.data$company_id - 4) * 3
+    ),
   here::here("data-raw", "toydata", "abcd_stress_test_input.csv")
 )
 
 readr::write_csv(
   financial_toydata %>%
     rowwise() %>%
-    mutate(company_id=(.data$company_id - 4) * 3)
-  ,
+    mutate(company_id = (.data$company_id - 4) * 3),
   here::here(
     "data-raw",
     "toydata",

@@ -144,7 +144,7 @@ for (run_id_name in unique(data_cdi_el_plot$crispy.run_id)) {
       x_var = "crispy.shock_year",
       y_var = metric_el_name,
       fill_var = metric_el_name,
-      facet_var="portfolio.ald_sector",
+      facet_var = "portfolio.ald_sector",
       title = paste("With", metric_el_name)
     ) +
       ggplot2::theme(plot.title = ggplot2::element_text(size = 12, face = "bold"))
@@ -235,7 +235,6 @@ data_cdi_pd_plot_company <- analysis_data_company |>
     )
   ) |>
   dplyr::ungroup()
-
 ```
 
 
