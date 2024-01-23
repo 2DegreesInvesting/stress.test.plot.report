@@ -25,7 +25,7 @@ library(ggpubr)
 ```{r}
 analysis_data_full_global <-
   load_input_plots_data(
-    crispy_outputs_dir = here::here("workspace", "methodology_paper", "st_outputs"),
+    trisk_output_dir = here::here("workspace", "methodology_paper", "st_outputs"),
     granularity = c(
       "company_name",
       "company_id",

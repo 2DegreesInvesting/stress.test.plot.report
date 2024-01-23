@@ -1,17 +1,17 @@
 #' Title
 #'
-#' @param crispy_outputs_dir
+#' @param trisk_output_dir
 #'
 #' @return
 #' @export
 #'
 #' @examples
-load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
+load_multiple_crispy <- function(trisk_output_dir, max_granularity) {
   # Required Libraries
 
   # Get file paths
   files_path <- list.files(
-    path = crispy_outputs_dir,
+    path = trisk_output_dir,
     pattern = "^crispy_output_(.*).csv",
     recursive = TRUE,
     full.names = TRUE

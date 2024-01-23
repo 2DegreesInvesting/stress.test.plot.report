@@ -4,7 +4,7 @@
 #'  The dataframe in output of this function should always be
 #'  the one used as input for the plots preprocessing functions
 #'
-#' @param crispy_outputs_dir
+#' @param trisk_output_dir
 #' @param portfolio_data_path
 #' @param granularity
 #' @param maturity_month_term_bridge_fp
@@ -14,15 +14,15 @@
 #'
 #' @examples
 load_input_plots_data <-
-  function(crispy_outputs_dir,
+  function(trisk_output_dir,
            portfolio_data_path = NULL,
            granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
            maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv"),
            trisk_start_year = 2022) {
     multi_crispy_data <-
       main_load_multi_crispy_data(
-        crispy_outputs_dir = crispy_outputs_dir,
-        max_crispy_granularity =
+        trisk_output_dir = trisk_output_dir,
+        max_trisk_granularity =
           c("run_id", "term", "scenario_geography", granularity)
       )
 
@@ -96,17 +96,17 @@ main_load_portfolio_data <-
 
 #' Title
 #'
-#' @param crispy_outputs_dir
+#' @param trisk_output_dir
 #' @param max_crispy_granularity
 #'
 #' @return
 #'
 #' @examples
 main_load_multi_crispy_data <-
-  function(crispy_outputs_dir,
+  function(trisk_output_dir,
            max_crispy_granularity) {
     multi_crispy_data <-
-      load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
+      load_multiple_crispy(trisk_output_dir = trisk_output_dir) |>
       aggregate_crispy_facts(group_cols = max_crispy_granularity)
     return(multi_crispy_data)
   }
