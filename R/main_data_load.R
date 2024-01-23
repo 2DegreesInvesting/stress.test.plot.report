@@ -16,7 +16,7 @@
 load_input_plots_data <-
   function(crispy_outputs_dir,
            portfolio_data_path = NULL,
-           granularity = c("company_id", "ald_sector", "ald_business_unit"),
+           granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
            maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv"),
            trisk_start_year = 2022) {
     multi_crispy_data <-
@@ -53,7 +53,6 @@ load_input_plots_data <-
 #' @param portfolio_crispy_merge_cols
 #'
 #' @return
-#' @export
 #'
 #' @examples
 main_load_analysis_data <-
@@ -75,7 +74,6 @@ main_load_analysis_data <-
 #' @param max_portfolio_granularity
 #'
 #' @return
-#' @export
 #'
 #' @examples
 main_load_portfolio_data <-
@@ -102,7 +100,6 @@ main_load_portfolio_data <-
 #' @param max_crispy_granularity
 #'
 #' @return
-#' @export
 #'
 #' @examples
 main_load_multi_crispy_data <-

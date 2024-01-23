@@ -4,7 +4,6 @@
 #' @param multi_crispy
 #'
 #' @return
-#' @export
 #'
 #' @examples
 create_analysis_data <-
@@ -19,15 +18,16 @@ create_analysis_data <-
       portfolio_data <- dplyr::full_join(portfolio_data, merge_cols_values)
     }
 
+    # prefix column names in portfolio and crispy
+    colnames(portfolio_data) <-
+      paste0("portfolio.", colnames(portfolio_data))
+    colnames(multi_crispy_data) <- paste0("crispy.", colnames(multi_crispy_data))
 
+    # create merging named vector
     portfolio_crispy_merge_cols <- setNames(
       paste0("crispy.", portfolio_crispy_merge_cols),
       paste0("portfolio.", portfolio_crispy_merge_cols)
     )
-
-    colnames(portfolio_data) <-
-      paste0("portfolio.", colnames(portfolio_data))
-    colnames(multi_crispy_data) <- paste0("crispy.", colnames(multi_crispy_data))
 
     analysis_data <-
       dplyr::inner_join(
@@ -44,7 +44,6 @@ create_analysis_data <-
 #' @param analysis_data
 #'
 #' @return
-#' @export
 #'
 #' @examples
 compute_analysis_metrics <- function(analysis_data) {
@@ -53,6 +52,7 @@ compute_analysis_metrics <- function(analysis_data) {
       net_present_value_difference = .data$crispy.net_present_value_shock - .data$crispy.net_present_value_baseline,
       crispy_perc_value_change = .data$net_present_value_difference / .data$crispy.net_present_value_baseline,
       crispy_value_loss = .data$crispy_perc_value_change * .data$portfolio.exposure_value_usd,
+
       exposure_at_default = .data$portfolio.exposure_value_usd * .data$portfolio.loss_given_default,
       # exposure_at_default_baseline = .data$net_present_value_baseline * .data$loss_given_default,
       # exposure_at_default_shock = .data$net_present_value_shock * .data$loss_given_default,
@@ -62,7 +62,8 @@ compute_analysis_metrics <- function(analysis_data) {
       expected_loss_shock = .data$exposure_at_default * .data$crispy.pd_shock,
 
       # pd_difference_portfolio = .data$portfolio.pd_portfolio - .data$crispy.pd_shock,
-      pd_difference = .data$crispy.pd_shock - .data$crispy.pd_baseline
+      pd_difference = .data$crispy.pd_shock - .data$crispy.pd_baseline,
+      crispy_perc_pd_change = .data$pd_difference / .data$crispy.pd_baseline
     )
 
 

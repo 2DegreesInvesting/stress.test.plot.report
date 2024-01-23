@@ -50,7 +50,7 @@ analysis_data <-
 Filter the trisk data to focus on a single geography/run
 
 ```{r}
-focus_run_id <- "NGFS2021_MESSAGE_B2DS_Global_no_carbon_tax"
+focus_run_id <- "be4ce08a-6bc5-4724-a259-d5e2bd8fe01f"
 focus_scenario_geography <- "Global"
 active_tab <- "portfolio.portfolio_id"
 

@@ -105,7 +105,6 @@ map_portfolio_maturity_to_term <-
 #' @param group_cols
 #'
 #' @return
-#' @export
 #'
 #' @examples
 aggregate_portfolio_facts <- function(portfolio_data, group_cols) {
