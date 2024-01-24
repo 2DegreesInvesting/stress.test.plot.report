@@ -52,7 +52,6 @@ compute_analysis_metrics <- function(analysis_data) {
       net_present_value_difference = .data$crispy.net_present_value_shock - .data$crispy.net_present_value_baseline,
       crispy_perc_value_change = .data$net_present_value_difference / .data$crispy.net_present_value_baseline,
       crispy_value_loss = .data$crispy_perc_value_change * .data$portfolio.exposure_value_usd,
-
       exposure_at_default = .data$portfolio.exposure_value_usd * .data$portfolio.loss_given_default,
       # exposure_at_default_baseline = .data$net_present_value_baseline * .data$loss_given_default,
       # exposure_at_default_shock = .data$net_present_value_shock * .data$loss_given_default,

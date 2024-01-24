@@ -4,7 +4,12 @@
 \alias{make_density_plots}
 \title{Title}
 \usage{
-make_density_plots(data_cdi_pd_plot, density_var)
+make_density_plots(
+  data_cdi_pd_plot,
+  numeric_values,
+  density_var,
+  group_variable = "portfolio.ald_sector"
+)
 }
 \arguments{
 \item{density_var}{}
