@@ -7,7 +7,7 @@
 load_input_plots_data(
   crispy_outputs_dir,
   portfolio_data_path = NULL,
-  granularity = c("company_id", "ald_sector", "ald_business_unit"),
+  granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
   maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv"),
   trisk_start_year = 2022
 )

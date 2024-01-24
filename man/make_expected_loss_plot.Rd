@@ -9,8 +9,7 @@ make_expected_loss_plot(
   x_var,
   y_var,
   fill_var,
-  facet_rows_var,
-  facet_cols_var,
+  facet_var,
   title
 )
 }
