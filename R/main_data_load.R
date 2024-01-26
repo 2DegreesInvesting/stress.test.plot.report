@@ -167,9 +167,9 @@ main_load_multi_crispy_data <-
 #' @return
 #' @export
 #'
-main_data_load_trajectories_data <- function(company_trajectories_data) {
+main_data_load_trajectories_data <- function(company_trajectories_data, trisk_granularity) {
   company_trajectories_data <- company_trajectories_data |>
     aggregate_trajectories_facts(group_cols = trisk_granularity) |>
-    convert_trajectories_as_percentages()
+    convert_trajectories_as_percentages(group_cols = trisk_granularity)
   return(company_trajectories_data)
 }
