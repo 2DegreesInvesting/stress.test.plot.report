@@ -1,11 +1,3 @@
-#' Title
-#'
-#' @param portfolio_data_path
-#'
-#' @return
-#' @export
-#'
-#' @examples
 load_portfolio_data <- function(portfolio_data_path) {
   if (!is.null(portfolio_data_path)) {
     portfolio_data <- readr::read_csv(
@@ -42,16 +34,12 @@ load_portfolio_data <- function(portfolio_data_path) {
 }
 
 
-#' Title
+#' Convert column year to term
 #'
-#' @param portfolio_data
-#' @param maturity_month_term_bridge
-#' @param start_year
+#' @param portfolio_data portfolio_data
+#' @param maturity_month_term_bridge maturity_month_term_bridge
+#' @param start_year start_year
 #'
-#' @return
-#' @export
-#'
-#' @examples
 map_portfolio_maturity_to_term <-
   function(portfolio_data,
            maturity_month_term_bridge,

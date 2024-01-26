@@ -8,9 +8,8 @@
 drafts/
 legacy/
 documentation/
-data-raw/
 inst/doc
 /doc/
 /Meta/
 workspace/
-
+data-raw/mlflow_outputs/

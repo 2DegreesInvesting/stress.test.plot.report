@@ -79,18 +79,6 @@ metrics_el <- c("expected_loss_baseline", "expected_loss_shock")
 #     )
 #   )
 
-#
-# weights_data <- analysis_data |>
-#   dplyr::group_by(crispy.run_id) |>
-#   dplyr::group_modify(
-#     ~ compute_sector_weights(
-#       .,
-#       group_variable_vec = group_variables_vec,
-#       weight_variable = weight_variable
-#     )
-#   )|>
-#   dplyr::ungroup()
-
 
 data_cdi_npv_plot <- analysis_data |>
   dplyr::group_by(crispy.run_id) |>

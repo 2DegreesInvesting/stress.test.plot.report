@@ -1,26 +1,11 @@
-# prepare_for_cdi_plots <- function(analysis_data, group_variables_vec, metrics, agg_fn){
-#   # Sum over sector and portfolio
-#   # TODO tests
-#   data_cdi_el_plot <- analysis_data %>%
-#     dplyr::group_by_at(group_variables_vec) %>%
-#     dplyr::summarise_at(.vars = metrics, .funs = agg_fn) %>%
-#     dplyr::ungroup()
-#
-#   return(data_cdi_el_plot)
-# }
-
-
 
 #' Title
 #'
-#' @param analysis_data
-#' @param group_variables_vec
-#' @param metrics_npv
+#' @param analysis_data analysis_data
+#' @param group_variables_vec group_variables_vec
+#' @param metrics_npv metrics_npv
 #'
-#' @return
 #' @export
-#'
-#' @examples
 prepare_for_cdi_npv_plots <-
   function(analysis_data,
            group_variables_vec,
@@ -33,9 +18,7 @@ prepare_for_cdi_npv_plots <-
       )
     ))
 
-
     # Sum over sector and portfolio
-    # TODO tests
     data_cdi_el_plot <- analysis_data %>%
       dplyr::group_by_at(group_variables_vec) %>%
       dplyr::summarise_at(.vars = metrics_npv, .funs = sum) %>%
@@ -47,15 +30,12 @@ prepare_for_cdi_npv_plots <-
 
 #' Title
 #'
-#' @param analysis_data
-#' @param group_variables_vec
-#' @param weight_variable_char
-#' @param metrics_pd
+#' @param analysis_data analysis_data
+#' @param group_variables_vec group_variables_vec
+#' @param weight_variable_char weight_variable_char
+#' @param metrics_pd metrics_pd
 #'
-#' @return
 #' @export
-#'
-#' @examples
 prepare_for_cdi_pd_plots <-
   function(analysis_data,
            group_variables_vec,
@@ -91,14 +71,11 @@ prepare_for_cdi_pd_plots <-
 
 #' Title
 #'
-#' @param analysis_data
-#' @param group_variables_vec
-#' @param metrics_el
+#' @param analysis_data analysis_data
+#' @param group_variables_vec group_variables_vec
+#' @param metrics_el metrics_el
 #'
-#' @return
 #' @export
-#'
-#' @examples
 prepare_for_cdi_el_plots <- function(analysis_data,
                                      group_variables_vec = group_variables_vec,
                                      metrics_el = metrics_el) {

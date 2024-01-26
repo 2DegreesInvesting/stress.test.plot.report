@@ -1,11 +1,4 @@
-#' Title
-#'
-#' @param portfolio_data
-#' @param multi_crispy
-#'
-#' @return
-#'
-#' @examples
+
 create_analysis_data <-
   function(portfolio_data,
            multi_crispy_data,
@@ -51,17 +44,17 @@ compute_analysis_metrics <- function(analysis_data) {
     dplyr::mutate(
       net_present_value_difference = .data$crispy.net_present_value_shock - .data$crispy.net_present_value_baseline,
       crispy_perc_value_change = .data$net_present_value_difference / .data$crispy.net_present_value_baseline,
-      crispy_value_loss = .data$crispy_perc_value_change * .data$portfolio.exposure_value_usd,
+      crispy_value_loss = .data$crispy_perc_value_change * .data$exposure_value_usd,
 
-      exposure_at_default = .data$portfolio.exposure_value_usd * .data$portfolio.loss_given_default,
+      exposure_at_default = .data$exposure_value_usd * .data$loss_given_default,
       # exposure_at_default_baseline = .data$net_present_value_baseline * .data$loss_given_default,
       # exposure_at_default_shock = .data$net_present_value_shock * .data$loss_given_default,
 
-      expected_loss_portfolio = .data$exposure_at_default * .data$portfolio.pd_portfolio,
+      expected_loss_portfolio = .data$exposure_at_default * .data$pd_portfolio,
       expected_loss_baseline = .data$exposure_at_default * .data$crispy.pd_baseline,
       expected_loss_shock = .data$exposure_at_default * .data$crispy.pd_shock,
 
-      # pd_difference_portfolio = .data$portfolio.pd_portfolio - .data$crispy.pd_shock,
+      # pd_difference_portfolio = .data$pd_portfolio - .data$crispy.pd_shock,
       pd_difference = .data$crispy.pd_shock - .data$crispy.pd_baseline,
       crispy_perc_pd_change = .data$pd_difference / .data$crispy.pd_baseline
     )

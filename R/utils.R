@@ -12,7 +12,7 @@ repeat_plot_in_a_grid <- function(data, plot_fun, title = "", row_layout = TRUE)
       y_var = metric_el_name,
       fill_var = metric_el_name,
       facet_rows_var = NULL,
-      facet_cols_var = "portfolio.ald_business_unit"
+      facet_cols_var = "ald_business_unit"
     ) +
       labs(title = plot_title) +
       theme(plot.title = element_text(size = 12, face = "bold"))

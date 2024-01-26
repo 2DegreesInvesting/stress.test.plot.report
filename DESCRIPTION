@@ -11,6 +11,9 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
+    2DegreesInvesting/r2dii.climate.stress.test,
+    2DegreesInvesting/STDataMGMT,
+    box,
     dplyr,
     forcats,
     ggplot2,

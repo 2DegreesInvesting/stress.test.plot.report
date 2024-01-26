@@ -1,0 +1,2 @@
+PYTHON_BIN="/Users/bertrandgallice/opt/miniconda3/envs/mlflow_env/bin/python"
+PYTHON_MLFLOW_BIN=""/Users/bertrandgallice/opt/miniconda3/envs/mlflow_env/bin/mlflow""

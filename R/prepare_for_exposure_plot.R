@@ -4,14 +4,11 @@
 #' the data in output of this function is NOT aggregated on the group variable
 #'
 #'
-#' @param analysis_data
-#' @param group_variable_char
-#' @param value_to_plot_char
+#' @param analysis_data analysis_data
+#' @param group_variable_char group_variable_char
+#' @param value_to_plot_char value_to_plot_char
 #'
-#' @return
 #' @export
-#'
-#' @examples
 prepare_for_exposure_plot <- function(analysis_data_single_run, group_variable_char, value_to_plot_char) {
   data_exposure_plot <- analysis_data_single_run |>
     dplyr::mutate(

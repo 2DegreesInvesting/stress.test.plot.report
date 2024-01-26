@@ -10,7 +10,7 @@
 #' @examples
 qplot_pd_sector <- function(data_pd, common_y_axis = FALSE, annual_pds = FALSE) {
   if (!annual_pds) {
-    p <- ggplot(data_pd, aes(x = portfolio.term, y = .data$value_to_plot, fill = .data$value_to_plot))
+    p <- ggplot(data_pd, aes(x = term, y = .data$value_to_plot, fill = .data$value_to_plot))
   } else {
     p <- ggplot(data_pd, aes(x = crispy.shock_year, y = .data$value_to_plot, fill = .data$value_to_plot))
   }
@@ -28,9 +28,9 @@ qplot_pd_sector <- function(data_pd, common_y_axis = FALSE, annual_pds = FALSE) 
     )
 
   if (common_y_axis) {
-    p <- p + facet_wrap(~portfolio.ald_sector, scales = "fixed")
+    p <- p + facet_wrap(~ald_sector, scales = "fixed")
   } else {
-    p <- p + facet_grid(~portfolio.ald_sector, scales = "free")
+    p <- p + facet_grid(~ald_sector, scales = "free")
   }
 
   if (!annual_pds) {

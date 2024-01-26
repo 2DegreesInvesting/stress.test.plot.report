@@ -4,34 +4,34 @@
 #'  The dataframe in output of this function should always be
 #'  the one used as input for the plots preprocessing functions
 #'
-#' @param crispy_outputs_dir
-#' @param portfolio_data_path
-#' @param granularity
-#' @param maturity_month_term_bridge_fp
+#' @param crispy_outputs_dir crispy_outputs_dir
+#' @param portfolio_data_path portfolio_data_path
+#' @param granularity granularity
+#' @param maturity_month_term_bridge_fp see in data-raw in the source package
+#' @param trisk_start_year (default) sets to the earliest year of multi_cripy_data
 #'
 #' @return
 #' @export
 #'
-#' @examples
-load_input_plots_data <-
+load_input_plots_data_from_files <-
   function(crispy_outputs_dir,
            portfolio_data_path = NULL,
            granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
            maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv"),
-           trisk_start_year = 2022) {
+           trisk_start_year = NA) {
+
     multi_crispy_data <-
+      load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
       main_load_multi_crispy_data(
-        crispy_outputs_dir = crispy_outputs_dir,
         max_crispy_granularity =
           c("run_id", "term", "scenario_geography", granularity)
       )
 
-    portfolio_data <-
+    portfolio_data <- load_portfolio_data(portfolio_data_path) |>
       main_load_portfolio_data(
-        portfolio_data_path = portfolio_data_path,
         maturity_month_term_bridge_fp = maturity_month_term_bridge_fp,
         max_portfolio_granularity = c("portfolio_id", "term", granularity),
-        trisk_start_year = trisk_start_year
+        trisk_start_year = min(multi_crispy_data$year)
       )
 
     analysis_data <-
@@ -44,17 +44,65 @@ load_input_plots_data <-
     return(analysis_data)
   }
 
+#' Data load function to generate plots
+#'
+#' @description
+#'  The dataframe in output of this function should always be
+#'  the one used as input for the plots preprocessing functions
+#'
+#' @param crispy_outputs_dir crispy_outputs_dir
+#' @param portfolio_data_path portfolio_data_path
+#' @param granularity granularity
+#' @param maturity_month_term_bridge_fp see in data-raw in the source package
+#' @param trisk_start_year (default) sets to the earliest year of multi_cripy_data
+#'
+#' @return
+#' @export
+#'
+load_input_plots_data_from_tibble <-
+  function(multi_crispy_data,
+           portfolio_data = tibble::tibble(),
+           granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
+           maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv"),
+           trisk_start_year = NA) {
+
+    multi_crispy_data <-
+      multi_crispy_data |>
+      main_load_multi_crispy_data(
+        max_crispy_granularity =
+          c("run_id", "term", "scenario_geography", granularity)
+      )
+
+    portfolio_data <-
+      portfolio_data |>
+      main_load_portfolio_data(
+        maturity_month_term_bridge_fp = maturity_month_term_bridge_fp,
+        max_portfolio_granularity = c("portfolio_id", "term", granularity),
+        trisk_start_year = min(multi_crispy_data$year)
+      )
+
+    analysis_data <-
+      main_load_analysis_data(
+        portfolio_data = portfolio_data,
+        multi_crispy_data = multi_crispy_data,
+        portfolio_crispy_merge_cols = c("term", granularity)
+      )
+
+    return(analysis_data)
+  }
+
+
 #' Title
 #'
 #'
 #'
-#' @param multi_crispy
-#' @param portfolio_data
-#' @param portfolio_crispy_merge_cols
+#' @param multi_crispy multi_crispy
+#' @param portfolio_data portfolio_data
+#' @param portfolio_crispy_merge_cols portfolio_crispy_merge_cols
 #'
 #' @return
 #'
-#' @examples
+#' @export
 main_load_analysis_data <-
   function(multi_crispy_data,
            portfolio_data,
@@ -71,17 +119,16 @@ main_load_analysis_data <-
 
 #' Title
 #'
-#' @param max_portfolio_granularity
+#' @param max_portfolio_granularity max_portfolio_granularity
 #'
 #' @return
 #'
-#' @examples
+#' @export
 main_load_portfolio_data <-
-  function(portfolio_data_path,
+  function(portfolio_data,
            maturity_month_term_bridge_fp,
            max_portfolio_granularity,
            trisk_start_year) {
-    portfolio_data <- load_portfolio_data(portfolio_data_path)
     maturity_month_term_bridge <- readr::read_csv(maturity_month_term_bridge_fp)
 
     portfolio_data <- portfolio_data |>
@@ -96,17 +143,16 @@ main_load_portfolio_data <-
 
 #' Title
 #'
-#' @param crispy_outputs_dir
-#' @param max_crispy_granularity
+#' @param crispy_outputs_dir crispy_outputs_dir
+#' @param max_crispy_granularity max_crispy_granularity
 #'
 #' @return
 #'
-#' @examples
+#' @export
 main_load_multi_crispy_data <-
-  function(crispy_outputs_dir,
+  function(multi_crispy_data,
            max_crispy_granularity) {
-    multi_crispy_data <-
-      load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
+    multi_crispy_data <- multi_crispy_data |>
       aggregate_crispy_facts(group_cols = max_crispy_granularity)
     return(multi_crispy_data)
   }

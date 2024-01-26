@@ -78,7 +78,7 @@ make_mean_pd_diff_plot <- function(data_cdi_pd_plot, scenario_name_for_title) {
       labels = scales::comma,
       name = "Mean pd_difference"
     ) +
-    facet_grid( ~ portfolio.ald_sector, scales = "free_y") + # Allow separate scales for y-axis
+    facet_grid( ~ ald_sector, scales = "free_y") + # Allow separate scales for y-axis
     theme_2dii() +
     labs(x = "Shock_Year", y = "Mean pd_difference", title = paste("Mean PD Difference by Shock Year -", scenario_name_for_title))
   # theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 28),  # Adjust title size
@@ -116,7 +116,7 @@ make_discount_rate_plot <- function(plot_data, scenario_name_for_title, y_var) {
       labels = scales::comma,
       name = "Mean pd_difference"
     ) +
-    facet_grid( ~ portfolio.ald_sector, scales = "free_y") + # Allow separate scales for y-axis
+    facet_grid( ~ ald_sector, scales = "free_y") + # Allow separate scales for y-axis
     theme_2dii() +
     labs(x = "Discount Rate", y = "Mean pd_difference", title = paste("Mean PD Difference by Discount Rate -", scenario_name_for_title))
   # theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 24),  # Adjust title size
@@ -142,7 +142,7 @@ make_discount_rate_plot <- function(plot_data, scenario_name_for_title, y_var) {
 #' @export
 #'
 #' @examples
-make_density_plots <- function(data_cdi_pd_plot, numeric_values, density_var, group_variable="portfolio.ald_sector") {
+make_density_plots <- function(data_cdi_pd_plot, numeric_values, density_var, group_variable="ald_sector") {
 
   density_var_values <- unique(data_cdi_pd_plot[[density_var]])
   plots <- list()
