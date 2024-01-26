@@ -11,6 +11,8 @@ main_data_load_trajectories_data(
 }
 \arguments{
 \item{company_trajectories_data}{company_trajectories_data}
+
+\item{max_trajectories_granularity}{max_trajectories_granularity}
 }
 \description{
 Title
