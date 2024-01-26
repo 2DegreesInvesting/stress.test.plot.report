@@ -12,8 +12,8 @@ prepare_for_cdi_npv_plots <-
            metrics_npv) {
     stopifnot(all(
       metrics_npv %in% c(
-        "crispy.net_present_value_baseline",
-        "crispy.net_present_value_shock",
+        "net_present_value_baseline",
+        "net_present_value_shock",
         "net_present_value_difference"
       )
     ))
@@ -42,7 +42,7 @@ prepare_for_cdi_pd_plots <-
            weight_variable_char = NULL,
            metrics_pd) {
     stopifnot(all(
-      metrics_pd %in% c("crispy.pd_baseline", "crispy.pd_shock", "pd_difference")
+      metrics_pd %in% c("pd_baseline", "pd_shock", "pd_difference")
     ))
 
     # TODO tests

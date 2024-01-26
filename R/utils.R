@@ -7,8 +7,8 @@ repeat_plot_in_a_grid <- function(data, plot_fun, title = "", row_layout = TRUE)
 
     cdi_plot <- make_expected_loss_plot(
       data_cdi_el_plot = data_cdi_el_plot %>%
-        filter(crispy.run_id == run_id_name),
-      x_var = "crispy.shock_year",
+        filter(run_id == run_id_name),
+      x_var = "shock_year",
       y_var = metric_el_name,
       fill_var = metric_el_name,
       facet_rows_var = NULL,

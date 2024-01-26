@@ -41,8 +41,7 @@ analysis_data <-
     crispy_outputs_dir = crispy_outputs_dir,
     portfolio_data_path = portfolio_data_path,
     granularity = granularity,
-    maturity_month_term_bridge_fp = maturity_month_term_bridge_fp,
-    trisk_start_year = trisk_start_year
+    maturity_month_term_bridge_fp = maturity_month_term_bridge_fp
   )
 ```
 
@@ -50,14 +49,15 @@ analysis_data <-
 Filter the trisk data to focus on a single geography/run
 
 ```{r}
-focus_run_id <- "be4ce08a-6bc5-4724-a259-d5e2bd8fe01f"
-focus_scenario_geography <- "Global"
-active_tab <- "portfolio.portfolio_id"
+focus_run_id <- unique(analysis_data$run_id)[2]
+focus_scenario_geography <-
+  analysis_data |> dplyr::filter(run_id == focus_run_id) |> dplyr::distinct(scenario_geography) |> dplyr::pull()
+active_tab <- "portfolio_id"
 
 analysis_data_single_run <- analysis_data |>
   dplyr::filter(
-    .data$crispy.run_id == focus_run_id,
-    .data$crispy.scenario_geography == focus_scenario_geography
+    .data$run_id == focus_run_id,
+    .data$scenario_geography == focus_scenario_geography
   )
 ```
 
@@ -72,7 +72,7 @@ data_exposure_plot <- prepare_for_exposure_plot(
 data_performers_plot <- prepare_for_performers_plot(
   analysis_data_single_run,
   group_variable_vec = c(active_tab),
-  performer_variable_char = "portfolio.ald_business_unit",
+  performer_variable_char = "ald_business_unit",
   performance_metric = "exposure_at_default",
   n_performers = 10
 )
@@ -95,14 +95,14 @@ data_el_plot <-
 data_pd <-
   prepare_for_pd_plot(
     analysis_data_single_run,
-    group_variable_charvec = c("portfolio.ald_sector", "portfolio.term"),
+    group_variable_charvec = c("ald_sector", "term"),
     value_to_plot_char = "pd_difference"
   )
 
 data_val_change <-
   prepare_for_value_change_plot(
     analysis_data_single_run,
-    group_variable_charvec = c("portfolio.ald_sector", "portfolio.term"),
+    group_variable_charvec = c("ald_sector", "term"),
     value_to_plot_char = "shock"
   )
 ```
@@ -123,7 +123,7 @@ qplot_pie_summaries(data_summary_plot, agg_sum_name_chr = "group_sum")
 
 ```{r fig2, fig.width = 8, fig.height=8}
 qplot_worst_performers(data_performers_plot,
-  x_var = "portfolio.ald_business_unit",
+  x_var = "ald_business_unit",
   y_var = "exposure_at_default",
   fill_var = active_tab,
   facet_var = active_tab
@@ -188,7 +188,7 @@ qplot_val_change(data_val_change)
 Per sector
 
 ```{r} 
-qplot_val_change_facet(data_val_change, facet_chr = "portfolio.ald_sector")
+qplot_val_change_facet(data_val_change, facet_chr = "ald_sector")
 ```
 
 Per technology

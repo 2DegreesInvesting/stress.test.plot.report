@@ -22,9 +22,8 @@ library(ggplot2)
 library(tidyr)
 library(purrr)
 library(digest)
-if (!file.exists(here::here("data-raw", "st_inputs", "abcd_stress_test_input.csv"))) {
-  source(file = here::here("data-raw", "run_prepare_abcd_stress_test_input.R"))
-}
+
+here::here("data-raw", "st_inputs", "abcd_stress_test_input.csv")
 
 set.seed(42)
 

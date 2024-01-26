@@ -1,5 +1,5 @@
 box::use(
-  data-raw/scripts / constant [mock_filepaths],
+  `data-raw`/scripts / constant [mock_filepaths],
   dplyr[...]
 )
 
@@ -70,6 +70,7 @@ portfolio_data$pd_portfolio <- NA
 
 portfolio_data <- portfolio_data |> select(
   portfolio_id,
+  company_name,
   company_id,
   asset_type,
   ald_sector,

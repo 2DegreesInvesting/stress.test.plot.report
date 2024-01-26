@@ -69,7 +69,7 @@ make_expected_loss_plot <-
 #' @examples
 make_mean_pd_diff_plot <- function(data_cdi_pd_plot, scenario_name_for_title) {
   # Create plot
-  plotsy <- ggplot(data = data_cdi_pd_plot, aes(x = factor(crispy.shock_year), group = factor(crispy.shock_year), y = pd_difference, fill = pd_difference)) +
+  plotsy <- ggplot(data = data_cdi_pd_plot, aes(x = factor(shock_year), group = factor(shock_year), y = pd_difference, fill = pd_difference)) +
     geom_bar(stat = "identity") +
     scale_fill_gradientn(
       colors = color_gradient,
@@ -107,7 +107,7 @@ make_mean_pd_diff_plot <- function(data_cdi_pd_plot, scenario_name_for_title) {
 #' @examples
 make_discount_rate_plot <- function(plot_data, scenario_name_for_title, y_var) {
   # Create plot
-  plotsy <- ggplot(data = plot_data, aes(x = factor(crispy.discount_rate), group = factor(crispy.discount_rate), y = !!rlang::sym(y_var), fill = !!rlang::sym(y_var))) +
+  plotsy <- ggplot(data = plot_data, aes(x = factor(discount_rate), group = factor(discount_rate), y = !!rlang::sym(y_var), fill = !!rlang::sym(y_var))) +
     geom_bar(stat = "identity") +
     scale_fill_gradientn(
       colors = color_gradient,

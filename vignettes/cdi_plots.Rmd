@@ -28,20 +28,17 @@ portfolio_data_path <-
   here::here("data-raw","synthetic_portfolio.csv")
 crispy_outputs_dir <- here::here("data-raw","mock_st_outputs")
 
-
-trisk_start_year <- 2022
 ```
 
 Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
 
 ```{r}
 analysis_data <-
-  load_input_plots_data(
+  load_input_plots_data_from_files(
     crispy_outputs_dir = crispy_outputs_dir,
     portfolio_data_path = portfolio_data_path,
     granularity = granularity,
-    maturity_month_term_bridge_fp = maturity_month_term_bridge_fp,
-    trisk_start_year = trisk_start_year
+    maturity_month_term_bridge_fp = maturity_month_term_bridge_fp
   )
 ```
 
@@ -55,22 +52,22 @@ active_tab <- "portfolio_id"
 
 analysis_data_single_run <- analysis_data |>
   dplyr::filter(
-    .data$crispy.run_id == focus_run_id,
-    .data$crispy.scenario_geography == focus_scenario_geography
+    .data$run_id == focus_run_id,
+    .data$scenario_geography == focus_scenario_geography
   )
 ```
 
 # PLOTS
 
 ```{r}
-group_variables_vec <- c("portfolio.ald_sector", "crispy.shock_year", "crispy.baseline_scenario", "crispy.shock_scenario", "crispy.discount_rate")
-weight_variable <- "portfolio.exposure_value_usd"
-metrics_npv <- c("crispy.net_present_value_baseline", "crispy.net_present_value_shock", "net_present_value_difference")
-metrics_pd <- c("crispy.pd_baseline", "crispy.pd_shock", "pd_difference")
+group_variables_vec <- c("ald_sector", "shock_year", "baseline_scenario", "shock_scenario", "discount_rate")
+weight_variable <- "exposure_value_usd"
+metrics_npv <- c("net_present_value_baseline", "net_present_value_shock", "net_present_value_difference")
+metrics_pd <- c("pd_baseline", "pd_shock", "pd_difference")
 metrics_el <- c("expected_loss_baseline", "expected_loss_shock")
 
 # weights_data <- analysis_data |>
-#   dplyr::group_by(crispy.run_id) |>
+#   dplyr::group_by(run_id) |>
 #   dplyr::group_modify(
 #     ~ compute_sector_weights(
 #       .,
@@ -81,7 +78,7 @@ metrics_el <- c("expected_loss_baseline", "expected_loss_shock")
 
 
 data_cdi_npv_plot <- analysis_data |>
-  dplyr::group_by(crispy.run_id) |>
+  dplyr::group_by(run_id) |>
   dplyr::group_modify(
     ~ prepare_for_cdi_npv_plots(
       .,
@@ -94,7 +91,7 @@ data_cdi_npv_plot <- analysis_data |>
 
 
 data_cdi_pd_plot <- analysis_data |>
-  dplyr::group_by(crispy.run_id) |>
+  dplyr::group_by(run_id) |>
   dplyr::group_modify(
     ~ prepare_for_cdi_pd_plots(
       .,
@@ -106,7 +103,7 @@ data_cdi_pd_plot <- analysis_data |>
 
 
 data_cdi_el_plot <- analysis_data |>
-  dplyr::group_by(crispy.run_id) |>
+  dplyr::group_by(run_id) |>
   dplyr::group_modify(
     ~ prepare_for_cdi_el_plots(
       .,
@@ -121,18 +118,18 @@ data_cdi_el_plot <- analysis_data |>
 EL PLOTS
 
 ```{r, fig.width = 8, fig.height = 12}
-for (run_id_name in unique(data_cdi_el_plot$crispy.run_id)) {
+for (run_id_name in unique(data_cdi_el_plot$run_id)) {
   plist <- list()
   plot_i <- 1
 
-  data_cdi_el_plot_filtered <- data_cdi_el_plot |> filter(crispy.run_id == run_id_name)
+  data_cdi_el_plot_filtered <- data_cdi_el_plot |> filter(run_id == run_id_name)
   for (metric_el_name in metrics_el) {
     cdi_plot <- make_expected_loss_plot(
       data_cdi_el_plot = data_cdi_el_plot_filtered,
-      x_var = "crispy.shock_year",
+      x_var = "shock_year",
       y_var = metric_el_name,
       fill_var = metric_el_name,
-      facet_var="portfolio.ald_sector",
+      facet_var="ald_sector",
       title = paste("With", metric_el_name)
     ) +
       ggplot2::theme(plot.title = ggplot2::element_text(size = 12, face = "bold"))
@@ -163,8 +160,8 @@ for (run_id_name in unique(data_cdi_el_plot$crispy.run_id)) {
 MEAN PD DIFF PLOTS
 
 ```{r, fig.width = 8, fig.height = 12}
-for (scenario_name in unique(data_cdi_pd_plot$crispy.shock_scenario)) {
-  plot_data <- data_cdi_pd_plot |> dplyr::filter(crispy.shock_scenario == scenario_name)
+for (scenario_name in unique(data_cdi_pd_plot$shock_scenario)) {
+  plot_data <- data_cdi_pd_plot |> dplyr::filter(shock_scenario == scenario_name)
 
 
   mean_pd_diff_plot <- make_mean_pd_diff_plot(plot_data, scenario_name)
@@ -175,9 +172,9 @@ for (scenario_name in unique(data_cdi_pd_plot$crispy.shock_scenario)) {
 PD Diff plot Discount Rate
 
 ```{r, fig.width = 8, fig.height = 12}
-for (scenario_name in unique(data_cdi_pd_plot$crispy.shock_scenario)) {
+for (scenario_name in unique(data_cdi_pd_plot$shock_scenario)) {
   plot_data <- data_cdi_pd_plot |>
-    dplyr::filter(crispy.shock_scenario == scenario_name)
+    dplyr::filter(shock_scenario == scenario_name)
 
   discount_rate_plot <- make_discount_rate_plot(plot_data, scenario_name, y_var = "pd_difference")
   print(discount_rate_plot)
@@ -187,8 +184,8 @@ for (scenario_name in unique(data_cdi_pd_plot$crispy.shock_scenario)) {
 EL PLOTS DISCOUNT RATE
 
 ```{r, fig.width = 8, fig.height = 12}
-for (scenario_name in unique(data_cdi_el_plot$crispy.shock_scenario)) {
-  plot_data <- data_cdi_el_plot |> dplyr::filter(crispy.shock_scenario == scenario_name)
+for (scenario_name in unique(data_cdi_el_plot$shock_scenario)) {
+  plot_data <- data_cdi_el_plot |> dplyr::filter(shock_scenario == scenario_name)
 
   discount_rate_plot <- make_discount_rate_plot(plot_data, scenario_name, y_var = "expected_loss_shock")
   print(discount_rate_plot)
@@ -214,7 +211,7 @@ analysis_data_company <-
 
 
 data_cdi_pd_plot_company <- analysis_data_company |>
-  dplyr::group_by(crispy.run_id) |>
+  dplyr::group_by(run_id) |>
   dplyr::group_modify(
     ~ prepare_for_cdi_pd_plots(
       .,
@@ -230,7 +227,7 @@ data_cdi_pd_plot_company <- analysis_data_company |>
 SHOCK YEAR
 
 ```{r, fig.width = 8, fig.height = 12}
-density_plot <- make_density_plots(data_cdi_pd_plot_company, density_var = "crispy.shock_year")
+density_plot <- make_density_plots(data_cdi_pd_plot_company, density_var = "shock_year")
 
 print(density_plot)
 ```
@@ -238,7 +235,7 @@ print(density_plot)
 DISCOUNT RATE
 
 ```{r, fig.width = 8, fig.height = 12}
-density_plot <- make_density_plots(data_cdi_pd_plot_company, density_var = "crispy.discount_rate")
+density_plot <- make_density_plots(data_cdi_pd_plot_company, density_var = "discount_rate")
 
 print(density_plot)
 ```

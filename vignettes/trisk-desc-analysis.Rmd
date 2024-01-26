@@ -33,7 +33,7 @@ analysis_data_full_global <-
       "ald_business_unit"
     )
   ) |>
-  dplyr::filter(crispy.scenario_geography == "Global")
+  dplyr::filter(scenario_geography == "Global")
 
 abcd_full_global <-
   readr::read_csv(here::here(
@@ -72,14 +72,14 @@ raw_asset_impact <-
 for (run_id in c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f", 
                  "663fa2de-e808-457b-b234-dca8e736b8a0", "eb594eb8-13a7-461e-b8fb-7cad52a7167b")){
 analysis_data_1_run <- analysis_data_full_global |> 
-  dplyr::filter(crispy.run_id == run_id) |>
-  dplyr::inner_join(analysis_data %>% distinct(portfolio.company_id, portfolio.ald_sector, portfolio.ald_business_unit))
+  dplyr::filter(run_id == run_id) |>
+  dplyr::inner_join(analysis_data %>% distinct(company_id, ald_sector, ald_business_unit))
 
 data_plot <- analysis_data_1_run |> 
   
-  dplyr::group_by(portfolio.term, portfolio.ald_sector, portfolio.ald_business_unit) |>
-  dplyr::summarise(avg_pd_baseline=mean(crispy.pd_baseline),
-                   avg_pd_shock=mean(crispy.pd_shock)
+  dplyr::group_by(term, ald_sector, ald_business_unit) |>
+  dplyr::summarise(avg_pd_baseline=mean(pd_baseline),
+                   avg_pd_shock=mean(pd_shock)
                    , .groups="drop") |>
   dplyr::mutate(avg_pd_difference=avg_pd_shock-avg_pd_baseline) |>
   rename(`Shock`=avg_pd_shock,
@@ -92,17 +92,17 @@ data_plot <- analysis_data_1_run |>
   )
 
 
-le_plot <- ggplot(data_plot, aes(x=portfolio.term, y=`Average PD`, group=`PD type`, color=`PD type`)) +
+le_plot <- ggplot(data_plot, aes(x=term, y=`Average PD`, group=`PD type`, color=`PD type`)) +
   geom_line() +
   labs(x = "Years from now")+ 
   scale_x_continuous(breaks = c(1, 2, 3, 4, 5), labels = c(1.5, 2.5, 3.5, 4.5, 5.5)) +
   scale_y_continuous(labels = scales::percent_format(scale = 100), breaks=scales::pretty_breaks(n=3)) +
   r2dii.plot::theme_2dii() +
-  facet_wrap(~portfolio.ald_sector+portfolio.ald_business_unit, scales = "fixed") +
+  facet_wrap(~ald_sector+ald_business_unit, scales = "fixed") +
   theme(panel.grid.major.y = element_line(color = "gray", linetype = "dashed", linewidth=0.3)) +
-  ggtitle(paste(analysis_data_1_run[1, "crispy.shock_scenario"] %>% pull(),
+  ggtitle(paste(analysis_data_1_run[1, "shock_scenario"] %>% pull(),
               " - shock year :",
-              analysis_data_1_run[1, "crispy.shock_year"] %>% pull()))
+              analysis_data_1_run[1, "shock_year"] %>% pull()))
 
 print(le_plot)
 
@@ -113,7 +113,7 @@ print(le_plot)
 
 ```{r}
 analysis_data_full_global_term_5 <- analysis_data_full_global %>% 
-  filter(portfolio.term == 5) %>%
+  filter(term == 5) %>%
   mutate(crispy_perc_value_change=if_else(is.infinite(crispy_perc_value_change), NA, crispy_perc_value_change))%>%
   filter(!is.na(crispy_perc_value_change))
 ```
@@ -125,19 +125,19 @@ TODO why are there Inf values
 ```{r, fig.width=10}
 
 
-# 5776a4b8-476f-48ba-91ae-b83a178d4331 // filter(crispy.shock_scenario=="NGFS2021_GCAM_NZ2050", crispy.shock_year==2032)
-# 24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f // filter(crispy.shock_scenario=="Oxford2021_fast", crispy.shock_year==2032)
-# 663fa2de-e808-457b-b234-dca8e736b8a0 // filter(crispy.shock_scenario=="NGFS2021_REMIND_B2DS", crispy.shock_year==2032) 
-# eb594eb8-13a7-461e-b8fb-7cad52a7167b // filter(crispy.shock_scenario=="NGFS2021_GCAM_NZ2050", crispy.shock_year==2027)
+# 5776a4b8-476f-48ba-91ae-b83a178d4331 // filter(shock_scenario=="NGFS2021_GCAM_NZ2050", shock_year==2032)
+# 24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f // filter(shock_scenario=="Oxford2021_fast", shock_year==2032)
+# 663fa2de-e808-457b-b234-dca8e736b8a0 // filter(shock_scenario=="NGFS2021_REMIND_B2DS", shock_year==2032) 
+# eb594eb8-13a7-461e-b8fb-7cad52a7167b // filter(shock_scenario=="NGFS2021_GCAM_NZ2050", shock_year==2027)
 
 for (run_id in c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f", 
                  "663fa2de-e808-457b-b234-dca8e736b8a0", "eb594eb8-13a7-461e-b8fb-7cad52a7167b")){
-analysis_data_1_run <- analysis_data_full_global_term_5 |> dplyr::filter(crispy.run_id == run_id)
+analysis_data_1_run <- analysis_data_full_global_term_5 |> dplyr::filter(run_id == run_id)
 
 agg_analysis_data <- analysis_data_1_run |>
   # dplyr::filter(.data$net_present_value_difference != 0) |>
-  dplyr::select(.data$portfolio.company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
-  dplyr::group_by(.data$portfolio.company_name) |>
+  dplyr::select(.data$company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
+  dplyr::group_by(.data$company_name) |>
   dplyr::summarise(
     crispy_perc_value_change = mean(crispy_perc_value_change),
     pd_difference = mean(pd_difference),
@@ -148,12 +148,12 @@ agg_analysis_data <- analysis_data_1_run |>
 plot_data <- agg_analysis_data |>
   # sample_frac(0.1) |>
   dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) |>
-  dplyr::mutate(portfolio.company_name = factor(.data$portfolio.company_name, levels = .data$portfolio.company_name)) |>
+  dplyr::mutate(company_name = factor(.data$company_name, levels = .data$company_name)) |>
   tidyr::pivot_longer(cols = c("crispy_perc_value_change", "pd_difference"), names_to = "variable", values_to = "value")
 
  
 # Plotting
-p1 <- ggplot(plot_data %>% filter(variable == "crispy_perc_value_change"), aes(x = factor(portfolio.company_name), y = value, group=variable)) +
+p1 <- ggplot(plot_data %>% filter(variable == "crispy_perc_value_change"), aes(x = factor(company_name), y = value, group=variable)) +
   geom_step(color="#5D9324", size=1) +
     scale_y_continuous(
     labels = scales::percent_format(accuracy = 1),
@@ -216,9 +216,9 @@ le_plot <- cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
 
 title <- cowplot::ggdraw() + 
   cowplot::draw_label(
-    paste(analysis_data_1_run[1, "crispy.shock_scenario"] %>% pull(),
+    paste(analysis_data_1_run[1, "shock_scenario"] %>% pull(),
               " - shock year :",
-              analysis_data_1_run[1, "crispy.shock_year"] %>% pull()),
+              analysis_data_1_run[1, "shock_year"] %>% pull()),
     fontface = 'bold',
     x = 0.5,
     hjust = 0.5
@@ -257,17 +257,17 @@ remove_outliers <- function(df, column, max_zscore=3) {
   # Calculate the Z-scores for the column
   z_scores <- (df[[column]] - mean_value) / sd_value
   
-  outlier_companies <- unique(df[abs(z_scores) > max_zscore, "portfolio.company_id"])%>%pull()
+  outlier_companies <- unique(df[abs(z_scores) > max_zscore, "company_id"])%>%pull()
   
   # Filter out rows where the absolute z-score is greater than 3
-  df_filtered <- df %>% filter(!(portfolio.company_id %in% outlier_companies))
+  df_filtered <- df %>% filter(!(company_id %in% outlier_companies))
   
   return(df_filtered)
 }
 
 # Assuming your list of dataframes is named 'list_of_dfs'
 analysis_data_full_global_no_outlier_per_run <- analysis_data_full_global_term_5 %>%
-  group_by(crispy.run_id) %>%
+  group_by(run_id) %>%
   group_modify(~remove_outliers(.x, column = "crispy_perc_value_change")) %>%
   ungroup()
 
@@ -278,23 +278,23 @@ Only use companies that exist in all runs to be able to compare them
 ```{r}
 
 common_rows <- analysis_data_full_global_no_outlier_per_run %>%
-  group_by(portfolio.company_id,
-           portfolio.ald_sector,
-           portfolio.ald_business_unit) %>%
-  mutate(count = n_distinct(crispy.run_id)) %>%
+  group_by(company_id,
+           ald_sector,
+           ald_business_unit) %>%
+  mutate(count = n_distinct(run_id)) %>%
   ungroup() %>%
   filter(count == max(count)) %>%
-  distinct(portfolio.company_id,
-           portfolio.ald_sector,
-           portfolio.ald_business_unit)
+  distinct(company_id,
+           ald_sector,
+           ald_business_unit)
   
 
 
 # Filtering the original dataframe
 analysis_data_full_global_no_outlier <- analysis_data_full_global_no_outlier_per_run %>%
-  inner_join(common_rows, by = c("portfolio.company_id", 
-                                 "portfolio.ald_sector", 
-                                 "portfolio.ald_business_unit"))
+  inner_join(common_rows, by = c("company_id", 
+                                 "ald_sector", 
+                                 "ald_business_unit"))
 
 ```
 
@@ -304,12 +304,12 @@ analysis_data_full_global_no_outlier <- analysis_data_full_global_no_outlier_per
 # 
 # for (run_id in c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f", 
 #                  "663fa2de-e808-457b-b234-dca8e736b8a0", "eb594eb8-13a7-461e-b8fb-7cad52a7167b")){
-# analysis_data_1_run <- analysis_data_full_global_no_outlier |> dplyr::filter(crispy.run_id == run_id)
+# analysis_data_1_run <- analysis_data_full_global_no_outlier |> dplyr::filter(run_id == run_id)
 # 
 # agg_analysis_data <- analysis_data_1_run |>
 #   # dplyr::filter(.data$net_present_value_difference != 0) |>
-#   dplyr::select(.data$portfolio.company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
-#   dplyr::group_by(.data$portfolio.company_name) |>
+#   dplyr::select(.data$company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
+#   dplyr::group_by(.data$company_name) |>
 #   dplyr::summarise(
 #     crispy_perc_value_change = mean(crispy_perc_value_change),
 #     pd_difference = mean(pd_difference),
@@ -320,13 +320,13 @@ analysis_data_full_global_no_outlier <- analysis_data_full_global_no_outlier_per
 # plot_data <- agg_analysis_data |>
 #   # sample_frac(0.1) |>
 #   dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) |>
-#   dplyr::mutate(portfolio.company_name = factor(.data$portfolio.company_name, levels = .data$portfolio.company_name)) |>
+#   dplyr::mutate(company_name = factor(.data$company_name, levels = .data$company_name)) |>
 #   tidyr::pivot_longer(cols = c("crispy_perc_value_change", "pd_difference"), names_to = "variable", values_to = "value")
 # 
 # 
 #  
 # # Plotting
-# p1 <- ggplot(plot_data %>% filter(variable == "crispy_perc_value_change"), aes(x = factor(portfolio.company_name), y = value, group=variable)) +
+# p1 <- ggplot(plot_data %>% filter(variable == "crispy_perc_value_change"), aes(x = factor(company_name), y = value, group=variable)) +
 #   geom_step(color="#5D9324", size=1) +
 #     scale_y_continuous(
 #     labels = scales::percent_format(accuracy = 1),
@@ -400,10 +400,10 @@ analysis_data_full_global_no_outlier <- analysis_data_full_global_no_outlier_per
 Filter abcd data to remove crispy outliers:
 ```{r}
 abcd_data_no_outliers <- abcd_full_global %>% inner_join(
-  analysis_data_full_global_no_outlier %>% distinct(portfolio.company_id, portfolio.ald_sector, portfolio.ald_business_unit) %>% mutate(portfolio.company_id=as.numeric(portfolio.company_id)),
-  by=c("company_id"="portfolio.company_id",
-       "ald_sector"="portfolio.ald_sector",
-       "ald_business_unit"="portfolio.ald_business_unit")
+  analysis_data_full_global_no_outlier %>% distinct(company_id, ald_sector, ald_business_unit) %>% mutate(company_id=as.numeric(company_id)),
+  by=c("company_id"="company_id",
+       "ald_sector"="ald_sector",
+       "ald_business_unit"="ald_business_unit")
 )
 ```
 
@@ -562,23 +562,23 @@ for (ratio_value in names(sampled_rows)){
     inner_join(
       sampled_rows[[ratio_value]] %>% mutate(company_id = as.character(company_id)),
       by = c(
-        "portfolio.company_id" = "company_id",
-        "portfolio.ald_sector" = "ald_sector",
-        "portfolio.ald_business_unit" = "ald_business_unit"
+        "company_id" = "company_id",
+        "ald_sector" = "ald_sector",
+        "ald_business_unit" = "ald_business_unit"
       )
     ) %>%
-    group_by(portfolio.ald_sector, crispy.run_id, crispy.shock_scenario, crispy.shock_year) %>%
+    group_by(ald_sector, run_id, shock_scenario, shock_year) %>%
     dplyr::summarise(
-      crispy.net_present_value_baseline = sum(crispy.net_present_value_baseline, na.rm = T),
-      crispy.net_present_value_shock = sum(crispy.net_present_value_shock, na.rm = T),
-      crispy.pd_baseline = stats::median(crispy.pd_baseline, na.rm = T),
-      crispy.pd_shock = stats::median(crispy.pd_shock, na.rm = T),
+      net_present_value_baseline = sum(net_present_value_baseline, na.rm = T),
+      net_present_value_shock = sum(net_present_value_shock, na.rm = T),
+      pd_baseline = stats::median(pd_baseline, na.rm = T),
+      pd_shock = stats::median(pd_shock, na.rm = T),
       .groups = "drop"
     ) %>%
     mutate(
-      net_present_value_difference = .data$crispy.net_present_value_shock - .data$crispy.net_present_value_baseline,
-      crispy_perc_value_change = .data$net_present_value_difference / .data$crispy.net_present_value_baseline,
-      pd_difference = .data$crispy.pd_shock - .data$crispy.pd_baseline,
+      net_present_value_difference = .data$net_present_value_shock - .data$net_present_value_baseline,
+      crispy_perc_value_change = .data$net_present_value_difference / .data$net_present_value_baseline,
+      pd_difference = .data$pd_shock - .data$pd_baseline,
     )
     
   analysis_data_samples[[ratio_value]] <- analysis_data_sampled
@@ -631,12 +631,12 @@ ggplot(
   aes(
     x = as.numeric(list_name),
     y = values,
-    group = crispy.run_id,
+    group = run_id,
     color = value_type
   )
 ) +
   geom_line() +
-  facet_wrap(value_type ~ portfolio.ald_sector, scales = "free_y", nrow=2) +
+  facet_wrap(value_type ~ ald_sector, scales = "free_y", nrow=2) +
   r2dii.plot::theme_2dii() +
   theme(legend.position = 'none',
         axis.text.x = element_text(angle = 45, hjust = 1, size=8),
@@ -678,9 +678,9 @@ analysis_data <- analysis_data_full_global_no_outlier %>%
   inner_join(
     abcd_data %>% distinct(company_id, ald_sector, ald_business_unit) %>% mutate(company_id = as.character(company_id)),
     by = c(
-      "portfolio.company_id" = "company_id",
-      "portfolio.ald_sector" = "ald_sector",
-      "portfolio.ald_business_unit" = "ald_business_unit"
+      "company_id" = "company_id",
+      "ald_sector" = "ald_sector",
+      "ald_business_unit" = "ald_business_unit"
     )
   )
   
@@ -742,12 +742,12 @@ company_volume_prod_toydata <- sum_company_prod_volume(abcd_data)
 
 for (run_id in c("5776a4b8-476f-48ba-91ae-b83a178d4331", "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f", 
                  "663fa2de-e808-457b-b234-dca8e736b8a0", "eb594eb8-13a7-461e-b8fb-7cad52a7167b")){
-analysis_data_1_run <- analysis_data |> dplyr::filter(crispy.run_id == run_id)
+analysis_data_1_run <- analysis_data |> dplyr::filter(run_id == run_id)
 
 agg_analysis_data <- analysis_data_1_run |>
   # dplyr::filter(.data$net_present_value_difference != 0) |>
-  dplyr::select(.data$portfolio.company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
-  dplyr::group_by(.data$portfolio.company_name) |>
+  dplyr::select(.data$company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
+  dplyr::group_by(.data$company_name) |>
   dplyr::summarise(
     crispy_perc_value_change = mean(crispy_perc_value_change),
     pd_difference = mean(pd_difference),
@@ -758,13 +758,13 @@ agg_analysis_data <- analysis_data_1_run |>
 plot_data <- agg_analysis_data |>
   # sample_frac(0.1) |>
   dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) |>
-  dplyr::mutate(portfolio.company_name = factor(.data$portfolio.company_name, levels = .data$portfolio.company_name)) |>
+  dplyr::mutate(company_name = factor(.data$company_name, levels = .data$company_name)) |>
   tidyr::pivot_longer(cols = c("crispy_perc_value_change", "pd_difference"), names_to = "variable", values_to = "value")
 
 
  
 # Plotting
-p1 <- ggplot(plot_data %>% filter(variable == "crispy_perc_value_change"), aes(x = factor(portfolio.company_name), y = value, group=variable)) +
+p1 <- ggplot(plot_data %>% filter(variable == "crispy_perc_value_change"), aes(x = factor(company_name), y = value, group=variable)) +
   geom_step(color="#5D9324", size=1) +
     scale_y_continuous(
     labels = scales::percent_format(accuracy = 1),
@@ -826,9 +826,9 @@ le_plot <- cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
 
 title <- cowplot::ggdraw() + 
   cowplot::draw_label(
-    paste(analysis_data_1_run[1, "crispy.shock_scenario"] %>% pull(),
+    paste(analysis_data_1_run[1, "shock_scenario"] %>% pull(),
               " - shock year :",
-              analysis_data_1_run[1, "crispy.shock_year"] %>% pull()),
+              analysis_data_1_run[1, "shock_year"] %>% pull()),
     fontface = 'bold',
     x = 0.5,
     hjust = 0.5
@@ -1005,7 +1005,7 @@ The analysis data is then filtered no this subset of abcd to reflect the same ou
 # analysis_data <-
 #   analysis_data %>% inner_join(
 #     abcd_data %>% mutate(company_id = as.character(company_id)) %>% distinct(company_id),
-#     by = c("portfolio.company_id" = "company_id")
+#     by = c("company_id" = "company_id")
 #   )
 ```
 
@@ -1019,11 +1019,11 @@ The analysis data is then filtered no this subset of abcd to reflect the same ou
 # Calculate the average ROC per company for the second plot
 df_averages <-  analysis_data |>
   dplyr::group_by(
-    portfolio.company_name,
-    crispy.run_id,
-    portfolio.ald_business_unit,
-    crispy.shock_scenario,
-    crispy.shock_year
+    company_name,
+    run_id,
+    ald_business_unit,
+    shock_scenario,
+    shock_year
   )  |>
   dplyr::summarise(
     average_roc = mean(crispy_perc_value_change),
@@ -1043,10 +1043,10 @@ long_data <- df_averages %>%
 # Calculate means and confidence intervals
 data_summary <- long_data %>%
   group_by(
-    crispy.run_id,
-    crispy.shock_scenario,
-    crispy.shock_year,
-    portfolio.ald_business_unit,
+    run_id,
+    shock_scenario,
+    shock_year,
+    ald_business_unit,
     metric
   ) %>%
   summarise(
@@ -1066,11 +1066,11 @@ for (run_id in c(
   "663fa2de-e808-457b-b234-dca8e736b8a0",
   "eb594eb8-13a7-461e-b8fb-7cad52a7167b"
 )) {
-  plot_data <- data_summary %>% filter(crispy.run_id == run_id)
+  plot_data <- data_summary %>% filter(run_id == run_id)
   
   p1 <-
     ggplot(plot_data,
-           aes(x = portfolio.ald_business_unit, y = mean, fill = metric)) +
+           aes(x = ald_business_unit, y = mean, fill = metric)) +
     geom_bar(stat = "identity", position = position_dodge()) +
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),
                   width = 0.2,
@@ -1085,9 +1085,9 @@ for (run_id in c(
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
           legend.position = 'none') +
     labs(y = "Average Value", x = "Business Unit") +
-    ggtitle(paste(plot_data[1, "crispy.shock_scenario"] %>% pull(),
+    ggtitle(paste(plot_data[1, "shock_scenario"] %>% pull(),
                   " - shock year :",
-                  plot_data[1, "crispy.shock_year"] %>% pull())) 
+                  plot_data[1, "shock_year"] %>% pull())) 
   
   print(p1)
   
@@ -1108,7 +1108,7 @@ a_company_id <- 498443
 # a_company_id <- 1990
 # a_company_id <- 919
 
-company_data <- analysis_data%>%filter(portfolio.company_id==a_company_id)
+company_data <- analysis_data%>%filter(company_id==a_company_id)
 
 
 
@@ -1119,43 +1119,43 @@ for (run_id in c(
   "663fa2de-e808-457b-b234-dca8e736b8a0",
   "eb594eb8-13a7-461e-b8fb-7cad52a7167b"
 )) {
-  plot_data <- company_data %>% filter(crispy.run_id == run_id)  %>%
+  plot_data <- company_data %>% filter(run_id == run_id)  %>%
     select(
-      crispy.shock_scenario,
-      crispy.shock_year,
-      portfolio.company_name,
-      portfolio.ald_sector,
-      portfolio.ald_business_unit,
-      crispy.net_present_value_baseline,
-      crispy.net_present_value_shock,
-      crispy.pd_baseline,
-      crispy.pd_shock
+      shock_scenario,
+      shock_year,
+      company_name,
+      ald_sector,
+      ald_business_unit,
+      net_present_value_baseline,
+      net_present_value_shock,
+      pd_baseline,
+      pd_shock
     )
   
-  a_shock_scenario <-  unique(plot_data$crispy.shock_scenario)
-  a_company_name <-  unique(plot_data$portfolio.company_name)
-  a_shock_year <-  unique(plot_data$crispy.shock_year)
+  a_shock_scenario <-  unique(plot_data$shock_scenario)
+  a_company_name <-  unique(plot_data$company_name)
+  a_shock_year <-  unique(plot_data$shock_year)
   
   
 # Reshape the data for NPV
 npv_data <- plot_data %>%
-    pivot_longer(cols = starts_with("crispy.net_present_value"), 
+    pivot_longer(cols = starts_with("net_present_value"), 
                  names_to = "type", 
                  values_to = "value") %>%
-    mutate(type = ifelse(type == "crispy.net_present_value_baseline", "Baseline", "Shock"))
+    mutate(type = ifelse(type == "net_present_value_baseline", "Baseline", "Shock"))
 
 # Reshape the data for PD
 pd_data <- plot_data %>%
-    pivot_longer(cols = starts_with("crispy.pd"), 
+    pivot_longer(cols = starts_with("pd"), 
                  names_to = "type", 
                  values_to = "value") %>%
-    mutate(type = ifelse(type == "crispy.pd_baseline", "Baseline", "Shock"))
+    mutate(type = ifelse(type == "pd_baseline", "Baseline", "Shock"))
 
 # Plot for NPV
-npv_plot <- ggplot(npv_data, aes(x = portfolio.ald_business_unit, y = value, color=type)) +
+npv_plot <- ggplot(npv_data, aes(x = ald_business_unit, y = value, color=type)) +
     geom_bar(stat = "identity", position = position_dodge(), fill="#5D9324") +
     scale_y_continuous(labels = scales::label_number(scale = 1e-6, suffix = "M$"))+
-    facet_wrap(~ portfolio.ald_sector, scales = "free") +
+    facet_wrap(~ ald_sector, scales = "free") +
     labs(y = "NPV Value", fill = "Type") +
     scale_color_manual(values = c("Baseline" = "blue", "Shock" = "red")) +
     r2dii.plot::theme_2dii()+
@@ -1163,9 +1163,9 @@ npv_plot <- ggplot(npv_data, aes(x = portfolio.ald_business_unit, y = value, col
           axis.title.x = element_blank())
 
 # Plot for PD
-pd_plot <- ggplot(pd_data, aes(x = portfolio.ald_business_unit, y = value, color=type)) +
+pd_plot <- ggplot(pd_data, aes(x = ald_business_unit, y = value, color=type)) +
     geom_bar(stat = "identity", position = position_dodge(), fill = "#BAB6B5") +
-    facet_wrap(~ portfolio.ald_sector, scales = "free") +
+    facet_wrap(~ ald_sector, scales = "free") +
     labs(y = "PD Value", fill = "Type", x="Business Unit") +
     scale_color_manual(values = c("Baseline" = "blue", "Shock" = "red")) +
     scale_y_continuous(labels = scales::label_percent(accuracy = 0.001)) +
@@ -1192,7 +1192,7 @@ print(combined_plot)
 
 ```{r}
 
-group_variables_vec <- c("portfolio.company_name", "portfolio.company_id","portfolio.ald_sector", "crispy.shock_year", "crispy.baseline_scenario", "crispy.shock_scenario", "crispy.discount_rate")
+group_variables_vec <- c("company_name", "company_id","ald_sector", "shock_year", "baseline_scenario", "shock_scenario", "discount_rate")
 metrics_el <- c("expected_loss_baseline", "expected_loss_shock")
 
 
@@ -1201,11 +1201,11 @@ metrics_el <- c("expected_loss_baseline", "expected_loss_shock")
 data_cdi_el_plot <- analysis_data |>
   mutate( # THIS MUTATE ONLY IF NO PORTFOLIO PROVIDED
     loss_given_default=0.35,
-    exposure_at_default = .data$crispy.net_present_value_baseline * .data$loss_given_default,
-    expected_loss_baseline = .data$exposure_at_default * .data$crispy.pd_baseline,
-    expected_loss_shock = .data$exposure_at_default * .data$crispy.pd_shock
+    exposure_at_default = .data$net_present_value_baseline * .data$loss_given_default,
+    expected_loss_baseline = .data$exposure_at_default * .data$pd_baseline,
+    expected_loss_shock = .data$exposure_at_default * .data$pd_shock
   ) |>
-  dplyr::group_by(crispy.run_id) |>
+  dplyr::group_by(run_id) |>
   dplyr::group_modify(
     ~ prepare_for_cdi_el_plots(
       .,
@@ -1227,20 +1227,20 @@ for (run_id_name in  c(
   plot_i <- 1
 
   data_cdi_el_plot_filtered <- data_cdi_el_plot |> 
-    filter(crispy.run_id == run_id_name, portfolio.company_id == company_id)
+    filter(run_id == run_id_name, company_id == company_id)
   
   
-  a_shock_scenario <-  unique(data_cdi_el_plot_filtered$crispy.shock_scenario)
-  a_company_name <-  unique(data_cdi_el_plot_filtered$portfolio.company_name)
-  a_shock_year <-  unique(data_cdi_el_plot_filtered$crispy.shock_year)
+  a_shock_scenario <-  unique(data_cdi_el_plot_filtered$shock_scenario)
+  a_company_name <-  unique(data_cdi_el_plot_filtered$company_name)
+  a_shock_year <-  unique(data_cdi_el_plot_filtered$shock_year)
   
   for (metric_el_name in metrics_el) {
     cdi_plot <- make_expected_loss_plot(
       data_cdi_el_plot = data_cdi_el_plot_filtered,
-      x_var = "crispy.shock_year",
+      x_var = "shock_year",
       y_var = metric_el_name,
       fill_var = metric_el_name,
-      facet_var="portfolio.ald_sector",
+      facet_var="ald_sector",
       title = paste("With", metric_el_name)
     ) +
       ggplot2::theme(plot.title = ggplot2::element_text(size = 12, face = "bold"))
@@ -1274,24 +1274,24 @@ for (run_id_name in  c(
 ```{r, fig.height=7, fig.width=9}
 
 data_cdi_pd_plot <- analysis_data |>
-  dplyr::group_by(crispy.run_id, crispy.shock_scenario, crispy.shock_year) |>
+  dplyr::group_by(run_id, shock_scenario, shock_year) |>
   dplyr::group_modify(~ prepare_for_cdi_pd_plots(
     .,
     group_variables_vec = c(
-      "portfolio.company_id",
-      "portfolio.ald_business_unit"
+      "company_id",
+      "ald_business_unit"
     ),
-    metrics = c("crispy.pd_baseline", "crispy.pd_shock", "pd_difference"),
+    metrics = c("pd_baseline", "pd_shock", "pd_difference"),
   )) |>
   dplyr::ungroup()
 
-for (shock_scenario in unique(data_cdi_pd_plot$crispy.shock_scenario)){
+for (shock_scenario in unique(data_cdi_pd_plot$shock_scenario)){
   
   density_plot <- make_density_plots(
-    data_cdi_pd_plot %>% filter(crispy.shock_scenario == shock_scenario),
+    data_cdi_pd_plot %>% filter(shock_scenario == shock_scenario),
                     numeric_values = "pd_difference",
-                       density_var = "crispy.shock_year",
-                       group_variable = "portfolio.ald_business_unit") + ggtitle(
+                       density_var = "shock_year",
+                       group_variable = "ald_business_unit") + ggtitle(
                          paste("Distribution of PD difference -", shock_scenario)) +
   theme(plot.title = element_text(face = "bold", size = 14))
   
@@ -1313,24 +1313,24 @@ for (shock_scenario in unique(data_cdi_pd_plot$crispy.shock_scenario)){
 ```{r}
 
 # data_cdi_npv_plot <- analysis_data |>
-#   dplyr::group_by(crispy.run_id, crispy.shock_scenario, crispy.shock_year) |>
+#   dplyr::group_by(run_id, shock_scenario, shock_year) |>
 #   dplyr::group_modify(~ prepare_for_cdi_npv_plots(
 #     .,
 #     group_variables_vec = c(
-#       "portfolio.company_id",
-#       "portfolio.ald_business_unit"
+#       "company_id",
+#       "ald_business_unit"
 #     ),
-#     metrics_npv = c("crispy.net_present_value_baseline", "crispy.net_present_value_shock", "net_present_value_difference")
+#     metrics_npv = c("net_present_value_baseline", "net_present_value_shock", "net_present_value_difference")
 #   )) |>
 #   dplyr::ungroup()
 # 
-# for (shock_scenario in unique(data_cdi_npv_plot$crispy.shock_scenario)){
+# for (shock_scenario in unique(data_cdi_npv_plot$shock_scenario)){
 # 
 #   density_plot <- make_density_plots(
-#     data_cdi_npv_plot %>% filter(crispy.shock_scenario == shock_scenario),
+#     data_cdi_npv_plot %>% filter(shock_scenario == shock_scenario),
 #     numeric_values = "net_present_value_difference",
-#                        density_var = "crispy.shock_year",
-#                        group_variable = "portfolio.ald_business_unit") +
+#                        density_var = "shock_year",
+#                        group_variable = "ald_business_unit") +
 #     ggtitle("Distribution of NPV difference")
 #   print(density_plot)
 # }
@@ -1348,7 +1348,7 @@ for (shock_scenario in unique(data_cdi_pd_plot$crispy.shock_scenario)){
 # 
 # company_var_accross_scenarios <- analysis_data %>%
 #   # filter(
-#   #   crispy.run_id %in% c(
+#   #   run_id %in% c(
 #   #     "5776a4b8-476f-48ba-91ae-b83a178d4331",
 #   #     "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f",
 #   #     "663fa2de-e808-457b-b234-dca8e736b8a0",
@@ -1356,22 +1356,22 @@ for (shock_scenario in unique(data_cdi_pd_plot$crispy.shock_scenario)){
 #   #   )
 #   # ) %>%
 #   group_by(
-#     portfolio.company_id,
-#     portfolio.ald_sector,
-#     portfolio.ald_business_unit,
-#     crispy.shock_year
+#     company_id,
+#     ald_sector,
+#     ald_business_unit,
+#     shock_year
 #   ) %>%
 #   summarise(
 #     npv_change_var = var(crispy_perc_value_change),
 #     pd_diff_var = var(pd_difference),
 #     .groups = "drop"
 #   ) %>%
-#   filter(crispy.shock_year == 2032) %>%
-#   group_by(portfolio.company_id) %>%
+#   filter(shock_year == 2032) %>%
+#   group_by(company_id) %>%
 #   mutate(n_bu = n()) %>%
 #   ungroup() %>%
 #   filter(n_bu >= (max(n_bu) - 1)) %>%
-#   group_by(portfolio.company_id) %>%
+#   group_by(company_id) %>%
 #   summarise(
 #     npv_change_var = mean(npv_change_var),
 #     pd_diff_var = mean(pd_diff_var) ,
@@ -1380,41 +1380,41 @@ for (shock_scenario in unique(data_cdi_pd_plot$crispy.shock_scenario)){
 #   arrange(desc(npv_change_var))
 # 
 # top_var_companies <-
-#   company_var_accross_scenarios[1:4, ]$portfolio.company_id
+#   company_var_accross_scenarios[1:4, ]$company_id
 # 
 # top_plot_companies <- analysis_data %>%
 #   # filter(
-#   #   crispy.run_id %in% c(
+#   #   run_id %in% c(
 #   #     "5776a4b8-476f-48ba-91ae-b83a178d4331",
 #   #     "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f",
 #   #     "663fa2de-e808-457b-b234-dca8e736b8a0",
 #   #     "eb594eb8-13a7-461e-b8fb-7cad52a7167b"
 #   #   )
 #   # ) %>%
-#   filter(portfolio.company_id %in% top_var_companies) %>%
+#   filter(company_id %in% top_var_companies) %>%
 #   select(
-#     crispy.shock_scenario,
-#     crispy.shock_year,
-#     portfolio.company_id,
-#     portfolio.company_name,
-#     portfolio.ald_sector,
-#     portfolio.ald_business_unit,
+#     shock_scenario,
+#     shock_year,
+#     company_id,
+#     company_name,
+#     ald_sector,
+#     ald_business_unit,
 #     crispy_perc_value_change,
 #     pd_difference
 #   )
 # 
 # a_shock_year <- 2032
 # 
-# for (a_company_name in unique(top_plot_companies$portfolio.company_name)){
+# for (a_company_name in unique(top_plot_companies$company_name)){
 # plot_data <- top_plot_companies %>% 
-#   filter(portfolio.company_name == a_company_name,
-#          crispy.shock_scenario %in% c(
+#   filter(company_name == a_company_name,
+#          shock_scenario %in% c(
 #            "NGFS2021_REMIND_NZ2050",
 #            "NGFS2021_GCAM_B2DS",
 #            "IPR2021_FPS",
 #            "WEO2021_SDS"
 #          ),
-#          crispy.shock_year == a_shock_year) %>%
+#          shock_year == a_shock_year) %>%
 #   tidyr::pivot_longer(cols = c(crispy_perc_value_change, pd_difference), 
 #                       names_to="value_name",
 #                       values_to="values")
@@ -1423,11 +1423,11 @@ for (shock_scenario in unique(data_cdi_pd_plot$crispy.shock_scenario)){
 # p1 <-
 #   ggplot(
 #     data = plot_data,
-#     aes(x = portfolio.ald_business_unit, 
+#     aes(x = ald_business_unit, 
 #         y = values,
-#         group = crispy.shock_scenario,
-#         color=crispy.shock_scenario,
-#         fill=crispy.shock_scenario)
+#         group = shock_scenario,
+#         color=shock_scenario,
+#         fill=shock_scenario)
 #   ) +
 #   geom_bar(stat = "identity",
 #            width = .5,
@@ -1471,18 +1471,18 @@ a_shock_scenario <- "IPR2021_FPS"
 
 
 count_company_bu <-   analysis_data %>%
-  distinct(portfolio.ald_business_unit, portfolio.company_id) %>%
-  group_by(portfolio.company_id) %>%
+  distinct(ald_business_unit, company_id) %>%
+  group_by(company_id) %>%
   mutate(n_bu = n()) %>%
   ungroup()
 
 company_bu_var_accross_sy <- analysis_data %>%
-  filter(crispy.shock_scenario == a_shock_scenario,
-         crispy.shock_year==2032) %>%
+  filter(shock_scenario == a_shock_scenario,
+         shock_year==2032) %>%
   group_by(
-    portfolio.company_id
-    # portfolio.ald_sector,
-    # portfolio.ald_business_unit
+    company_id
+    # ald_sector,
+    # ald_business_unit
     ) %>%
   summarise(
     npv_change_var = var(crispy_perc_value_change),
@@ -1496,34 +1496,34 @@ company_bu_var_accross_sy <- analysis_data %>%
 
 
 company_var_accross_sy <- company_bu_var_accross_sy %>%
-  group_by(portfolio.ald_business_unit) %>% 
+  group_by(ald_business_unit) %>% 
   filter(pd_diff_var >= quantile(pd_diff_var, 0.9)) 
 
-# top_var_companies <-company_var_accross_sy$portfolio.company_id
+# top_var_companies <-company_var_accross_sy$company_id
 
 top_var_companies <-
-  company_bu_var_accross_sy %>% distinct(portfolio.company_id) %>% sample_n(size = 10) %>% pull()
+  company_bu_var_accross_sy %>% distinct(company_id) %>% sample_n(size = 10) %>% pull()
 
 
 top_plot_companies <- analysis_data %>%
-  # filter(portfolio.company_id %in% top_var_companies) %>%
-  filter(portfolio.company_id %in% c(2583435, 1990)) %>%
+  # filter(company_id %in% top_var_companies) %>%
+  filter(company_id %in% c(2583435, 1990)) %>%
   select(
-    crispy.shock_scenario,
-    crispy.shock_year,
-    portfolio.company_id,
-    portfolio.company_name,
-    portfolio.ald_sector,
-    portfolio.ald_business_unit,
+    shock_scenario,
+    shock_year,
+    company_id,
+    company_name,
+    ald_sector,
+    ald_business_unit,
     crispy_perc_value_change,
     pd_difference
   )
 
 
-for (a_company_name in unique(top_plot_companies$portfolio.company_name)){
+for (a_company_name in unique(top_plot_companies$company_name)){
 plot_data <- top_plot_companies %>% 
-  filter(crispy.shock_scenario == a_shock_scenario,
-         portfolio.company_name == a_company_name) %>%
+  filter(shock_scenario == a_shock_scenario,
+         company_name == a_company_name) %>%
   rename(`NPV Rate of Change`=crispy_perc_value_change,
          `PD Difference` = pd_difference) %>%
   tidyr::pivot_longer(cols = c(`NPV Rate of Change`, `PD Difference`), 
@@ -1533,7 +1533,7 @@ plot_data <- top_plot_companies %>%
 
 # Define a function to create a plot
 create_plot <- function(data_subset, strip_color) {
-  ggplot(data_subset, aes(x = portfolio.ald_business_unit, y = values, fill = factor(crispy.shock_year))) +
+  ggplot(data_subset, aes(x = ald_business_unit, y = values, fill = factor(shock_year))) +
     geom_bar(stat = "identity", width = .5, position = "dodge") +
     r2dii.plot::theme_2dii() +
     theme(
@@ -1577,7 +1577,7 @@ print(combined_plot)
 # 
 # company_var_accross_scenarios <- analysis_data %>%
 #   # filter(
-#   #   crispy.run_id %in% c(
+#   #   run_id %in% c(
 #   #     "5776a4b8-476f-48ba-91ae-b83a178d4331",
 #   #     "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f",
 #   #     "663fa2de-e808-457b-b234-dca8e736b8a0",
@@ -1585,22 +1585,22 @@ print(combined_plot)
 #   #   )
 #   # ) %>%
 #   group_by(
-#     portfolio.company_id,
-#     portfolio.ald_sector,
-#     portfolio.ald_business_unit,
-#     crispy.shock_year
+#     company_id,
+#     ald_sector,
+#     ald_business_unit,
+#     shock_year
 #   ) %>%
 #   summarise(
 #     npv_change_var = var(crispy_perc_value_change),
 #     pd_diff_var = var(pd_difference),
 #     .groups = "drop"
 #   ) %>%
-#   filter(crispy.shock_year == 2032) %>%
-#   group_by(portfolio.company_id) %>%
+#   filter(shock_year == 2032) %>%
+#   group_by(company_id) %>%
 #   mutate(n_bu = n()) %>%
 #   ungroup() %>%
 #   filter(n_bu >= (max(n_bu) - 1)) %>%
-#   group_by(portfolio.company_id) %>%
+#   group_by(company_id) %>%
 #   summarise(
 #     npv_change_var = mean(npv_change_var),
 #     pd_diff_var = mean(pd_diff_var) ,
@@ -1609,41 +1609,41 @@ print(combined_plot)
 #   arrange(desc(pd_diff_var*npv_change_var))
 # 
 # top_var_companies <-
-#   company_var_accross_scenarios[1:4, ]$portfolio.company_id
+#   company_var_accross_scenarios[1:4, ]$company_id
 # 
 # top_plot_companies <- analysis_data %>%
 #   # filter(
-#   #   crispy.run_id %in% c(
+#   #   run_id %in% c(
 #   #     "5776a4b8-476f-48ba-91ae-b83a178d4331",
 #   #     "24e5ddb1-d63b-416f-bc4f-6d5f2d0e0a5f",
 #   #     "663fa2de-e808-457b-b234-dca8e736b8a0",
 #   #     "eb594eb8-13a7-461e-b8fb-7cad52a7167b"
 #   #   )
 #   # ) %>%
-#   filter(portfolio.company_id %in% top_var_companies) %>%
+#   filter(company_id %in% top_var_companies) %>%
 #   select(
-#     crispy.shock_scenario,
-#     crispy.shock_year,
-#     portfolio.company_id,
-#     portfolio.company_name,
-#     portfolio.ald_sector,
-#     portfolio.ald_business_unit,
+#     shock_scenario,
+#     shock_year,
+#     company_id,
+#     company_name,
+#     ald_sector,
+#     ald_business_unit,
 #     crispy_perc_value_change,
 #     pd_difference
 #   )
 # 
 # a_shock_year <- 2032
 # 
-# for (a_company_name in unique(top_plot_companies$portfolio.company_name)){
+# for (a_company_name in unique(top_plot_companies$company_name)){
 # plot_data <- top_plot_companies %>% 
-#   filter(portfolio.company_name == a_company_name,
-#          crispy.shock_scenario %in% c(
+#   filter(company_name == a_company_name,
+#          shock_scenario %in% c(
 #            "NGFS2021_REMIND_NZ2050",
 #            "NGFS2021_GCAM_B2DS",
 #            "IPR2021_FPS",
 #            "WEO2021_SDS"
 #          ),
-#          crispy.shock_year == a_shock_year) %>%
+#          shock_year == a_shock_year) %>%
 #   tidyr::pivot_longer(cols = c(crispy_perc_value_change, pd_difference), 
 #                       names_to="value_name",
 #                       values_to="values")
@@ -1652,11 +1652,11 @@ print(combined_plot)
 # p1 <-
 #   ggplot(
 #     data = plot_data,
-#     aes(x = portfolio.ald_business_unit, 
+#     aes(x = ald_business_unit, 
 #         y = values,
-#         group = crispy.shock_scenario,
-#         color=crispy.shock_scenario,
-#         fill=crispy.shock_scenario)
+#         group = shock_scenario,
+#         color=shock_scenario,
+#         fill=shock_scenario)
 #   ) +
 #   geom_bar(stat = "identity",
 #            width = .5,
@@ -1688,7 +1688,7 @@ runs_selection <- c("5776a4b8-476f-48ba-91ae-b83a178d4331", "eb594eb8-13a7-461e-
 
 
 
-group_variables_vec <- c("portfolio.company_name", "portfolio.company_id","portfolio.ald_sector", "crispy.shock_year", "crispy.baseline_scenario", "crispy.shock_scenario", "crispy.discount_rate")
+group_variables_vec <- c("company_name", "company_id","ald_sector", "shock_year", "baseline_scenario", "shock_scenario", "discount_rate")
 metrics_el <- c("expected_loss_baseline", "expected_loss_shock")
 
 
@@ -1697,11 +1697,11 @@ metrics_el <- c("expected_loss_baseline", "expected_loss_shock")
 data_cdi_el_plot <- analysis_data |>
   mutate( # THIS MUTATE ONLY IF NO PORTFOLIO PROVIDED
     loss_given_default=0.35,
-    exposure_at_default = .data$crispy.net_present_value_baseline * .data$loss_given_default,
-    expected_loss_baseline = .data$exposure_at_default * .data$crispy.pd_baseline,
-    expected_loss_shock = .data$exposure_at_default * .data$crispy.pd_shock
+    exposure_at_default = .data$net_present_value_baseline * .data$loss_given_default,
+    expected_loss_baseline = .data$exposure_at_default * .data$pd_baseline,
+    expected_loss_shock = .data$exposure_at_default * .data$pd_shock
   ) |>
-  dplyr::group_by(crispy.run_id) |>
+  dplyr::group_by(run_id) |>
   dplyr::group_modify(
     ~ prepare_for_cdi_el_plots(
       .,
@@ -1717,20 +1717,20 @@ data_cdi_el_plot <- analysis_data |>
   plot_i <- 1
 
   data_cdi_el_plot_filtered <- data_cdi_el_plot |> 
-    filter(crispy.run_id %in% runs_selection, portfolio.company_id == company_id)
+    filter(run_id %in% runs_selection, company_id == company_id)
   
   
-  a_shock_scenario <-  unique(data_cdi_el_plot_filtered$crispy.shock_scenario)
-  a_company_name <-  unique(data_cdi_el_plot_filtered$portfolio.company_name)
-  a_shock_year <-  unique(data_cdi_el_plot_filtered$crispy.shock_year)
+  a_shock_scenario <-  unique(data_cdi_el_plot_filtered$shock_scenario)
+  a_company_name <-  unique(data_cdi_el_plot_filtered$company_name)
+  a_shock_year <-  unique(data_cdi_el_plot_filtered$shock_year)
   
   for (metric_el_name in metrics_el) {
     cdi_plot <- make_expected_loss_plot(
       data_cdi_el_plot = data_cdi_el_plot_filtered,
-      x_var = "crispy.shock_year",
+      x_var = "shock_year",
       y_var = metric_el_name,
       fill_var = metric_el_name,
-      facet_var="portfolio.ald_sector",
+      facet_var="ald_sector",
       title = paste("With", metric_el_name)
     ) +
       ggplot2::theme(plot.title = ggplot2::element_text(size = 8, face = "bold"))

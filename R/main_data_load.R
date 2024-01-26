@@ -17,8 +17,8 @@ load_input_plots_data_from_files <-
   function(crispy_outputs_dir,
            portfolio_data_path = NULL,
            granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
-           maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv"),
-           trisk_start_year = NA) {
+           maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv")
+           ) {
 
     multi_crispy_data <-
       load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
@@ -27,11 +27,15 @@ load_input_plots_data_from_files <-
           c("run_id", "term", "scenario_geography", granularity)
       )
 
-    portfolio_data <- load_portfolio_data(portfolio_data_path) |>
+    stopifnot(length(unique(multi_crispy_data$start_year)) == 1)
+    trisk_start_year <- unique(multi_crispy_data$start_year)[1]
+
+    portfolio_data <-
+      load_portfolio_data(portfolio_data_path) |>
       main_load_portfolio_data(
         maturity_month_term_bridge_fp = maturity_month_term_bridge_fp,
         max_portfolio_granularity = c("portfolio_id", "term", granularity),
-        trisk_start_year = min(multi_crispy_data$year)
+        trisk_start_year = trisk_start_year
       )
 
     analysis_data <-

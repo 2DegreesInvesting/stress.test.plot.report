@@ -30,7 +30,7 @@ mock_filepaths <- list(
 
   trisk_output_path = here::here("data-raw", "mock_st_outputs"),
 
-  portfolio_data=here::here("data-raw", "synthetic_portfolio.csv")
+  portfolio_data=here::here("data-raw", "synthetic_csv")
 
 )
 

@@ -12,7 +12,7 @@ qplot_pd_sector <- function(data_pd, common_y_axis = FALSE, annual_pds = FALSE) 
   if (!annual_pds) {
     p <- ggplot(data_pd, aes(x = term, y = .data$value_to_plot, fill = .data$value_to_plot))
   } else {
-    p <- ggplot(data_pd, aes(x = crispy.shock_year, y = .data$value_to_plot, fill = .data$value_to_plot))
+    p <- ggplot(data_pd, aes(x = shock_year, y = .data$value_to_plot, fill = .data$value_to_plot))
   }
   p <- p +
     geom_bar(stat = "identity") +
