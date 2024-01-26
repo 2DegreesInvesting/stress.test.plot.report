@@ -16,8 +16,7 @@
 load_input_plots_data_from_files <-
   function(crispy_outputs_dir,
            portfolio_data_path = NULL,
-           granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
-           maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv")) {
+           granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit")) {
     multi_crispy_data <-
       load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
       main_load_multi_crispy_data(
@@ -31,7 +30,6 @@ load_input_plots_data_from_files <-
     portfolio_data <-
       load_portfolio_data(portfolio_data_path) |>
       main_load_portfolio_data(
-        maturity_month_term_bridge_fp = maturity_month_term_bridge_fp,
         max_portfolio_granularity = c("portfolio_id", "term", granularity),
         trisk_start_year = trisk_start_year
       )
@@ -55,7 +53,6 @@ load_input_plots_data_from_files <-
 #' @param crispy_outputs_dir crispy_outputs_dir
 #' @param portfolio_data_path portfolio_data_path
 #' @param granularity granularity
-#' @param maturity_month_term_bridge_fp see in data-raw in the source package
 #' @param trisk_start_year (default) sets to the earliest year of multi_cripy_data
 #'
 #' @return
@@ -65,7 +62,6 @@ load_input_plots_data_from_tibble <-
   function(multi_crispy_data,
            portfolio_data = tibble::tibble(),
            granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
-           maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv"),
            trisk_start_year = NA) {
     multi_crispy_data <-
       multi_crispy_data |>
@@ -77,7 +73,6 @@ load_input_plots_data_from_tibble <-
     portfolio_data <-
       portfolio_data |>
       main_load_portfolio_data(
-        maturity_month_term_bridge_fp = maturity_month_term_bridge_fp,
         max_portfolio_granularity = c("portfolio_id", "term", granularity),
         trisk_start_year = min(multi_crispy_data$year)
       )
@@ -127,14 +122,11 @@ main_load_analysis_data <-
 #' @export
 main_load_portfolio_data <-
   function(portfolio_data,
-           maturity_month_term_bridge_fp,
            max_portfolio_granularity,
            trisk_start_year) {
-    maturity_month_term_bridge <- readr::read_csv(maturity_month_term_bridge_fp)
 
     portfolio_data <- portfolio_data |>
       map_portfolio_maturity_to_term(
-        maturity_month_term_bridge = maturity_month_term_bridge,
         trisk_start_year = trisk_start_year
       ) |>
       aggregate_portfolio_facts(group_cols = max_portfolio_granularity)

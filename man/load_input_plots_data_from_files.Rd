@@ -7,8 +7,7 @@
 load_input_plots_data_from_files(
   crispy_outputs_dir,
   portfolio_data_path = NULL,
-  granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
-  maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv")
+  granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit")
 )
 }
 \arguments{

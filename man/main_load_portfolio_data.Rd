@@ -6,7 +6,6 @@
 \usage{
 main_load_portfolio_data(
   portfolio_data,
-  maturity_month_term_bridge_fp,
   max_portfolio_granularity,
   trisk_start_year
 )

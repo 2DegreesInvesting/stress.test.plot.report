@@ -8,14 +8,11 @@ load_input_plots_data_from_tibble(
   multi_crispy_data,
   portfolio_data = tibble::tibble(),
   granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
-  maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv"),
   trisk_start_year = NA
 )
 }
 \arguments{
 \item{granularity}{granularity}
-
-\item{maturity_month_term_bridge_fp}{see in data-raw in the source package}
 
 \item{trisk_start_year}{(default) sets to the earliest year of multi_cripy_data}
 

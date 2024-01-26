@@ -37,50 +37,25 @@ load_portfolio_data <- function(portfolio_data_path) {
 #' Convert column year to term
 #'
 #' @param portfolio_data portfolio_data
-#' @param maturity_month_term_bridge maturity_month_term_bridge
 #' @param start_year start_year
 #'
 map_portfolio_maturity_to_term <-
   function(portfolio_data,
-           maturity_month_term_bridge,
            trisk_start_year) {
-    min_maturity_month <-
-      min(maturity_month_term_bridge$portfolio_maturity_month)
-    max_maturity_month <-
-      max(maturity_month_term_bridge$portfolio_maturity_month)
 
     start_date <- as.Date(paste0(trisk_start_year, "-01-01"))
 
     portfolio_data <- portfolio_data |>
       dplyr::mutate(
-        portfolio_maturity_month = lubridate::interval(.env$start_date, .data$expiration_date) %/% months(1)
+        expiration_date = as.Date(.data$expiration_date),
+        portfolio_maturity_month = lubridate::interval(.env$start_date, .data$expiration_date) %/% months(1),
+        term = ceiling((.data$portfolio_maturity_month/12) * 0.4) # 1 term is equal to 2.5 years
       ) |>
-      dplyr::mutate(
-        portfolio_maturity_month = dplyr::if_else(
-          .data$portfolio_maturity_month < .env$min_maturity_month,
-          .env$min_maturity_month,
-          .data$portfolio_maturity_month
-        )
-      ) |>
-      dplyr::mutate(
-        portfolio_maturity_month = dplyr::if_else(
-          .data$portfolio_maturity_month > .env$max_maturity_month,
-          .env$max_maturity_month,
-          .data$portfolio_maturity_month
-        )
-      ) |>
-      dplyr::select(-c(.data$expiration_date))
+      dplyr::select(-c(portfolio_maturity_month))
 
-
-    # Create the column term
+    # replace term by 1 when the asset is not expected to have a term
     portfolio_data <- portfolio_data |>
-      dplyr::left_join(maturity_month_term_bridge, by = "portfolio_maturity_month") |>
-      dplyr::select(-c(.data$portfolio_maturity_month))
-
-
-    # replace term by 5 when the asset is not expected to have a term
-    portfolio_data <- portfolio_data |>
-      dplyr::mutate(term = dplyr::if_else(asset_type == "fixed_income", .data$term, 5))
+      dplyr::mutate(term = dplyr::if_else(asset_type == "fixed_income", .data$term, 1))
 
     return(portfolio_data)
   }

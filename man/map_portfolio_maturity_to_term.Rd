@@ -4,16 +4,10 @@
 \alias{map_portfolio_maturity_to_term}
 \title{Convert column year to term}
 \usage{
-map_portfolio_maturity_to_term(
-  portfolio_data,
-  maturity_month_term_bridge,
-  trisk_start_year
-)
+map_portfolio_maturity_to_term(portfolio_data, trisk_start_year)
 }
 \arguments{
 \item{portfolio_data}{portfolio_data}
-
-\item{maturity_month_term_bridge}{maturity_month_term_bridge}
 
 \item{start_year}{start_year}
 }
