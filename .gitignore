@@ -13,3 +13,12 @@ inst/doc
 /Meta/
 workspace/
 data-raw/mlflow_outputs/
+
+data-raw/mock_rawdata/company_emissions.csv
+data-raw/mock_rawdata/company_activities.csv
+data-raw/mock_rawdata/eikon_data.csv
+
+data-raw/mock_st_inputs/abcd_stress_test_input.csv
+data-raw/mock_st_inputs/prewrangled_financial_data_stress_test.csv
+
+data-raw/mock_st_outputs/*
