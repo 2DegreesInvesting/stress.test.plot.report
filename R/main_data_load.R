@@ -163,13 +163,14 @@ main_load_multi_crispy_data <-
 #' Title
 #'
 #' @param company_trajectories_data company_trajectories_data
+#' @param max_trajectories_granularity max_trajectories_granularity
 #'
 #' @return
 #' @export
 #'
-main_data_load_trajectories_data <- function(company_trajectories_data, group_cols) {
+main_data_load_trajectories_data <- function(company_trajectories_data, max_trajectories_granularity) {
   company_trajectories_data <- company_trajectories_data |>
-    aggregate_trajectories_facts(group_cols = group_cols) |>
-    convert_trajectories_as_percentages(group_cols = group_cols)
+    aggregate_trajectories_facts(group_cols = max_trajectories_granularity) |>
+    convert_trajectories_as_percentages(group_cols = max_trajectories_granularity)
   return(company_trajectories_data)
 }
