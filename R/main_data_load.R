@@ -69,12 +69,14 @@ load_input_plots_data_from_tibble <-
         max_crispy_granularity =
           c("run_id", "term", "scenario_geography", granularity)
       )
+    stopifnot(length(unique(multi_crispy_data$start_year)) == 1)
+    trisk_start_year <- unique(multi_crispy_data$start_year)[1]
 
     portfolio_data <-
       portfolio_data |>
       main_load_portfolio_data(
         max_portfolio_granularity = c("portfolio_id", "term", granularity),
-        trisk_start_year = min(multi_crispy_data$year)
+        trisk_start_year = trisk_start_year
       )
 
     analysis_data <-
