@@ -1,4 +1,3 @@
-
 print("=================== RUNNING gen_synthetic_company_data ===================")
 source(here::here("data-raw", "scripts", "generate_synthetic_data", "gen_synthetic_company_data.R"))
 rm(list = ls())

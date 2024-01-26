@@ -78,7 +78,7 @@ make_mean_pd_diff_plot <- function(data_cdi_pd_plot, scenario_name_for_title) {
       labels = scales::comma,
       name = "Mean pd_difference"
     ) +
-    facet_grid( ~ ald_sector, scales = "free_y") + # Allow separate scales for y-axis
+    facet_grid(~ald_sector, scales = "free_y") + # Allow separate scales for y-axis
     theme_2dii() +
     labs(x = "Shock_Year", y = "Mean pd_difference", title = paste("Mean PD Difference by Shock Year -", scenario_name_for_title))
   # theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 28),  # Adjust title size
@@ -116,7 +116,7 @@ make_discount_rate_plot <- function(plot_data, scenario_name_for_title, y_var) {
       labels = scales::comma,
       name = "Mean pd_difference"
     ) +
-    facet_grid( ~ ald_sector, scales = "free_y") + # Allow separate scales for y-axis
+    facet_grid(~ald_sector, scales = "free_y") + # Allow separate scales for y-axis
     theme_2dii() +
     labs(x = "Discount Rate", y = "Mean pd_difference", title = paste("Mean PD Difference by Discount Rate -", scenario_name_for_title))
   # theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 24),  # Adjust title size
@@ -142,8 +142,7 @@ make_discount_rate_plot <- function(plot_data, scenario_name_for_title, y_var) {
 #' @export
 #'
 #' @examples
-make_density_plots <- function(data_cdi_pd_plot, numeric_values, density_var, group_variable="ald_sector") {
-
+make_density_plots <- function(data_cdi_pd_plot, numeric_values, density_var, group_variable = "ald_sector") {
   density_var_values <- unique(data_cdi_pd_plot[[density_var]])
   plots <- list()
   # Create plots for each sector
@@ -180,7 +179,7 @@ make_density_plots <- function(data_cdi_pd_plot, numeric_values, density_var, gr
         plot.title = element_text(size = 11, face = "bold", hjust = 0.5),
         axis.text = element_text(size = 13),
         axis.text.x = element_text(size = 10, angle = 45, vjust = 0.5),
-        axis.title.x = element_blank(),#element_text(size = 13),
+        axis.title.x = element_blank(), # element_text(size = 13),
         axis.title.y = element_text(size = 13),
         # legend.title = element_blank(),
         legend.text = element_text(size = 10),
@@ -207,14 +206,14 @@ make_density_plots <- function(data_cdi_pd_plot, numeric_values, density_var, gr
       legend = "right"
     )
 
-  combined_plot <- ggpubr::annotate_figure(combined_plot
-                                           # ,top = ggpubr::text_grob(
-                                           #   paste("Distribution of ",numeric_values," - ", group_variable),
-                                           #   face = "bold",
-                                           #   size = 14
-                                           # )
-
-                                           )
+  combined_plot <- ggpubr::annotate_figure(
+    combined_plot
+    # ,top = ggpubr::text_grob(
+    #   paste("Distribution of ",numeric_values," - ", group_variable),
+    #   face = "bold",
+    #   size = 14
+    # )
+  )
 
   return(combined_plot)
 }

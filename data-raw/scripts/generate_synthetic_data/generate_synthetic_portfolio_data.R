@@ -1,10 +1,10 @@
 box::use(
-  `data-raw`/scripts / constant [mock_filepaths],
+  `data-raw` / scripts / constant[mock_filepaths],
   dplyr[...]
 )
 
 
-abcd_stress_test_input <-readr::read_csv(mock_filepaths$abcd_stress_test_input)
+abcd_stress_test_input <- readr::read_csv(mock_filepaths$abcd_stress_test_input)
 eikon_data <- readr::read_csv(mock_filepaths$eikon_data)
 
 portfolio_values <- abcd_stress_test_input |>

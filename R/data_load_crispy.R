@@ -1,4 +1,3 @@
-
 load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
   # Required Libraries
 
@@ -29,10 +28,10 @@ load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
         div_netprofit_prop_coef = "d",
         growth_rate = "d",
         shock_year = "d",
-        carbon_price_model="c",
-        market_passthrough="d",
-        financial_stimulus="d",
-        start_year="d",
+        carbon_price_model = "c",
+        market_passthrough = "d",
+        financial_stimulus = "d",
+        start_year = "d",
         net_present_value_baseline = "d",
         net_present_value_shock = "d",
         pd_baseline = "d",
@@ -58,11 +57,11 @@ load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
 #' @param param_cols TODO the parameters should be stored in a dataframe other than crispy and use the run_id as key to join
 #'
 aggregate_crispy_facts <- function(multi_crispy, group_cols, param_cols = c(
-                                     "run_id", "roll_up_type","scenario_geography","baseline_scenario",
-                                     "shock_scenario","risk_free_rate","discount_rate","div_netprofit_prop_coef",
-                                     "carbon_price_model","market_passthrough","financial_stimulus","start_year",
-                                     "growth_rate","shock_year")
-                                     ) {
+                                     "run_id", "roll_up_type", "scenario_geography", "baseline_scenario",
+                                     "shock_scenario", "risk_free_rate", "discount_rate", "div_netprofit_prop_coef",
+                                     "carbon_price_model", "market_passthrough", "financial_stimulus", "start_year",
+                                     "growth_rate", "shock_year"
+                                   )) {
   multi_crispy <- multi_crispy |>
     dplyr::group_by_at(c(group_cols, param_cols)) |>
     dplyr::summarise(

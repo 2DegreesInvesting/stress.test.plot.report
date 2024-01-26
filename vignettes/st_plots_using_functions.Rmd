@@ -27,7 +27,7 @@ maturity_month_term_bridge_fp <-
   here::here("data", "maturity_month_term_bridge.csv")
 portfolio_data_path <-
   here::here("data-raw/synthetic_portfolio.csv")
-crispy_outputs_dir <- here::here("data-raw","mock_st_outputs")
+crispy_outputs_dir <- here::here("data-raw", "mock_st_outputs")
 
 
 trisk_start_year <- 2022
@@ -51,7 +51,10 @@ Filter the trisk data to focus on a single geography/run
 ```{r}
 focus_run_id <- unique(analysis_data$run_id)[2]
 focus_scenario_geography <-
-  analysis_data |> dplyr::filter(run_id == focus_run_id) |> dplyr::distinct(scenario_geography) |> dplyr::pull()
+  analysis_data |>
+  dplyr::filter(run_id == focus_run_id) |>
+  dplyr::distinct(scenario_geography) |>
+  dplyr::pull()
 active_tab <- "portfolio_id"
 
 analysis_data_single_run <- analysis_data |>

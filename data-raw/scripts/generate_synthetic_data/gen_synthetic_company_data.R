@@ -1,5 +1,5 @@
 box::use(
-  `data-raw` / scripts/ constant[production_types, mock_filepaths],
+  `data-raw` / scripts / constant[production_types, mock_filepaths],
   dplyr[...]
 )
 #' Generation of synthetic data
@@ -43,7 +43,7 @@ generate_company_sectors <- function(
 }
 
 generate_company_location <- function(
-  company_sectors, max_assigned_countries) {
+    company_sectors, max_assigned_countries) {
   countries <- countrycode::codelist$ecb
   countries <- countries[!is.na(countries)]
   # subsample the country codes, so we're sure some companies will

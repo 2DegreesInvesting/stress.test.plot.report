@@ -25,9 +25,8 @@ granularity <-
 maturity_month_term_bridge_fp <-
   here::here("data", "maturity_month_term_bridge.csv")
 portfolio_data_path <-
-  here::here("data-raw","synthetic_portfolio.csv")
-crispy_outputs_dir <- here::here("data-raw","mock_st_outputs")
-
+  here::here("data-raw", "synthetic_portfolio.csv")
+crispy_outputs_dir <- here::here("data-raw", "mock_st_outputs")
 ```
 
 Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
@@ -47,7 +46,10 @@ Filter the trisk data to focus on a single geography/run
 
 ```{r}
 focus_run_id <- unique(analysis_data$run_id)[1]
-focus_scenario_geography <- analysis_data |> filter(run_id == focus_run_id)|> dplyr::distinct(scenario_geography) |> dplyr::pull() 
+focus_scenario_geography <- analysis_data |>
+  filter(run_id == focus_run_id) |>
+  dplyr::distinct(scenario_geography) |>
+  dplyr::pull()
 active_tab <- "portfolio_id"
 
 analysis_data_single_run <- analysis_data |>
@@ -129,7 +131,7 @@ for (run_id_name in unique(data_cdi_el_plot$run_id)) {
       x_var = "shock_year",
       y_var = metric_el_name,
       fill_var = metric_el_name,
-      facet_var="ald_sector",
+      facet_var = "ald_sector",
       title = paste("With", metric_el_name)
     ) +
       ggplot2::theme(plot.title = ggplot2::element_text(size = 12, face = "bold"))
@@ -220,7 +222,6 @@ data_cdi_pd_plot_company <- analysis_data_company |>
     )
   ) |>
   dplyr::ungroup()
-
 ```
 
 

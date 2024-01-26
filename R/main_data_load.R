@@ -17,9 +17,7 @@ load_input_plots_data_from_files <-
   function(crispy_outputs_dir,
            portfolio_data_path = NULL,
            granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
-           maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv")
-           ) {
-
+           maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv")) {
     multi_crispy_data <-
       load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
       main_load_multi_crispy_data(
@@ -69,7 +67,6 @@ load_input_plots_data_from_tibble <-
            granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
            maturity_month_term_bridge_fp = here::here("data", "maturity_month_term_bridge.csv"),
            trisk_start_year = NA) {
-
     multi_crispy_data <-
       multi_crispy_data |>
       main_load_multi_crispy_data(
@@ -160,3 +157,19 @@ main_load_multi_crispy_data <-
       aggregate_crispy_facts(group_cols = max_crispy_granularity)
     return(multi_crispy_data)
   }
+
+
+
+#' Title
+#'
+#' @param company_trajectories_data company_trajectories_data
+#'
+#' @return
+#' @export
+#'
+main_data_load_trajectories_data <- function(company_trajectories_data) {
+  company_trajectories_data <- company_trajectories_data |>
+    aggregate_trajectories_facts(group_cols = trisk_granularity) |>
+    convert_trajectories_as_percentages()
+  return(company_trajectories_data)
+}

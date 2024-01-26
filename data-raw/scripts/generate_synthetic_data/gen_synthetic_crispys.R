@@ -59,5 +59,3 @@ run_trisk(
   baseline_scenario = "Oxford2021_base",
   shock_scenario = "Oxford2021_fast"
 )
-
-
