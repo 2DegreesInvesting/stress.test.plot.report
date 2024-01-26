@@ -8,12 +8,16 @@ aggregate_crispy_facts(
   multi_crispy,
   group_cols,
   param_cols = c("run_id", "roll_up_type", "scenario_geography", "baseline_scenario",
-    "shock_scenario", "lgd", "risk_free_rate", "discount_rate",
-    "div_netprofit_prop_coef", "carbon_price_model", "market_passthrough",
-    "financial_stimulus", "start_year", "growth_rate", "shock_year")
+    "shock_scenario", "risk_free_rate", "discount_rate", "div_netprofit_prop_coef",
+    "carbon_price_model", "market_passthrough", "financial_stimulus", "start_year",
+    "growth_rate", "shock_year")
 )
 }
 \arguments{
+\item{multi_crispy}{multi_crispy}
+
+\item{group_cols}{group_cols}
+
 \item{param_cols}{TODO the parameters should be stored in a dataframe other than crispy and use the run_id as key to join}
 }
 \description{

@@ -8,7 +8,7 @@ make_density_plots(
   data_cdi_pd_plot,
   numeric_values,
   density_var,
-  group_variable = "portfolio.ald_sector"
+  group_variable = "ald_sector"
 )
 }
 \arguments{

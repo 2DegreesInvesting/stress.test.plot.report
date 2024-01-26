@@ -25,8 +25,8 @@ granularity <-
 maturity_month_term_bridge_fp <-
   here::here("data", "maturity_month_term_bridge.csv")
 portfolio_data_path <-
-  here::here("data-raw/synthetic_portfolio.csv")
-crispy_outputs_dir <- here::here("data-raw/synthetic_crispy")
+  here::here("data-raw","synthetic_portfolio.csv")
+crispy_outputs_dir <- here::here("data-raw","mock_st_outputs")
 
 
 trisk_start_year <- 2022
@@ -49,8 +49,8 @@ analysis_data <-
 Filter the trisk data to focus on a single geography/run
 
 ```{r}
-focus_run_id <- "NGFS2021_MESSAGE_B2DS_Global_no_carbon_tax"
-focus_scenario_geography <- "Global"
+focus_run_id <- unique(analysis_data$run_id)[1]
+focus_scenario_geography <- analysis_data |> filter(run_id == focus_run_id)|> dplyr::distinct(scenario_geography) |> dplyr::pull() 
 active_tab <- "portfolio_id"
 
 analysis_data_single_run <- analysis_data |>

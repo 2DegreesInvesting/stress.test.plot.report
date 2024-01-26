@@ -5,14 +5,14 @@
 \title{Title}
 \usage{
 main_load_portfolio_data(
-  portfolio_data_path,
+  portfolio_data,
   maturity_month_term_bridge_fp,
   max_portfolio_granularity,
   trisk_start_year
 )
 }
 \arguments{
-\item{max_portfolio_granularity}{}
+\item{max_portfolio_granularity}{max_portfolio_granularity}
 }
 \description{
 Title

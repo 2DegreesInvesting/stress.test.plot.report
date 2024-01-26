@@ -1,0 +1,1746 @@
+company_id,company_name,ald_sector,ald_business_unit,ald_location,activity_unit,Equity Ownership 2022,Equity Ownership 2023,Equity Ownership 2024,Equity Ownership 2025,Equity Ownership 2026
+1,company-1,Power,NuclearCap,BN,tCO2e,1722,9306,51964,44985,21514
+1,company-1,Power,NuclearCap,NA,tCO2e,299062,121208,30115,69207,70674
+1,company-1,Power,NuclearCap,FR,tCO2e,2391,9064,26833,345516,136210
+2,company-2,Power,HydroCap,FR,tCO2e,75008,122374,74761,250499,50831
+2,company-2,Power,HydroCap,KZ,tCO2e,139144,122220,143882,NA,12083
+2,company-2,Power,HydroCap,BO,tCO2e,13727,NA,12009,4685,10322
+2,company-2,Power,HydroCap,NL,tCO2e,116277,29143,7517,26027,14069
+2,company-2,Power,HydroCap,BN,tCO2e,17062,17973,14247,329751,100675
+3,company-3,Cement,Integrated facility,NL,tCO2e,NA,145760,32142,100676,NA
+3,company-3,Cement,Integrated facility,BN,tCO2e,3452,57484,12905,28871,19985
+3,company-3,Cement,Integrated facility,BO,tCO2e,369284,113670,NA,96005,16406
+4,company-4,Power,OilCap,BN,tCO2e,251840,456145,10581,34542,NA
+4,company-4,Power,OilCap,NL,tCO2e,148968,1253,7135,NA,37925
+4,company-4,Power,OilCap,KZ,tCO2e,NA,NA,139572,NA,121776
+4,company-4,Power,OilCap,NA,tCO2e,58979,269187,49867,40276,113744
+4,company-4,Power,OilCap,FR,tCO2e,5779,26419,115847,155661,7573
+5,company-5,Automotive,ICE,FR,tCO2,NA,100452,90624,113062,271844
+5,company-5,Automotive,ICE,NA,tCO2,216,NA,73449,315761,160318
+6,company-6,Automotive,Electric,KZ,tCO2,NA,85525,36979,75014,65095
+6,company-6,Automotive,Electric,FR,tCO2,14507,10652,43989,192755,45922
+6,company-6,Automotive,Electric,NL,tCO2,3008,NA,74608,305704,NA
+6,company-6,Automotive,Electric,BO,tCO2,120992,NA,13702,28856,NA
+7,company-7,Oil&Gas,Oil,NL,tCO2e,16497,30187,130148,16083,54651
+8,company-8,Shipping,Passenger,NL,tCO2,NA,183079,70133,15711,NA
+8,company-8,Shipping,Passenger,FR,tCO2,135473,98616,38692,608109,265971
+9,company-9,Power,HydroCap,NA,tCO2e,44528,178184,106619,185499,38876
+10,company-10,Power,NuclearCap,FR,tCO2e,368665,18084,26813,252543,135375
+11,company-11,Automotive,Electric,KZ,tCO2,NA,2003,244061,NA,161465
+11,company-11,Automotive,Electric,FR,tCO2,314879,164926,NA,NA,9476
+12,company-12,Power,GasCap,NL,tCO2e,NA,132233,NA,92016,74233
+12,company-12,Power,GasCap,BN,tCO2e,28860,NA,15640,35305,46149
+13,company-13,Aviation,Freight,BO,tCO2,123632,73569,124073,322687,54017
+13,company-13,Aviation,Freight,BN,tCO2,NA,71891,7441,81377,NA
+13,company-13,Aviation,Freight,NA,tCO2,79273,287360,NA,40163,13703
+13,company-13,Aviation,Freight,FR,tCO2,NA,91590,NA,NA,30898
+14,company-14,Cement,Integrated facility,NA,tCO2e,1772,29000,234792,NA,78551
+14,company-14,Cement,Integrated facility,NL,tCO2e,3365,9517,66411,NA,NA
+15,company-15,Power,OilCap,NA,tCO2e,16697,355903,1148,85057,NA
+15,company-15,Power,OilCap,FR,tCO2e,164829,NA,158477,NA,15610
+15,company-15,Power,OilCap,NL,tCO2e,NA,NA,27598,34715,64366
+15,company-15,Power,OilCap,KZ,tCO2e,20441,63254,27235,13550,7089
+15,company-15,Power,OilCap,BN,tCO2e,227844,99207,11805,31701,153744
+16,company-16,Oil&Gas,Gas,KZ,tCO2e,599610,46857,195012,108919,85141
+17,company-17,Coal,Coal,FR,tCO2e,2117,NA,126975,304966,137400
+18,company-18,Automotive,ICE,BO,tCO2,187009,25270,34034,56045,32010
+18,company-18,Automotive,ICE,NA,tCO2,NA,117541,58274,87539,161525
+19,company-19,Aviation,Freight,BN,tCO2,20365,44061,NA,158290,65394
+20,company-20,Power,OilCap,FR,tCO2e,164282,18667,7429,NA,194679
+21,company-21,Aviation,Passenger,BO,tCO2,29094,716,28579,31127,55997
+21,company-21,Aviation,Passenger,KZ,tCO2,167421,311706,96441,139189,274003
+22,company-22,Power,RenewablesCap,BN,tCO2e,25109,147567,72419,489498,69757
+22,company-22,Power,RenewablesCap,KZ,tCO2e,23557,7,NA,720,24288
+22,company-22,Power,RenewablesCap,NL,tCO2e,57458,12627,27667,182505,56827
+22,company-22,Power,RenewablesCap,FR,tCO2e,233543,NA,25400,19080,133377
+22,company-22,Power,RenewablesCap,BO,tCO2e,52080,246758,25402,54283,246789
+23,company-23,Automotive,Hybrid,FR,tCO2,66239,97920,316827,NA,81909
+23,company-23,Automotive,Hybrid,NL,tCO2,10473,254443,60510,NA,15108
+23,company-23,Automotive,Hybrid,BN,tCO2,49972,64907,NA,306403,29254
+23,company-23,Automotive,Hybrid,BO,tCO2,242013,51507,198770,32434,344772
+23,company-23,Automotive,Hybrid,KZ,tCO2,NA,536,247646,NA,10016
+24,company-24,Shipping,Passenger,FR,tCO2,151083,44322,32115,84219,616206
+24,company-24,Shipping,Passenger,BO,tCO2,74653,89238,NA,33438,NA
+24,company-24,Shipping,Passenger,NA,tCO2,17658,NA,NA,11756,156090
+25,company-25,Shipping,Freight,BO,tCO2,28761,306894,84799,73459,2930
+25,company-25,Shipping,Freight,FR,tCO2,274,195983,34795,NA,55732
+25,company-25,Shipping,Freight,KZ,tCO2,NA,NA,24854,50865,68736
+25,company-25,Shipping,Freight,NL,tCO2,3824,251546,98881,184767,24001
+26,company-26,Automotive,Electric,BN,tCO2,38609,123518,62231,212538,NA
+26,company-26,Automotive,Electric,NA,tCO2,34522,60324,NA,164128,188793
+26,company-26,Automotive,Electric,BO,tCO2,61946,57790,91219,2798,88143
+26,company-26,Automotive,Electric,FR,tCO2,224591,115442,24354,92905,114562
+26,company-26,Automotive,Electric,KZ,tCO2,NA,285329,7582,32293,80923
+27,company-27,Power,RenewablesCap,KZ,tCO2e,NA,117994,192031,NA,8459
+28,company-28,Power,RenewablesCap,KZ,tCO2e,30814,107529,104315,30743,70689
+28,company-28,Power,RenewablesCap,NL,tCO2e,NA,NA,52734,57716,65919
+28,company-28,Power,RenewablesCap,NA,tCO2e,17750,93299,82911,15000,27375
+28,company-28,Power,RenewablesCap,BN,tCO2e,357172,NA,NA,73405,53957
+29,company-29,Automotive,Electric,BN,tCO2,73803,158972,25195,3727,95180
+29,company-29,Automotive,Electric,BO,tCO2,25187,15822,NA,235385,240996
+29,company-29,Automotive,Electric,NA,tCO2,35858,NA,252210,NA,29317
+29,company-29,Automotive,Electric,NL,tCO2,20317,NA,NA,NA,NA
+30,company-30,Oil&Gas,Oil,BO,tCO2e,15472,NA,NA,NA,87092
+31,company-31,Cement,Integrated facility,FR,tCO2e,29063,94454,NA,264720,104860
+31,company-31,Cement,Integrated facility,NA,tCO2e,328681,123914,NA,11227,360254
+31,company-31,Cement,Integrated facility,KZ,tCO2e,151090,336,55940,175808,252784
+31,company-31,Cement,Integrated facility,NL,tCO2e,81149,118113,17388,55385,NA
+31,company-31,Cement,Integrated facility,BN,tCO2e,215416,38113,66484,56178,6765
+32,company-32,Power,CoalCap,NA,tCO2e,96659,222249,25692,532842,22793
+32,company-32,Power,CoalCap,KZ,tCO2e,24554,7326,10792,224788,50316
+32,company-32,Power,CoalCap,BN,tCO2e,77763,268920,81825,195633,55673
+33,company-33,Power,OilCap,NA,tCO2e,NA,20941,101638,57798,9803
+33,company-33,Power,OilCap,KZ,tCO2e,65602,147726,120568,55007,1037
+33,company-33,Power,OilCap,BN,tCO2e,70794,84044,NA,9027,NA
+34,company-34,Power,NuclearCap,BN,tCO2e,16981,2083,83406,14090,141188
+35,company-35,Power,RenewablesCap,NL,tCO2e,579,NA,40112,NA,131841
+35,company-35,Power,RenewablesCap,NA,tCO2e,3727,191511,302171,NA,238523
+36,company-36,Automotive,FuelCell,BO,tCO2,2636,NA,12514,83025,64196
+36,company-36,Automotive,FuelCell,BN,tCO2,107385,NA,NA,NA,NA
+36,company-36,Automotive,FuelCell,FR,tCO2,42685,54921,56598,NA,NA
+36,company-36,Automotive,FuelCell,NL,tCO2,NA,31726,83105,124203,181314
+37,company-37,Power,NuclearCap,FR,tCO2e,413790,36168,27798,NA,NA
+37,company-37,Power,NuclearCap,NA,tCO2e,242992,30382,93326,302324,53208
+37,company-37,Power,NuclearCap,BN,tCO2e,31880,NA,29672,24982,NA
+37,company-37,Power,NuclearCap,BO,tCO2e,54297,30782,NA,159874,26961
+37,company-37,Power,NuclearCap,KZ,tCO2e,73021,21942,160373,113242,46744
+38,company-38,Power,CoalCap,FR,tCO2e,NA,72275,NA,124899,NA
+38,company-38,Power,CoalCap,NA,tCO2e,40568,73055,NA,65130,868
+38,company-38,Power,CoalCap,BN,tCO2e,294761,206857,332237,10463,NA
+38,company-38,Power,CoalCap,NL,tCO2e,169567,64303,189292,102692,17795
+38,company-38,Power,CoalCap,KZ,tCO2e,983,48139,15463,NA,37307
+39,company-39,Power,OilCap,BO,tCO2e,NA,730,NA,8650,707
+39,company-39,Power,OilCap,KZ,tCO2e,129581,NA,80387,42175,56274
+40,company-40,Power,HydroCap,KZ,tCO2e,247297,4095,152567,62369,NA
+40,company-40,Power,HydroCap,BO,tCO2e,109033,17209,NA,40348,402752
+40,company-40,Power,HydroCap,FR,tCO2e,79705,222991,66412,187570,161567
+41,company-41,Power,NuclearCap,NA,tCO2e,78366,40773,4794,175064,43179
+41,company-41,Power,NuclearCap,FR,tCO2e,NA,68153,NA,563953,156323
+41,company-41,Power,NuclearCap,KZ,tCO2e,NA,30443,NA,53155,33335
+41,company-41,Power,NuclearCap,BN,tCO2e,34963,244650,39880,240007,59084
+41,company-41,Power,NuclearCap,BO,tCO2e,208082,290105,40346,2662,114230
+42,company-42,Automotive,Hybrid,FR,tCO2,NA,75136,NA,91033,12842
+43,company-43,Power,GasCap,BN,tCO2e,NA,NA,15047,167161,154870
+44,company-44,Shipping,Freight,KZ,tCO2,1964,106281,27596,NA,NA
+45,company-45,Steel,Open Hearth Furnace,BN,tCO2e,60664,56294,174497,5448,83731
+45,company-45,Steel,Open Hearth Furnace,KZ,tCO2e,NA,NA,80967,NA,NA
+45,company-45,Steel,Open Hearth Furnace,NA,tCO2e,115660,219730,12850,110860,338186
+45,company-45,Steel,Open Hearth Furnace,BO,tCO2e,130377,NA,272198,14168,242947
+45,company-45,Steel,Open Hearth Furnace,FR,tCO2e,277785,50301,50225,155226,290756
+46,company-46,Aviation,Freight,BO,tCO2,NA,NA,142294,NA,NA
+46,company-46,Aviation,Freight,KZ,tCO2,152065,27575,65238,310846,90898
+46,company-46,Aviation,Freight,BN,tCO2,209469,8485,127982,201825,33771
+46,company-46,Aviation,Freight,FR,tCO2,NA,113039,108853,38950,NA
+47,company-47,Automotive,Electric,NL,tCO2,35944,344819,149355,280494,12697
+47,company-47,Automotive,Electric,BN,tCO2,227397,91492,NA,51685,335704
+48,company-48,Aviation,Freight,FR,tCO2,410375,136595,16985,NA,26862
+48,company-48,Aviation,Freight,NL,tCO2,105501,NA,5437,155272,92782
+48,company-48,Aviation,Freight,BO,tCO2,69181,64,33560,104472,81211
+48,company-48,Aviation,Freight,KZ,tCO2,4774,146065,32909,NA,NA
+48,company-48,Aviation,Freight,BN,tCO2,21016,1552,37521,169091,123799
+49,company-49,Steel,Electric Arc Furnace,BN,tCO2e,60288,60665,66542,254424,187306
+49,company-49,Steel,Electric Arc Furnace,NL,tCO2e,15817,197648,146133,NA,NA
+49,company-49,Steel,Electric Arc Furnace,NA,tCO2e,24824,NA,90629,92000,166005
+50,company-50,Cement,Integrated facility,FR,tCO2e,NA,198532,NA,71386,203063
+50,company-50,Cement,Integrated facility,NL,tCO2e,193085,13929,136227,269696,36496
+50,company-50,Cement,Integrated facility,KZ,tCO2e,109304,88250,NA,16681,356951
+51,company-51,Automotive,ICE,NL,tCO2,372328,216836,52227,3646,NA
+51,company-51,Automotive,ICE,BO,tCO2,218934,93352,124203,335808,119184
+51,company-51,Automotive,ICE,NA,tCO2,NA,350045,60214,86577,77481
+51,company-51,Automotive,ICE,BN,tCO2,40911,23190,28958,11876,NA
+51,company-51,Automotive,ICE,FR,tCO2,163009,146758,161839,47252,27104
+52,company-52,Oil&Gas,Gas,NA,tCO2e,83620,15904,173041,NA,222735
+53,company-53,Power,CoalCap,BO,tCO2e,232829,53320,79825,47545,256133
+53,company-53,Power,CoalCap,BN,tCO2e,76837,NA,93878,133809,39733
+53,company-53,Power,CoalCap,NA,tCO2e,28020,44090,4908,165462,18540
+53,company-53,Power,CoalCap,NL,tCO2e,139035,300332,50915,231655,NA
+53,company-53,Power,CoalCap,FR,tCO2e,265808,7922,24882,169960,NA
+54,company-54,Steel,Open Hearth Furnace,FR,tCO2e,NA,32346,68321,294082,50527
+54,company-54,Steel,Open Hearth Furnace,NA,tCO2e,2001,15110,4315,NA,160777
+54,company-54,Steel,Open Hearth Furnace,BN,tCO2e,NA,107052,NA,NA,15834
+54,company-54,Steel,Open Hearth Furnace,KZ,tCO2e,15516,120514,17183,NA,6808
+54,company-54,Steel,Open Hearth Furnace,NL,tCO2e,5171,NA,NA,266114,59909
+55,company-55,Power,RenewablesCap,BO,tCO2e,29850,NA,78486,125483,9925
+55,company-55,Power,RenewablesCap,FR,tCO2e,12975,108570,228249,41860,28433
+55,company-55,Power,RenewablesCap,NL,tCO2e,87910,61155,78724,142554,NA
+56,company-56,Power,RenewablesCap,NL,tCO2e,48547,NA,NA,NA,118951
+56,company-56,Power,RenewablesCap,KZ,tCO2e,NA,8538,13124,1364,638
+56,company-56,Power,RenewablesCap,NA,tCO2e,25215,66127,12639,26120,140213
+56,company-56,Power,RenewablesCap,BO,tCO2e,182551,58131,49738,NA,5536
+57,company-57,Oil&Gas,Oil,BN,tCO2e,326487,40504,NA,NA,71169
+58,company-58,Steel,Electric Arc Furnace,KZ,tCO2e,81542,142614,69461,164328,132267
+58,company-58,Steel,Electric Arc Furnace,BO,tCO2e,NA,143338,70687,34043,NA
+58,company-58,Steel,Electric Arc Furnace,NA,tCO2e,33813,66657,912,56772,7409
+58,company-58,Steel,Electric Arc Furnace,NL,tCO2e,27594,134497,12405,116607,125813
+58,company-58,Steel,Electric Arc Furnace,FR,tCO2e,21119,100187,292908,15715,NA
+59,company-59,Power,RenewablesCap,KZ,tCO2e,4903,NA,NA,29581,75730
+59,company-59,Power,RenewablesCap,NA,tCO2e,NA,77516,10699,72446,98880
+59,company-59,Power,RenewablesCap,NL,tCO2e,195246,NA,NA,74783,281936
+59,company-59,Power,RenewablesCap,BN,tCO2e,NA,717722,90933,14493,22001
+60,company-60,Oil&Gas,Gas,BN,tCO2e,51986,82316,71514,91560,4330
+60,company-60,Oil&Gas,Gas,KZ,tCO2e,269464,NA,39176,102309,51837
+60,company-60,Oil&Gas,Gas,NL,tCO2e,85878,NA,65031,89610,NA
+60,company-60,Oil&Gas,Gas,BO,tCO2e,NA,NA,4756,63426,108867
+61,company-61,Power,HydroCap,BO,tCO2e,42291,NA,5150,44454,168635
+62,company-62,Automotive,Electric,NA,tCO2,120029,28443,23119,12703,29174
+62,company-62,Automotive,Electric,BO,tCO2,32103,164258,90584,43558,181032
+62,company-62,Automotive,Electric,FR,tCO2,81496,115089,231243,102816,8030
+63,company-63,Oil&Gas,Gas,NA,tCO2e,25870,173862,21198,NA,105773
+63,company-63,Oil&Gas,Gas,NL,tCO2e,NA,165479,192770,161717,152022
+63,company-63,Oil&Gas,Gas,KZ,tCO2e,180048,74718,43564,40727,32636
+63,company-63,Oil&Gas,Gas,FR,tCO2e,NA,NA,27567,262470,NA
+63,company-63,Oil&Gas,Gas,BO,tCO2e,90236,225243,82875,NA,233129
+64,company-64,Steel,Electric Arc Furnace,KZ,tCO2e,282751,26345,124905,50688,258182
+65,company-65,Aviation,Freight,BO,tCO2,269015,38349,NA,195940,6265
+65,company-65,Aviation,Freight,NA,tCO2,7657,248845,63414,NA,28174
+65,company-65,Aviation,Freight,NL,tCO2,74005,89767,47668,14180,15465
+66,company-66,Steel,Electric Arc Furnace,FR,tCO2e,220368,17373,70445,168279,191251
+66,company-66,Steel,Electric Arc Furnace,NA,tCO2e,167,30008,199740,8281,210962
+66,company-66,Steel,Electric Arc Furnace,KZ,tCO2e,165996,282594,89399,256751,137039
+66,company-66,Steel,Electric Arc Furnace,NL,tCO2e,374122,NA,203164,41888,29927
+67,company-67,Power,NuclearCap,BN,tCO2e,NA,24262,78505,254044,74498
+67,company-67,Power,NuclearCap,KZ,tCO2e,3525,164883,102854,248968,NA
+67,company-67,Power,NuclearCap,NL,tCO2e,5564,46801,195669,NA,140669
+67,company-67,Power,NuclearCap,BO,tCO2e,60833,270307,60392,136819,NA
+68,company-68,Power,GasCap,NA,tCO2e,27137,300756,NA,139372,89919
+68,company-68,Power,GasCap,BN,tCO2e,39066,64418,72135,119103,NA
+68,company-68,Power,GasCap,KZ,tCO2e,NA,NA,76769,73123,22134
+69,company-69,Power,GasCap,BN,tCO2e,532964,151908,64340,28455,126108
+69,company-69,Power,GasCap,FR,tCO2e,51949,3415,399319,59360,251532
+69,company-69,Power,GasCap,NA,tCO2e,20434,140689,251688,34631,5730
+70,company-70,Automotive,Hybrid,BN,tCO2,NA,115742,NA,189268,151070
+70,company-70,Automotive,Hybrid,KZ,tCO2,97997,74345,55707,183411,NA
+70,company-70,Automotive,Hybrid,FR,tCO2,15194,NA,23176,18355,38475
+70,company-70,Automotive,Hybrid,BO,tCO2,277566,223468,146807,27415,115394
+70,company-70,Automotive,Hybrid,NL,tCO2,NA,19325,52954,24875,NA
+71,company-71,Oil&Gas,Oil,NL,tCO2e,NA,91566,315535,56030,NA
+71,company-71,Oil&Gas,Oil,BN,tCO2e,NA,NA,41449,NA,7667
+71,company-71,Oil&Gas,Oil,BO,tCO2e,199698,55625,112391,NA,91744
+71,company-71,Oil&Gas,Oil,KZ,tCO2e,103605,10241,NA,126598,92854
+72,company-72,Shipping,Passenger,NL,tCO2,124851,243569,41767,117179,107848
+72,company-72,Shipping,Passenger,BN,tCO2,80034,219239,98703,494100,78953
+72,company-72,Shipping,Passenger,KZ,tCO2,30955,93267,NA,44443,109041
+72,company-72,Shipping,Passenger,FR,tCO2,42649,333910,73999,229102,NA
+73,company-73,Power,RenewablesCap,NL,tCO2e,129786,NA,27634,220534,NA
+73,company-73,Power,RenewablesCap,KZ,tCO2e,65708,NA,73909,164789,98252
+73,company-73,Power,RenewablesCap,BO,tCO2e,39344,155441,18784,1182,NA
+73,company-73,Power,RenewablesCap,BN,tCO2e,152702,NA,38154,103930,31748
+73,company-73,Power,RenewablesCap,FR,tCO2e,11338,88620,322,73442,NA
+74,company-74,Power,CoalCap,NL,tCO2e,97716,NA,115438,66458,NA
+74,company-74,Power,CoalCap,BN,tCO2e,65271,195081,173724,NA,NA
+75,company-75,Power,HydroCap,FR,tCO2e,3154,1835,89713,78688,349416
+75,company-75,Power,HydroCap,KZ,tCO2e,65267,NA,NA,NA,12388
+76,company-76,Power,NuclearCap,NL,tCO2e,21373,NA,219430,107244,92912
+76,company-76,Power,NuclearCap,BO,tCO2e,160719,284613,59718,63584,254981
+77,company-77,Coal,Coal,NL,tCO2e,94218,114007,NA,23102,NA
+77,company-77,Coal,Coal,NA,tCO2e,282450,252910,3323,348980,258884
+78,company-78,Power,NuclearCap,NL,tCO2e,11526,88359,68262,NA,89345
+78,company-78,Power,NuclearCap,BN,tCO2e,115103,367294,6991,190339,NA
+78,company-78,Power,NuclearCap,NA,tCO2e,29420,NA,33088,288882,108430
+78,company-78,Power,NuclearCap,FR,tCO2e,36693,58867,62430,9632,67640
+78,company-78,Power,NuclearCap,BO,tCO2e,497541,29431,203604,86603,236443
+79,company-79,Power,GasCap,NL,tCO2e,NA,NA,NA,185322,43052
+80,company-80,Cement,Integrated facility,NL,tCO2e,249588,NA,159366,99934,129143
+80,company-80,Cement,Integrated facility,BN,tCO2e,48313,1667,184036,NA,111921
+81,company-81,Cement,Integrated facility,BO,tCO2e,10097,31417,228765,77017,NA
+81,company-81,Cement,Integrated facility,NA,tCO2e,249209,145877,NA,9454,56915
+82,company-82,Steel,Electric Arc Furnace,KZ,tCO2e,229217,109880,NA,NA,116310
+82,company-82,Steel,Electric Arc Furnace,NA,tCO2e,267748,40981,123694,37145,35915
+82,company-82,Steel,Electric Arc Furnace,FR,tCO2e,NA,187900,NA,37345,NA
+82,company-82,Steel,Electric Arc Furnace,BO,tCO2e,427082,208731,19347,NA,82670
+83,company-83,Automotive,Electric,KZ,tCO2,83283,61996,368022,NA,15462
+83,company-83,Automotive,Electric,FR,tCO2,199836,67971,NA,19942,192825
+83,company-83,Automotive,Electric,BO,tCO2,20957,NA,35357,67233,NA
+83,company-83,Automotive,Electric,BN,tCO2,1074,27089,NA,33323,203770
+84,company-84,Power,OilCap,NL,tCO2e,63787,7602,NA,84776,111801
+84,company-84,Power,OilCap,KZ,tCO2e,NA,8981,NA,NA,149351
+84,company-84,Power,OilCap,FR,tCO2e,157646,56188,112109,44630,31262
+85,company-85,Automotive,FuelCell,KZ,tCO2,16025,48219,NA,26931,120355
+85,company-85,Automotive,FuelCell,NA,tCO2,36232,NA,67503,NA,NA
+86,company-86,Power,GasCap,BO,tCO2e,63094,36977,NA,238089,264029
+86,company-86,Power,GasCap,NL,tCO2e,NA,8706,72285,NA,NA
+86,company-86,Power,GasCap,BN,tCO2e,261968,106862,60561,57550,78554
+86,company-86,Power,GasCap,NA,tCO2e,NA,NA,NA,240408,21818
+86,company-86,Power,GasCap,FR,tCO2e,NA,139952,NA,26602,66995
+87,company-87,Aviation,Freight,BO,tCO2,NA,92751,1391,55902,378143
+88,company-88,Automotive,Hybrid,NL,tCO2,192365,NA,74742,NA,216549
+88,company-88,Automotive,Hybrid,KZ,tCO2,155270,94998,161568,48338,NA
+89,company-89,Aviation,Passenger,NA,tCO2,NA,NA,34027,NA,37468
+89,company-89,Aviation,Passenger,NL,tCO2,84087,13209,28674,4659,113340
+89,company-89,Aviation,Passenger,KZ,tCO2,268013,96854,135416,94402,8406
+90,company-90,Power,HydroCap,BN,tCO2e,130812,76658,115187,132298,48282
+90,company-90,Power,HydroCap,KZ,tCO2e,NA,NA,70460,221382,NA
+91,company-91,Power,NuclearCap,BO,tCO2e,42260,12714,60223,94470,116515
+91,company-91,Power,NuclearCap,FR,tCO2e,NA,NA,315685,NA,NA
+91,company-91,Power,NuclearCap,NL,tCO2e,NA,NA,71909,437130,NA
+91,company-91,Power,NuclearCap,BN,tCO2e,NA,4803,135731,NA,NA
+92,company-92,Power,CoalCap,FR,tCO2e,7566,55417,NA,31127,112550
+92,company-92,Power,CoalCap,BO,tCO2e,101349,331562,253065,290715,16327
+92,company-92,Power,CoalCap,KZ,tCO2e,64743,175767,NA,398254,NA
+92,company-92,Power,CoalCap,NA,tCO2e,9649,NA,5398,198547,41026
+93,company-93,Power,CoalCap,NL,tCO2e,34950,NA,4983,40668,229204
+93,company-93,Power,CoalCap,KZ,tCO2e,16952,125851,NA,282685,NA
+93,company-93,Power,CoalCap,BO,tCO2e,58906,74871,39299,229942,31583
+94,company-94,Coal,Coal,BO,tCO2e,124651,31284,68758,60196,14478
+94,company-94,Coal,Coal,KZ,tCO2e,NA,5749,9534,195912,89282
+94,company-94,Coal,Coal,BN,tCO2e,187955,304699,8334,13531,177208
+95,company-95,Power,NuclearCap,KZ,tCO2e,21668,479921,494426,14176,NA
+96,company-96,Steel,Electric Arc Furnace,NL,tCO2e,242557,112120,84606,53169,15563
+96,company-96,Steel,Electric Arc Furnace,KZ,tCO2e,273009,96549,NA,57650,117631
+96,company-96,Steel,Electric Arc Furnace,NA,tCO2e,75731,54146,116629,177515,461637
+96,company-96,Steel,Electric Arc Furnace,BO,tCO2e,NA,49556,86014,31544,14138
+97,company-97,Power,RenewablesCap,NL,tCO2e,84074,92098,39097,15759,54276
+97,company-97,Power,RenewablesCap,KZ,tCO2e,NA,41490,20222,165478,NA
+97,company-97,Power,RenewablesCap,NA,tCO2e,NA,NA,NA,NA,NA
+98,company-98,Power,GasCap,NL,tCO2e,733,51000,80037,187979,280378
+98,company-98,Power,GasCap,BO,tCO2e,83863,125477,130146,NA,NA
+98,company-98,Power,GasCap,NA,tCO2e,22639,NA,20656,35745,12736
+99,company-99,Cement,Integrated facility,BO,tCO2e,22100,48738,NA,30867,14285
+99,company-99,Cement,Integrated facility,NL,tCO2e,230767,NA,132878,38363,NA
+100,company-100,Steel,Basic Oxygen Furnace,FR,tCO2e,107642,18254,NA,9064,36257
+100,company-100,Steel,Basic Oxygen Furnace,BN,tCO2e,419401,199506,NA,NA,47583
+100,company-100,Steel,Basic Oxygen Furnace,NA,tCO2e,NA,332058,NA,199155,32905
+100,company-100,Steel,Basic Oxygen Furnace,KZ,tCO2e,NA,81774,211676,116592,NA
+4,company-4,Power,OilCap,FR,tCO2e,80414,NA,121222,5655,NA
+4,company-4,Power,OilCap,BO,tCO2e,96201,2281,239746,59821,29526
+4,company-4,Power,OilCap,BN,tCO2e,132002,3204,21691,65250,102132
+4,company-4,Power,OilCap,NA,tCO2e,NA,49593,96529,46422,34787
+12,company-12,Power,GasCap,BN,tCO2e,1638,119549,365407,44759,55636
+12,company-12,Power,GasCap,NA,tCO2e,56167,64423,2502,NA,281698
+12,company-12,Power,GasCap,KZ,tCO2e,4155,112438,232841,218013,29689
+12,company-12,Power,GasCap,NL,tCO2e,NA,38182,92860,23773,100537
+12,company-12,Power,GasCap,FR,tCO2e,206565,112233,434879,317583,NA
+15,company-15,Power,OilCap,FR,tCO2e,34593,8028,20551,16278,47116
+15,company-15,Power,OilCap,KZ,tCO2e,41697,10186,253330,NA,255585
+15,company-15,Power,OilCap,NA,tCO2e,826,40883,32775,118019,19131
+15,company-15,Power,OilCap,NL,tCO2e,686,NA,65241,117584,22654
+20,company-20,Power,OilCap,BO,tCO2e,28125,18838,NA,NA,127501
+20,company-20,Power,OilCap,BN,tCO2e,96843,164693,143774,178401,113100
+20,company-20,Power,OilCap,KZ,tCO2e,60145,44777,58136,27563,5439
+32,company-32,Power,CoalCap,FR,tCO2e,NA,29777,29706,NA,NA
+32,company-32,Power,CoalCap,BN,tCO2e,16784,44633,31714,NA,19805
+33,company-33,Power,OilCap,NA,tCO2e,NA,37193,133867,NA,19439
+33,company-33,Power,OilCap,FR,tCO2e,33595,9689,184334,20682,11225
+34,company-34,Power,NuclearCap,FR,tCO2e,13997,NA,64466,55889,21394
+34,company-34,Power,NuclearCap,BO,tCO2e,122330,30853,NA,159940,13926
+37,company-37,Power,NuclearCap,NL,tCO2e,80327,183114,126237,140069,214718
+37,company-37,Power,NuclearCap,BN,tCO2e,150729,67836,NA,21821,56819
+37,company-37,Power,NuclearCap,FR,tCO2e,485121,144628,173947,NA,49926
+37,company-37,Power,NuclearCap,BO,tCO2e,73002,33837,110484,28373,NA
+38,company-38,Power,CoalCap,BN,tCO2e,86271,NA,275055,107092,305398
+38,company-38,Power,CoalCap,NA,tCO2e,28150,103332,47039,856,215125
+38,company-38,Power,CoalCap,NL,tCO2e,32334,NA,48814,66347,27439
+38,company-38,Power,CoalCap,KZ,tCO2e,113234,217868,NA,NA,NA
+39,company-39,Power,OilCap,BN,tCO2e,196510,11793,NA,41683,148993
+39,company-39,Power,OilCap,FR,tCO2e,104138,220219,NA,7849,NA
+39,company-39,Power,OilCap,NA,tCO2e,33942,103374,136578,88903,60489
+39,company-39,Power,OilCap,NL,tCO2e,11318,213075,32946,6853,1124
+39,company-39,Power,OilCap,BO,tCO2e,43145,NA,168246,30841,143437
+55,company-55,Power,RenewablesCap,KZ,tCO2e,111926,76091,NA,269518,NA
+55,company-55,Power,RenewablesCap,BN,tCO2e,76286,68391,283985,71408,NA
+55,company-55,Power,RenewablesCap,NL,tCO2e,NA,379715,283287,120610,54642
+55,company-55,Power,RenewablesCap,FR,tCO2e,102199,162765,93564,161101,NA
+56,company-56,Power,RenewablesCap,NL,tCO2e,49685,NA,78622,28975,102428
+56,company-56,Power,RenewablesCap,NA,tCO2e,71257,NA,13304,NA,299255
+56,company-56,Power,RenewablesCap,FR,tCO2e,71718,107726,NA,362874,43184
+56,company-56,Power,RenewablesCap,KZ,tCO2e,319955,NA,21469,33217,84621
+61,company-61,Power,HydroCap,NL,tCO2e,NA,163599,NA,944,NA
+61,company-61,Power,HydroCap,BO,tCO2e,NA,62574,141617,NA,NA
+69,company-69,Power,GasCap,NL,tCO2e,113592,371085,14867,422469,5412
+69,company-69,Power,GasCap,BO,tCO2e,375091,113846,154535,44267,NA
+75,company-75,Power,HydroCap,NA,tCO2e,382802,80325,23817,205816,NA
+76,company-76,Power,NuclearCap,BN,tCO2e,133625,55998,69103,115000,NA
+76,company-76,Power,NuclearCap,NL,tCO2e,40218,363082,37317,148247,13521
+76,company-76,Power,NuclearCap,BO,tCO2e,14007,177597,118395,NA,97496
+76,company-76,Power,NuclearCap,NA,tCO2e,12490,65183,NA,52486,55088
+76,company-76,Power,NuclearCap,KZ,tCO2e,127755,NA,59093,8856,601182
+84,company-84,Power,OilCap,BO,tCO2e,NA,39921,212425,325534,11257
+84,company-84,Power,OilCap,BN,tCO2e,96646,NA,245326,NA,58202
+84,company-84,Power,OilCap,NL,tCO2e,4388,17137,73691,107165,18109
+84,company-84,Power,OilCap,FR,tCO2e,NA,45522,18194,31055,7797
+90,company-90,Power,HydroCap,FR,tCO2e,NA,9074,50772,155408,16501
+91,company-91,Power,NuclearCap,FR,tCO2e,243210,30905,96394,319564,NA
+92,company-92,Power,CoalCap,NL,tCO2e,65241,39558,120177,85263,131750
+92,company-92,Power,CoalCap,NA,tCO2e,180459,211547,109607,69193,13227
+92,company-92,Power,CoalCap,BN,tCO2e,692,20879,3470,6212,NA
+97,company-97,Power,RenewablesCap,NL,tCO2e,120678,NA,198778,40121,124392
+97,company-97,Power,RenewablesCap,BN,tCO2e,NA,9009,79716,143598,30490
+98,company-98,Power,GasCap,KZ,tCO2e,NA,8767,5277,59872,75801
+1,company-1,Power,NuclearCap,FR,tCO2e,32867,68911,54723,27365,204090
+1,company-1,Power,NuclearCap,NA,tCO2e,119144,49354,NA,46554,8297
+1,company-1,Power,NuclearCap,BO,tCO2e,295020,17575,69625,37687,102408
+1,company-1,Power,NuclearCap,KZ,tCO2e,NA,62515,NA,NA,63619
+1,company-1,Power,NuclearCap,BN,tCO2e,134704,95030,NA,171195,1441
+2,company-2,Power,HydroCap,NL,tCO2e,11816,230991,2686,18933,139461
+2,company-2,Power,HydroCap,NA,tCO2e,180146,NA,18793,55660,99240
+2,company-2,Power,HydroCap,BO,tCO2e,NA,6690,NA,154441,65670
+9,company-9,Power,HydroCap,BN,tCO2e,96583,15334,29846,NA,129200
+9,company-9,Power,HydroCap,FR,tCO2e,167572,22199,39645,333576,86341
+9,company-9,Power,HydroCap,KZ,tCO2e,120411,116846,28984,344897,24144
+10,company-10,Power,NuclearCap,BO,tCO2e,62451,149820,15803,144937,NA
+10,company-10,Power,NuclearCap,NL,tCO2e,87487,15729,121101,36161,13001
+10,company-10,Power,NuclearCap,FR,tCO2e,239394,140894,412906,27452,256399
+22,company-22,Power,RenewablesCap,BO,tCO2e,167692,19376,178491,81640,169236
+22,company-22,Power,RenewablesCap,FR,tCO2e,217294,4805,32846,350279,NA
+27,company-27,Power,RenewablesCap,NA,tCO2e,28513,28213,56537,11501,42777
+27,company-27,Power,RenewablesCap,KZ,tCO2e,78581,203769,37282,24674,NA
+27,company-27,Power,RenewablesCap,BO,tCO2e,7796,46999,33444,99630,66764
+27,company-27,Power,RenewablesCap,FR,tCO2e,31200,107185,NA,34645,80603
+28,company-28,Power,RenewablesCap,BN,tCO2e,312025,7426,NA,16439,21770
+28,company-28,Power,RenewablesCap,BO,tCO2e,54970,NA,109928,NA,NA
+28,company-28,Power,RenewablesCap,FR,tCO2e,35110,168981,NA,25612,NA
+35,company-35,Power,RenewablesCap,KZ,tCO2e,92016,12950,135078,159935,67373
+35,company-35,Power,RenewablesCap,NA,tCO2e,34640,269296,79809,NA,NA
+35,company-35,Power,RenewablesCap,NL,tCO2e,85596,NA,45900,4080,170607
+35,company-35,Power,RenewablesCap,FR,tCO2e,NA,1042,NA,NA,83713
+40,company-40,Power,HydroCap,NL,tCO2e,NA,65980,155937,38691,57579
+41,company-41,Power,NuclearCap,NL,tCO2e,36228,36087,25863,1765,13039
+41,company-41,Power,NuclearCap,FR,tCO2e,29186,NA,NA,65421,28933
+43,company-43,Power,GasCap,NA,tCO2e,29216,NA,60311,53195,111747
+43,company-43,Power,GasCap,FR,tCO2e,906,154909,75190,6300,34501
+43,company-43,Power,GasCap,BO,tCO2e,236612,NA,115175,44381,50945
+53,company-53,Power,CoalCap,NA,tCO2e,74212,NA,142872,247361,15085
+53,company-53,Power,CoalCap,KZ,tCO2e,15367,310571,22366,NA,77345
+53,company-53,Power,CoalCap,NL,tCO2e,3158,82213,238277,29598,85416
+53,company-53,Power,CoalCap,BN,tCO2e,404360,42419,134089,NA,26286
+53,company-53,Power,CoalCap,FR,tCO2e,4985,195284,487193,29055,15745
+59,company-59,Power,RenewablesCap,NA,tCO2e,3001,67304,25010,52274,NA
+67,company-67,Power,NuclearCap,NL,tCO2e,106162,1978,NA,80311,51360
+67,company-67,Power,NuclearCap,FR,tCO2e,6561,209319,202506,NA,120274
+67,company-67,Power,NuclearCap,NA,tCO2e,83236,318958,NA,20496,57367
+68,company-68,Power,GasCap,BN,tCO2e,202300,NA,138337,NA,120120
+73,company-73,Power,RenewablesCap,BN,tCO2e,43252,24919,67763,28043,82079
+73,company-73,Power,RenewablesCap,FR,tCO2e,25291,214656,36378,43421,2679
+73,company-73,Power,RenewablesCap,NL,tCO2e,49835,194177,40170,8853,185196
+73,company-73,Power,RenewablesCap,BO,tCO2e,1128,107932,NA,NA,250901
+74,company-74,Power,CoalCap,BN,tCO2e,34280,22213,63039,20857,295210
+74,company-74,Power,CoalCap,FR,tCO2e,45004,76197,5210,318302,9337
+74,company-74,Power,CoalCap,BO,tCO2e,117319,99985,232423,41605,41467
+74,company-74,Power,CoalCap,NL,tCO2e,NA,61396,129601,93680,95410
+78,company-78,Power,NuclearCap,BN,tCO2e,44809,151446,52082,20126,110330
+78,company-78,Power,NuclearCap,BO,tCO2e,21018,NA,58403,62509,146319
+79,company-79,Power,GasCap,KZ,tCO2e,NA,236095,131359,NA,115393
+79,company-79,Power,GasCap,NL,tCO2e,54643,17738,NA,27590,16472
+79,company-79,Power,GasCap,BN,tCO2e,293092,107953,39309,156895,NA
+79,company-79,Power,GasCap,BO,tCO2e,57928,58792,457990,NA,62904
+79,company-79,Power,GasCap,FR,tCO2e,208005,66864,282456,88681,17419
+86,company-86,Power,GasCap,NA,tCO2e,24243,4556,32652,NA,NA
+86,company-86,Power,GasCap,KZ,tCO2e,1284,725,NA,NA,47
+93,company-93,Power,CoalCap,NA,tCO2e,NA,275101,81326,108095,38078
+93,company-93,Power,CoalCap,FR,tCO2e,263804,NA,15109,44587,390609
+93,company-93,Power,CoalCap,BN,tCO2e,270819,7101,59549,1506,147279
+93,company-93,Power,CoalCap,KZ,tCO2e,71,33680,20038,123699,62397
+95,company-95,Power,NuclearCap,NL,tCO2e,17945,202919,NA,NA,NA
+95,company-95,Power,NuclearCap,BN,tCO2e,86463,153177,317697,39615,44746
+1,company-1,Power,OilCap,ZA,tCO2e,63626,66786,135580,68174,103551
+1,company-1,Power,OilCap,DE,tCO2e,26101,72451,61307,138363,70794
+1,company-1,Power,OilCap,LK,tCO2e,161973,84700,NA,116003,48295
+1,company-1,Power,RenewablesCap,LK,tCO2e,18868,7020,134329,61079,159717
+1,company-1,Steel,Electric Arc Furnace,JO,tCO2e,139847,91351,241748,31595,227858
+1,company-1,Steel,Electric Arc Furnace,ZA,tCO2e,125291,123279,78344,120637,364635
+1,company-1,Steel,Electric Arc Furnace,FJ,tCO2e,314046,129830,NA,23897,94484
+1,company-1,Steel,Electric Arc Furnace,LK,tCO2e,118467,NA,216589,255332,125701
+2,company-2,Steel,Open Hearth Furnace,CX,tCO2e,165179,71280,113612,150129,77945
+2,company-2,Steel,Open Hearth Furnace,FJ,tCO2e,119629,22290,21465,21944,97876
+2,company-2,Automotive,Electric,JO,tCO2,8218,10082,NA,464053,50879
+2,company-2,Automotive,Electric,LK,tCO2,NA,77974,22486,13290,85427
+2,company-2,Automotive,Electric,FJ,tCO2,243237,33829,110678,NA,76560
+2,company-2,Automotive,Electric,ZA,tCO2,NA,11799,111996,201777,52773
+2,company-2,Automotive,Electric,DE,tCO2,39239,65447,57076,99515,61192
+2,company-2,Power,NuclearCap,FJ,tCO2e,161836,132192,116898,66701,55785
+2,company-2,Power,NuclearCap,CX,tCO2e,NA,NA,NA,65240,56444
+2,company-2,Power,NuclearCap,JO,tCO2e,331423,118945,310133,11189,31085
+2,company-2,Power,NuclearCap,LK,tCO2e,111662,NA,14291,NA,100205
+2,company-2,Power,NuclearCap,ZA,tCO2e,145164,165073,105354,17596,56035
+3,company-3,Power,CoalCap,JO,tCO2e,NA,132382,56172,96449,84479
+3,company-3,Power,CoalCap,DE,tCO2e,264789,175304,7416,173247,9300
+3,company-3,Power,GasCap,JO,tCO2e,NA,178603,178912,82691,21045
+3,company-3,Power,GasCap,ZA,tCO2e,98898,40452,NA,152235,126120
+3,company-3,Steel,Electric Arc Furnace,JO,tCO2e,NA,50328,139872,295648,61105
+3,company-3,Steel,Electric Arc Furnace,CX,tCO2e,267128,NA,207375,57346,2144
+3,company-3,Steel,Electric Arc Furnace,ZA,tCO2e,251327,NA,251785,610,60856
+4,company-4,Shipping,Freight,FJ,tCO2,37913,59658,NA,8360,23211
+4,company-4,Power,OilCap,LK,tCO2e,48436,NA,120779,NA,89430
+4,company-4,Power,OilCap,FJ,tCO2e,27524,17878,64752,240976,518653
+4,company-4,Power,OilCap,CX,tCO2e,67219,39352,41020,NA,66624
+4,company-4,Power,OilCap,DE,tCO2e,112124,156370,10530,23546,NA
+4,company-4,Power,HydroCap,JO,tCO2e,86566,478321,10615,139449,NA
+5,company-5,Power,GasCap,DE,tCO2e,NA,NA,23788,19943,54136
+5,company-5,Power,GasCap,CX,tCO2e,311112,5407,5575,NA,60925
+5,company-5,Power,GasCap,LK,tCO2e,112023,NA,50359,36958,77191
+5,company-5,Power,GasCap,FJ,tCO2e,NA,8616,147716,323040,1659
+5,company-5,Power,GasCap,ZA,tCO2e,15789,53450,78465,48190,119928
+5,company-5,Steel,Electric Arc Furnace,ZA,tCO2e,NA,17311,204792,40618,42902
+5,company-5,Steel,Electric Arc Furnace,JO,tCO2e,95853,174175,23481,52577,NA
+5,company-5,Steel,Electric Arc Furnace,DE,tCO2e,14338,59318,69459,365062,38352
+5,company-5,Steel,Electric Arc Furnace,LK,tCO2e,46814,117284,109758,120966,6551
+5,company-5,Steel,Electric Arc Furnace,CX,tCO2e,133768,55072,118963,76786,NA
+5,company-5,Power,CoalCap,FJ,tCO2e,4659,92629,17184,121022,7945
+6,company-6,Automotive,Electric,CX,tCO2,9991,27308,78522,73427,NA
+6,company-6,Power,GasCap,DE,tCO2e,93496,105614,43024,157905,190362
+6,company-6,Power,GasCap,JO,tCO2e,266432,58117,58166,129641,36325
+6,company-6,Power,GasCap,CX,tCO2e,243043,217633,2300,123425,NA
+6,company-6,Power,GasCap,LK,tCO2e,1268,116086,NA,17006,91929
+6,company-6,Power,GasCap,ZA,tCO2e,76232,NA,50566,36993,41399
+6,company-6,Power,RenewablesCap,ZA,tCO2e,173603,161950,91524,NA,27766
+6,company-6,Power,RenewablesCap,FJ,tCO2e,91026,105804,48264,95427,152650
+6,company-6,Power,RenewablesCap,LK,tCO2e,21945,NA,24180,27519,37979
+6,company-6,Power,RenewablesCap,CX,tCO2e,NA,313091,NA,224472,49076
+7,company-7,Power,NuclearCap,ZA,tCO2e,269954,118424,67428,51527,15575
+7,company-7,Power,NuclearCap,FJ,tCO2e,19297,1464,153192,4445,72749
+7,company-7,Aviation,Passenger,FJ,tCO2,NA,21464,48126,NA,191019
+7,company-7,Aviation,Passenger,JO,tCO2,58763,51250,9770,65022,36827
+7,company-7,Power,GasCap,LK,tCO2e,223402,26601,104229,30598,65631
+7,company-7,Power,GasCap,CX,tCO2e,14602,NA,58168,NA,178327
+7,company-7,Power,GasCap,JO,tCO2e,NA,83096,NA,70710,NA
+7,company-7,Power,GasCap,ZA,tCO2e,19899,144471,64837,NA,854
+7,company-7,Power,GasCap,FJ,tCO2e,533513,275165,7264,NA,93307
+8,company-8,Power,GasCap,JO,tCO2e,97729,NA,29350,165524,69540
+8,company-8,Power,GasCap,DE,tCO2e,48704,148902,52964,15395,213385
+8,company-8,Power,GasCap,CX,tCO2e,NA,62128,34180,45700,31882
+8,company-8,Power,GasCap,FJ,tCO2e,4212,77196,69824,16507,20383
+8,company-8,Power,CoalCap,JO,tCO2e,32337,142355,11011,75959,39287
+8,company-8,Power,CoalCap,FJ,tCO2e,238114,75909,54268,165418,19618
+8,company-8,Aviation,Freight,ZA,tCO2,NA,54100,NA,250716,NA
+8,company-8,Aviation,Freight,LK,tCO2,35101,19169,NA,105907,25230
+8,company-8,Aviation,Freight,JO,tCO2,NA,51387,72268,55812,280
+8,company-8,Aviation,Freight,FJ,tCO2,32857,NA,107844,61200,118877
+9,company-9,Automotive,FuelCell,JO,tCO2,16928,301437,NA,215822,101145
+9,company-9,Automotive,FuelCell,DE,tCO2,228852,72799,97366,418597,NA
+9,company-9,Power,RenewablesCap,LK,tCO2e,166085,358914,214508,379793,NA
+9,company-9,Power,RenewablesCap,DE,tCO2e,279258,9543,49420,155644,108877
+9,company-9,Automotive,Electric,LK,tCO2,NA,95330,196286,NA,88684
+9,company-9,Automotive,Electric,FJ,tCO2,493361,11396,176067,19903,14575
+9,company-9,Automotive,Electric,CX,tCO2,143936,NA,NA,84618,84269
+9,company-9,Automotive,Electric,ZA,tCO2,245201,71346,114889,95952,99060
+9,company-9,Automotive,Electric,DE,tCO2,NA,106162,45753,99791,4451
+10,company-10,Power,RenewablesCap,DE,tCO2e,39093,109960,22102,42691,15992
+10,company-10,Power,RenewablesCap,ZA,tCO2e,32690,NA,35922,39270,65587
+10,company-10,Power,RenewablesCap,JO,tCO2e,108607,36276,39732,105245,38095
+10,company-10,Power,RenewablesCap,FJ,tCO2e,22947,6499,36430,35223,NA
+10,company-10,Power,RenewablesCap,CX,tCO2e,24064,32762,77278,NA,29772
+10,company-10,Steel,Basic Oxygen Furnace,ZA,tCO2e,129387,77606,NA,119837,NA
+10,company-10,Steel,Basic Oxygen Furnace,LK,tCO2e,12258,161577,76154,188592,132183
+10,company-10,Steel,Basic Oxygen Furnace,CX,tCO2e,142451,NA,184033,53842,183077
+10,company-10,Steel,Basic Oxygen Furnace,DE,tCO2e,50462,NA,17174,16474,98826
+10,company-10,Steel,Basic Oxygen Furnace,FJ,tCO2e,99496,59490,99941,NA,48689
+10,company-10,Power,GasCap,CX,tCO2e,NA,9466,3023,19814,NA
+10,company-10,Power,GasCap,DE,tCO2e,125613,27289,186943,2586,9935
+10,company-10,Power,GasCap,FJ,tCO2e,NA,111285,183034,60734,182054
+10,company-10,Power,GasCap,LK,tCO2e,17157,44890,178029,3218,NA
+10,company-10,Power,GasCap,JO,tCO2e,211285,183961,173574,172146,NA
+11,company-11,Steel,Basic Oxygen Furnace,JO,tCO2e,13466,170238,NA,9304,27725
+11,company-11,Steel,Basic Oxygen Furnace,FJ,tCO2e,17483,381787,197603,41353,126794
+11,company-11,Steel,Open Hearth Furnace,DE,tCO2e,108890,NA,148115,27362,7645
+11,company-11,Steel,Open Hearth Furnace,ZA,tCO2e,201475,38762,108941,123384,32229
+11,company-11,Steel,Open Hearth Furnace,CX,tCO2e,113895,43443,65633,NA,55846
+11,company-11,Steel,Open Hearth Furnace,JO,tCO2e,123904,27510,42061,207323,79651
+11,company-11,Power,HydroCap,CX,tCO2e,9559,11566,NA,NA,28666
+11,company-11,Power,HydroCap,FJ,tCO2e,11399,NA,120605,NA,1130
+11,company-11,Power,HydroCap,JO,tCO2e,161077,148143,NA,166935,233823
+12,company-12,Shipping,Passenger,FJ,tCO2,86396,186038,NA,233763,49060
+12,company-12,Shipping,Passenger,ZA,tCO2,NA,162687,94204,185712,64425
+12,company-12,Shipping,Passenger,JO,tCO2,52011,9438,73536,185343,72535
+12,company-12,Shipping,Passenger,DE,tCO2,NA,3933,93215,117701,16209
+12,company-12,Shipping,Passenger,LK,tCO2,91581,240120,37081,21932,NA
+12,company-12,Power,NuclearCap,ZA,tCO2e,48134,82458,89425,71684,74640
+12,company-12,Power,NuclearCap,JO,tCO2e,NA,23578,114745,13340,49407
+12,company-12,Power,NuclearCap,DE,tCO2e,182342,179365,33590,NA,34666
+12,company-12,Power,NuclearCap,CX,tCO2e,24486,40003,27187,31701,NA
+12,company-12,Cement,Integrated facility,FJ,tCO2e,19621,92336,29520,156731,123376
+12,company-12,Cement,Integrated facility,LK,tCO2e,110289,491379,146364,204656,352345
+12,company-12,Cement,Integrated facility,DE,tCO2e,NA,NA,NA,23127,NA
+13,company-13,Oil&Gas,Oil,ZA,tCO2e,76890,394729,9432,88033,40037
+13,company-13,Oil&Gas,Oil,JO,tCO2e,14734,NA,12371,30704,271542
+13,company-13,Oil&Gas,Oil,DE,tCO2e,126396,NA,NA,NA,NA
+13,company-13,Oil&Gas,Oil,CX,tCO2e,51976,100197,181428,19025,180497
+13,company-13,Aviation,Freight,LK,tCO2,157837,46849,19336,NA,211055
+13,company-13,Aviation,Freight,JO,tCO2,NA,77853,148292,21845,NA
+13,company-13,Aviation,Freight,DE,tCO2,21206,27590,2437,13331,80357
+13,company-13,Coal,Coal,ZA,tCO2e,153444,NA,67947,NA,36209
+13,company-13,Coal,Coal,JO,tCO2e,27336,NA,NA,208537,16452
+14,company-14,Power,NuclearCap,CX,tCO2e,NA,NA,NA,29243,45132
+14,company-14,Power,NuclearCap,ZA,tCO2e,109779,39975,14338,83109,62302
+14,company-14,Power,NuclearCap,DE,tCO2e,39965,97221,99944,33928,233541
+14,company-14,Power,NuclearCap,JO,tCO2e,46425,45772,73403,8953,47736
+14,company-14,Coal,Coal,ZA,tCO2e,46890,366082,256497,NA,421303
+14,company-14,Coal,Coal,CX,tCO2e,NA,72432,183341,35253,NA
+14,company-14,Coal,Coal,FJ,tCO2e,28092,111348,36977,247958,NA
+14,company-14,Coal,Coal,JO,tCO2e,169626,181982,66915,129196,188787
+14,company-14,Power,RenewablesCap,ZA,tCO2e,41640,28320,NA,NA,19185
+14,company-14,Power,RenewablesCap,LK,tCO2e,NA,64386,334269,NA,NA
+14,company-14,Power,RenewablesCap,FJ,tCO2e,40651,NA,185721,18488,38994
+14,company-14,Power,RenewablesCap,CX,tCO2e,32530,126803,209977,105810,102115
+15,company-15,Power,GasCap,JO,tCO2e,47581,292988,174366,NA,260078
+15,company-15,Power,GasCap,LK,tCO2e,NA,56178,NA,102219,88687
+15,company-15,Power,GasCap,ZA,tCO2e,5778,NA,NA,NA,133952
+15,company-15,Power,GasCap,FJ,tCO2e,NA,165312,110777,80969,32817
+15,company-15,Power,GasCap,DE,tCO2e,40461,31679,NA,NA,NA
+15,company-15,Power,HydroCap,JO,tCO2e,NA,89341,NA,196492,177169
+15,company-15,Power,HydroCap,FJ,tCO2e,2385,NA,10235,216508,NA
+15,company-15,Power,HydroCap,CX,tCO2e,81735,86029,55516,162147,114327
+15,company-15,Power,HydroCap,LK,tCO2e,42698,31766,18475,28882,77157
+15,company-15,Power,HydroCap,ZA,tCO2e,NA,75570,NA,NA,246757
+15,company-15,Power,OilCap,CX,tCO2e,153967,33852,75375,84461,163913
+15,company-15,Power,OilCap,LK,tCO2e,NA,117922,358854,25891,45347
+15,company-15,Power,OilCap,JO,tCO2e,NA,NA,73112,8848,42398
+15,company-15,Power,OilCap,FJ,tCO2e,133109,NA,48766,2327,88622
+15,company-15,Power,OilCap,ZA,tCO2e,NA,61779,NA,16479,40430
+16,company-16,Power,GasCap,FJ,tCO2e,55229,15946,231043,108544,2682
+16,company-16,Power,GasCap,LK,tCO2e,27326,NA,6440,53799,111439
+16,company-16,Oil&Gas,Gas,LK,tCO2e,NA,760,341,57936,192747
+16,company-16,Oil&Gas,Gas,CX,tCO2e,100268,52822,158193,47647,4753
+16,company-16,Oil&Gas,Gas,DE,tCO2e,197133,35563,NA,41387,10483
+16,company-16,Coal,Coal,ZA,tCO2e,54780,135188,23285,42297,8299
+16,company-16,Coal,Coal,DE,tCO2e,5799,18550,NA,37469,NA
+16,company-16,Coal,Coal,FJ,tCO2e,96273,62577,122373,156571,91929
+17,company-17,Automotive,FuelCell,ZA,tCO2,22720,35675,17908,185254,17531
+17,company-17,Automotive,FuelCell,DE,tCO2,69195,19663,80401,86277,108900
+17,company-17,Automotive,FuelCell,JO,tCO2,40013,118821,305962,NA,81912
+17,company-17,Power,RenewablesCap,FJ,tCO2e,26625,20741,74374,459109,51109
+17,company-17,Power,RenewablesCap,CX,tCO2e,115894,204878,55014,27378,11028
+17,company-17,Power,CoalCap,LK,tCO2e,NA,145349,113464,10878,13919
+17,company-17,Power,CoalCap,ZA,tCO2e,166787,74048,NA,67906,144344
+18,company-18,Cement,Integrated facility,FJ,tCO2e,8324,44158,24635,NA,85224
+18,company-18,Cement,Integrated facility,JO,tCO2e,NA,NA,105702,78140,120876
+18,company-18,Cement,Integrated facility,LK,tCO2e,18584,61318,286324,191601,77061
+18,company-18,Cement,Integrated facility,DE,tCO2e,164230,NA,117516,20947,186662
+18,company-18,Cement,Integrated facility,CX,tCO2e,NA,234888,1133,32748,48619
+18,company-18,Automotive,ICE,ZA,tCO2,NA,77707,123903,74430,NA
+18,company-18,Automotive,ICE,DE,tCO2,72011,184120,NA,65882,NA
+18,company-18,Power,GasCap,CX,tCO2e,NA,142335,7931,NA,44478
+19,company-19,Power,RenewablesCap,LK,tCO2e,80131,161253,NA,175047,NA
+19,company-19,Power,RenewablesCap,JO,tCO2e,17514,86825,72288,NA,NA
+19,company-19,Oil&Gas,Oil,ZA,tCO2e,26503,68511,NA,158168,75450
+19,company-19,Aviation,Freight,FJ,tCO2,113381,30004,52111,178390,54198
+19,company-19,Aviation,Freight,ZA,tCO2,NA,NA,64967,NA,103273
+19,company-19,Aviation,Freight,LK,tCO2,210341,42435,111455,39790,11714
+19,company-19,Aviation,Freight,CX,tCO2,52538,6607,132558,106328,125163
+19,company-19,Aviation,Freight,DE,tCO2,13851,65293,319520,271162,NA
+20,company-20,Power,NuclearCap,DE,tCO2e,27290,183127,21531,1375,74811
+20,company-20,Power,NuclearCap,CX,tCO2e,NA,NA,205704,114899,171191
+20,company-20,Power,NuclearCap,FJ,tCO2e,4079,82058,13265,321496,88771
+20,company-20,Power,NuclearCap,JO,tCO2e,93292,NA,11377,161114,265866
+20,company-20,Power,HydroCap,LK,tCO2e,127041,NA,NA,NA,57765
+20,company-20,Shipping,Freight,ZA,tCO2,200356,379591,75336,NA,136462
+20,company-20,Shipping,Freight,CX,tCO2,NA,101051,NA,NA,170657
+20,company-20,Shipping,Freight,DE,tCO2,110157,58875,120172,253397,NA
+20,company-20,Shipping,Freight,LK,tCO2,NA,89954,898,40012,128127
+21,company-21,Power,GasCap,LK,tCO2e,62053,NA,204185,196952,1858
+21,company-21,Power,GasCap,FJ,tCO2e,104094,342027,145425,76770,7900
+21,company-21,Power,OilCap,DE,tCO2e,22124,3108,437120,92924,96439
+21,company-21,Power,OilCap,LK,tCO2e,14022,140706,25708,52753,49813
+21,company-21,Power,OilCap,CX,tCO2e,NA,61696,4796,7886,79208
+21,company-21,Automotive,ICE,ZA,tCO2,25436,417356,28880,47322,4616
+21,company-21,Automotive,ICE,CX,tCO2,126603,64614,93066,105524,NA
+22,company-22,Coal,Coal,ZA,tCO2e,165810,NA,22556,164819,298687
+22,company-22,Coal,Coal,LK,tCO2e,82912,174302,137499,54924,191947
+22,company-22,Coal,Coal,FJ,tCO2e,154731,NA,137019,NA,55254
+22,company-22,Coal,Coal,DE,tCO2e,2091,185636,79350,70996,NA
+22,company-22,Coal,Coal,CX,tCO2e,39448,NA,40610,138358,26006
+22,company-22,Power,GasCap,JO,tCO2e,641822,16527,45378,116514,NA
+22,company-22,Automotive,ICE,JO,tCO2,279183,11055,NA,1078,12851
+22,company-22,Automotive,ICE,LK,tCO2,NA,134542,324857,NA,NA
+22,company-22,Automotive,ICE,FJ,tCO2,245565,36657,NA,NA,60145
+22,company-22,Automotive,ICE,DE,tCO2,NA,22450,272,58581,41491
+23,company-23,Power,OilCap,FJ,tCO2e,137165,52422,252255,53419,238210
+23,company-23,Power,OilCap,DE,tCO2e,139389,491035,57262,28103,244967
+23,company-23,Power,OilCap,JO,tCO2e,189249,65617,152699,NA,77977
+23,company-23,Power,OilCap,ZA,tCO2e,35796,91134,28858,423159,60050
+23,company-23,Power,OilCap,LK,tCO2e,99937,108947,168430,48759,34251
+23,company-23,Automotive,Electric,JO,tCO2,16030,NA,155346,107551,19017
+23,company-23,Steel,Basic Oxygen Furnace,JO,tCO2e,82801,56399,18585,NA,255738
+24,company-24,Power,NuclearCap,FJ,tCO2e,111824,28487,28234,105076,NA
+24,company-24,Power,NuclearCap,JO,tCO2e,21736,29260,160365,39736,NA
+24,company-24,Automotive,FuelCell,CX,tCO2,127010,225389,197093,10086,7301
+24,company-24,Automotive,FuelCell,ZA,tCO2,170947,301401,NA,55295,9635
+24,company-24,Shipping,Passenger,LK,tCO2,119354,NA,164046,124713,210939
+24,company-24,Shipping,Passenger,JO,tCO2,25775,23831,NA,7337,116518
+25,company-25,Power,OilCap,DE,tCO2e,163822,NA,46985,271053,41525
+25,company-25,Power,OilCap,ZA,tCO2e,132254,36953,7664,445556,64673
+25,company-25,Power,OilCap,FJ,tCO2e,NA,NA,NA,329115,101831
+25,company-25,Power,OilCap,JO,tCO2e,27384,116508,60471,517440,93936
+25,company-25,Power,CoalCap,FJ,tCO2e,9995,NA,48460,192714,253491
+25,company-25,Power,CoalCap,DE,tCO2e,20784,22681,195007,348661,NA
+25,company-25,Power,CoalCap,CX,tCO2e,142642,102220,146491,NA,NA
+25,company-25,Power,CoalCap,FJ,tCO2e,17104,13715,NA,463993,9927
+26,company-26,Steel,Electric Arc Furnace,CX,tCO2e,NA,9532,74660,14648,103725
+26,company-26,Power,RenewablesCap,ZA,tCO2e,NA,56725,NA,171850,117733
+26,company-26,Power,RenewablesCap,DE,tCO2e,9204,6376,15085,160640,NA
+26,company-26,Power,RenewablesCap,CX,tCO2e,NA,NA,202417,NA,35253
+26,company-26,Power,RenewablesCap,LK,tCO2e,NA,NA,12757,37071,90181
+26,company-26,Power,RenewablesCap,JO,tCO2e,69093,145212,115937,24884,NA
+26,company-26,Power,OilCap,LK,tCO2e,3541,12896,272214,48191,104625
+26,company-26,Power,OilCap,FJ,tCO2e,2480,32858,92173,NA,275136
+26,company-26,Power,OilCap,ZA,tCO2e,NA,6354,812,109502,28374
+27,company-27,Power,RenewablesCap,JO,tCO2e,91294,72808,25455,122780,83977
+27,company-27,Power,NuclearCap,CX,tCO2e,NA,81517,NA,NA,22759
+27,company-27,Automotive,ICE,CX,tCO2,NA,109683,46285,67138,74837
+27,company-27,Automotive,ICE,DE,tCO2,NA,30808,NA,9168,27594
+27,company-27,Automotive,ICE,LK,tCO2,10656,38212,20435,11155,34447
+27,company-27,Automotive,ICE,FJ,tCO2,NA,681316,NA,79175,NA
+27,company-27,Automotive,ICE,ZA,tCO2,NA,NA,163141,52242,149867
+28,company-28,Shipping,Passenger,DE,tCO2,13864,9308,167665,127024,NA
+28,company-28,Shipping,Passenger,LK,tCO2,15343,115886,30948,72532,6191
+28,company-28,Shipping,Passenger,ZA,tCO2,70205,NA,66100,NA,46709
+28,company-28,Shipping,Passenger,JO,tCO2,18179,NA,126666,125527,61865
+28,company-28,Power,GasCap,CX,tCO2e,NA,43163,81619,161076,144096
+28,company-28,Power,NuclearCap,DE,tCO2e,77362,254409,125432,NA,43989
+28,company-28,Power,NuclearCap,ZA,tCO2e,NA,176392,36182,3130,154950
+28,company-28,Power,NuclearCap,FJ,tCO2e,72235,NA,NA,50703,NA
+28,company-28,Power,NuclearCap,CX,tCO2e,56060,102683,486918,362924,5161
+29,company-29,Cement,Integrated facility,CX,tCO2e,457067,275460,5411,2693,104113
+29,company-29,Cement,Integrated facility,DE,tCO2e,28254,122325,90767,NA,NA
+29,company-29,Cement,Integrated facility,ZA,tCO2e,95340,NA,2784,56520,20824
+29,company-29,Power,HydroCap,ZA,tCO2e,80658,98428,99487,NA,106880
+29,company-29,Power,HydroCap,FJ,tCO2e,39655,63589,75451,335975,41722
+29,company-29,Power,HydroCap,DE,tCO2e,171698,24926,NA,73052,NA
+29,company-29,Power,HydroCap,JO,tCO2e,18393,55413,216493,289938,37935
+29,company-29,Automotive,Electric,JO,tCO2,53640,NA,20681,7365,239836
+29,company-29,Automotive,Electric,LK,tCO2,188889,44377,14133,NA,NA
+30,company-30,Power,CoalCap,LK,tCO2e,NA,NA,22739,246632,NA
+30,company-30,Power,OilCap,LK,tCO2e,6243,118437,19233,75484,133728
+30,company-30,Power,OilCap,ZA,tCO2e,269487,59504,NA,24407,106688
+30,company-30,Power,NuclearCap,LK,tCO2e,9202,234826,37236,238216,29820
+30,company-30,Power,NuclearCap,DE,tCO2e,32030,130886,49588,62204,30451
+30,company-30,Power,NuclearCap,JO,tCO2e,233197,2824,132902,56427,5155
+30,company-30,Power,NuclearCap,CX,tCO2e,93345,287174,188630,31179,76876
+31,company-31,Steel,Basic Oxygen Furnace,FJ,tCO2e,146134,48345,722,91704,441145
+31,company-31,Steel,Basic Oxygen Furnace,ZA,tCO2e,42259,NA,94699,48598,38168
+31,company-31,Power,NuclearCap,ZA,tCO2e,NA,6058,9584,NA,156095
+31,company-31,Power,NuclearCap,JO,tCO2e,281963,44164,112441,NA,62082
+31,company-31,Power,NuclearCap,CX,tCO2e,237302,NA,23440,NA,40176
+31,company-31,Power,NuclearCap,LK,tCO2e,14816,17138,166261,18992,2858
+31,company-31,Power,NuclearCap,DE,tCO2e,28232,NA,112557,81022,38863
+31,company-31,Oil&Gas,Gas,DE,tCO2e,59386,98250,89638,NA,NA
+31,company-31,Oil&Gas,Gas,JO,tCO2e,109336,7972,335656,341318,111638
+31,company-31,Oil&Gas,Gas,LK,tCO2e,NA,2939,4309,196037,84694
+32,company-32,Aviation,Passenger,LK,tCO2,8290,NA,68546,272780,234816
+32,company-32,Aviation,Passenger,CX,tCO2,112286,NA,NA,20286,327
+32,company-32,Aviation,Passenger,DE,tCO2,53018,166543,52792,NA,204245
+32,company-32,Aviation,Passenger,JO,tCO2,37578,26140,153445,288607,30669
+32,company-32,Automotive,Hybrid,FJ,tCO2,156173,NA,42795,176365,NA
+32,company-32,Automotive,Hybrid,DE,tCO2,147557,147605,413468,45931,1565
+32,company-32,Steel,Basic Oxygen Furnace,LK,tCO2e,64191,22032,453777,29719,32361
+32,company-32,Steel,Basic Oxygen Furnace,FJ,tCO2e,NA,32260,NA,NA,24658
+33,company-33,Power,OilCap,CX,tCO2e,40626,83119,4470,49768,71549
+33,company-33,Power,OilCap,DE,tCO2e,67212,75311,NA,NA,90979
+33,company-33,Power,NuclearCap,CX,tCO2e,NA,61703,344440,NA,216498
+33,company-33,Power,NuclearCap,LK,tCO2e,193193,NA,210169,9679,284487
+33,company-33,Power,NuclearCap,DE,tCO2e,115051,102522,127524,30862,1190
+33,company-33,Power,NuclearCap,ZA,tCO2e,5590,152246,243380,26750,44872
+33,company-33,Power,NuclearCap,FJ,tCO2e,32237,50373,14904,211652,273584
+33,company-33,Shipping,Passenger,CX,tCO2,NA,64093,NA,3152,40333
+33,company-33,Shipping,Passenger,ZA,tCO2,14121,86012,NA,NA,66638
+33,company-33,Shipping,Passenger,JO,tCO2,127453,NA,157828,212181,NA
+34,company-34,Oil&Gas,Gas,FJ,tCO2e,NA,6962,94077,39531,NA
+34,company-34,Coal,Coal,FJ,tCO2e,NA,63207,49296,17836,27577
+34,company-34,Coal,Coal,JO,tCO2e,337401,86611,372377,76109,32839
+34,company-34,Coal,Coal,CX,tCO2e,186794,394,NA,NA,14212
+34,company-34,Steel,Open Hearth Furnace,CX,tCO2e,NA,38912,5244,127856,7974
+34,company-34,Steel,Open Hearth Furnace,ZA,tCO2e,1455,110565,125062,32865,16747
+34,company-34,Steel,Open Hearth Furnace,DE,tCO2e,101368,43980,271919,28607,5179
+34,company-34,Steel,Open Hearth Furnace,FJ,tCO2e,321792,NA,59017,NA,129916
+34,company-34,Steel,Open Hearth Furnace,JO,tCO2e,12293,21803,112922,51855,17043
+35,company-35,Power,HydroCap,DE,tCO2e,80675,NA,14769,106234,168462
+35,company-35,Power,CoalCap,FJ,tCO2e,166590,50831,243969,43026,93839
+35,company-35,Power,CoalCap,LK,tCO2e,NA,NA,NA,NA,31010
+35,company-35,Power,CoalCap,CX,tCO2e,5285,NA,56510,13373,11039
+35,company-35,Power,CoalCap,DE,tCO2e,216543,193711,2157,108082,46235
+35,company-35,Steel,Open Hearth Furnace,ZA,tCO2e,132749,112398,18830,147876,NA
+35,company-35,Steel,Open Hearth Furnace,CX,tCO2e,124895,16533,266314,NA,80188
+36,company-36,Automotive,FuelCell,DE,tCO2,76177,NA,27105,11826,22150
+36,company-36,Automotive,FuelCell,ZA,tCO2,NA,81701,112117,84896,15075
+36,company-36,Automotive,FuelCell,JO,tCO2,178276,2741,NA,101334,36679
+36,company-36,Automotive,FuelCell,CX,tCO2,NA,138401,10175,343148,114865
+36,company-36,Automotive,ICE,DE,tCO2,NA,94357,430177,NA,136724
+36,company-36,Automotive,ICE,CX,tCO2,62402,NA,NA,41393,15237
+36,company-36,Automotive,ICE,ZA,tCO2,128211,NA,86246,238430,30420
+36,company-36,Automotive,ICE,LK,tCO2,205480,165414,20718,242748,420943
+36,company-36,Power,CoalCap,CX,tCO2e,17244,214368,150404,116740,105523
+36,company-36,Power,CoalCap,DE,tCO2e,122736,NA,NA,1292,NA
+36,company-36,Power,CoalCap,FJ,tCO2e,26267,5776,103699,99293,NA
+36,company-36,Power,CoalCap,JO,tCO2e,NA,15759,NA,45979,32669
+37,company-37,Shipping,Freight,DE,tCO2,206484,263884,126481,157761,88945
+37,company-37,Shipping,Freight,FJ,tCO2,52638,2558,34306,160681,38027
+37,company-37,Steel,Electric Arc Furnace,CX,tCO2e,NA,310347,85109,56671,NA
+37,company-37,Steel,Electric Arc Furnace,FJ,tCO2e,NA,29304,157578,79806,14704
+37,company-37,Steel,Electric Arc Furnace,ZA,tCO2e,NA,NA,15043,42009,28954
+37,company-37,Power,NuclearCap,CX,tCO2e,402071,11454,149701,111650,NA
+37,company-37,Power,NuclearCap,JO,tCO2e,200524,200666,92569,5879,217965
+37,company-37,Power,NuclearCap,LK,tCO2e,293114,NA,81288,NA,63856
+38,company-38,Power,NuclearCap,JO,tCO2e,39080,101199,NA,19574,254704
+38,company-38,Power,NuclearCap,DE,tCO2e,52648,NA,232614,11679,124470
+38,company-38,Power,NuclearCap,CX,tCO2e,NA,10692,145362,62628,143660
+38,company-38,Power,CoalCap,CX,tCO2e,61515,7007,NA,86934,56761
+38,company-38,Power,CoalCap,FJ,tCO2e,28950,NA,37168,54004,28622
+38,company-38,Power,CoalCap,LK,tCO2e,46013,9775,NA,NA,5765
+38,company-38,Power,HydroCap,LK,tCO2e,102576,NA,452664,251584,95764
+38,company-38,Power,HydroCap,CX,tCO2e,44409,NA,62182,NA,253505
+38,company-38,Power,HydroCap,FJ,tCO2e,77440,NA,82430,77659,NA
+38,company-38,Power,HydroCap,ZA,tCO2e,25418,517948,36142,38631,77049
+38,company-38,Power,HydroCap,JO,tCO2e,22798,108367,NA,76654,NA
+39,company-39,Power,HydroCap,DE,tCO2e,NA,NA,966,NA,37388
+39,company-39,Power,HydroCap,JO,tCO2e,21629,78014,77851,62608,73234
+39,company-39,Power,HydroCap,LK,tCO2e,36718,200451,7874,NA,NA
+39,company-39,Power,GasCap,CX,tCO2e,NA,38810,NA,471,19831
+39,company-39,Power,GasCap,LK,tCO2e,NA,489461,130765,NA,38687
+39,company-39,Automotive,FuelCell,JO,tCO2,NA,6990,279058,228552,427315
+39,company-39,Automotive,FuelCell,CX,tCO2,17958,64549,NA,149533,234091
+40,company-40,Automotive,FuelCell,CX,tCO2,298985,35341,5417,300070,91471
+40,company-40,Automotive,FuelCell,ZA,tCO2,NA,11197,6787,1821,302684
+40,company-40,Automotive,FuelCell,JO,tCO2,NA,83101,17522,275962,76110
+40,company-40,Automotive,Electric,ZA,tCO2,NA,214426,131117,NA,104897
+40,company-40,Automotive,Electric,CX,tCO2,206962,NA,6515,46023,292582
+40,company-40,Automotive,Electric,JO,tCO2,9874,66982,48736,30556,23469
+40,company-40,Power,NuclearCap,FJ,tCO2e,25012,65556,196600,55056,NA
+40,company-40,Power,NuclearCap,DE,tCO2e,NA,NA,94603,56182,NA
+40,company-40,Power,NuclearCap,CX,tCO2e,NA,NA,179268,28060,NA
+40,company-40,Power,NuclearCap,JO,tCO2e,2129,3572,143152,76342,58840
+41,company-41,Cement,Integrated facility,FJ,tCO2e,55075,164999,NA,224527,18762
+41,company-41,Cement,Integrated facility,LK,tCO2e,44489,4879,115786,48364,10889
+41,company-41,Cement,Integrated facility,CX,tCO2e,40103,16852,144358,45880,94099
+41,company-41,Cement,Integrated facility,DE,tCO2e,60456,10837,11403,6571,100697
+41,company-41,Shipping,Passenger,CX,tCO2,136589,105766,8294,264030,61267
+41,company-41,Aviation,Passenger,JO,tCO2,8594,137682,18709,415438,355527
+41,company-41,Aviation,Passenger,LK,tCO2,25289,407675,51744,47251,NA
+42,company-42,Automotive,ICE,FJ,tCO2,53051,32469,289644,406632,50109
+42,company-42,Automotive,ICE,DE,tCO2,39922,23812,152867,211185,123276
+42,company-42,Power,RenewablesCap,LK,tCO2e,NA,NA,51154,NA,2714
+42,company-42,Power,RenewablesCap,ZA,tCO2e,30762,NA,37924,NA,319891
+42,company-42,Shipping,Passenger,DE,tCO2,125177,139825,117637,62655,41092
+42,company-42,Shipping,Passenger,CX,tCO2,31834,108688,NA,13224,NA
+42,company-42,Shipping,Passenger,LK,tCO2,430191,198067,NA,22489,2572
+43,company-43,Power,NuclearCap,FJ,tCO2e,125895,79514,NA,84075,130516
+43,company-43,Power,NuclearCap,ZA,tCO2e,239936,346553,221520,NA,NA
+43,company-43,Power,NuclearCap,LK,tCO2e,30316,7330,26421,101992,26565
+43,company-43,Power,NuclearCap,JO,tCO2e,88901,98827,NA,118351,135131
+43,company-43,Oil&Gas,Gas,FJ,tCO2e,71407,43298,156844,90257,413042
+43,company-43,Oil&Gas,Gas,LK,tCO2e,149658,50942,50936,57412,20111
+43,company-43,Oil&Gas,Gas,DE,tCO2e,1815,25599,121866,21636,128134
+43,company-43,Steel,Electric Arc Furnace,CX,tCO2e,348844,169621,NA,26331,23846
+43,company-43,Steel,Electric Arc Furnace,FJ,tCO2e,NA,NA,NA,60178,88333
+43,company-43,Steel,Electric Arc Furnace,JO,tCO2e,57178,NA,173314,7260,14569
+43,company-43,Steel,Electric Arc Furnace,ZA,tCO2e,409566,232395,4231,NA,112369
+43,company-43,Steel,Electric Arc Furnace,LK,tCO2e,306217,177851,400210,37588,NA
+44,company-44,Power,OilCap,JO,tCO2e,167588,NA,172370,109735,66368
+44,company-44,Power,OilCap,CX,tCO2e,75971,40546,24291,323374,58825
+44,company-44,Power,OilCap,LK,tCO2e,39227,124169,NA,333749,61982
+44,company-44,Power,CoalCap,JO,tCO2e,47204,237,20005,71087,72676
+44,company-44,Power,CoalCap,ZA,tCO2e,NA,38278,NA,NA,5966
+44,company-44,Power,CoalCap,DE,tCO2e,300205,177138,55108,124062,274012
+44,company-44,Power,CoalCap,CX,tCO2e,20310,NA,NA,203357,NA
+44,company-44,Cement,Integrated facility,JO,tCO2e,183166,14697,NA,80023,NA
+44,company-44,Cement,Integrated facility,CX,tCO2e,143457,103626,40909,138896,234732
+44,company-44,Cement,Integrated facility,FJ,tCO2e,109637,NA,201418,102565,NA
+44,company-44,Cement,Integrated facility,DE,tCO2e,174382,13237,125485,19775,90829
+44,company-44,Cement,Integrated facility,LK,tCO2e,28659,145414,228886,NA,111055
+45,company-45,Power,HydroCap,ZA,tCO2e,117816,NA,83792,NA,17762
+45,company-45,Power,HydroCap,LK,tCO2e,66783,20516,4230,31170,131612
+45,company-45,Power,HydroCap,FJ,tCO2e,206869,164709,41370,24357,63009
+45,company-45,Power,HydroCap,DE,tCO2e,NA,59272,117776,32704,194462
+45,company-45,Steel,Electric Arc Furnace,ZA,tCO2e,NA,NA,3130,139117,17111
+45,company-45,Steel,Electric Arc Furnace,DE,tCO2e,6096,74431,77862,144587,392577
+45,company-45,Automotive,Hybrid,DE,tCO2,185609,NA,59037,75161,129624
+45,company-45,Automotive,Hybrid,CX,tCO2,NA,46416,35433,8090,157601
+45,company-45,Automotive,Hybrid,LK,tCO2,151217,NA,18941,21263,434052
+45,company-45,Automotive,Hybrid,FJ,tCO2,NA,93711,124309,31268,176232
+46,company-46,Aviation,Freight,FJ,tCO2,75908,NA,NA,74470,26875
+46,company-46,Automotive,Electric,JO,tCO2,11348,NA,44851,NA,4256
+46,company-46,Automotive,Electric,CX,tCO2,138955,NA,71530,94444,329999
+46,company-46,Automotive,Electric,ZA,tCO2,316537,171417,152467,62620,7444
+46,company-46,Automotive,Electric,DE,tCO2,130915,NA,9618,276125,136029
+46,company-46,Automotive,Electric,FJ,tCO2,32072,20155,44892,36804,NA
+46,company-46,Power,GasCap,CX,tCO2e,5200,234966,13607,214920,105856
+46,company-46,Power,GasCap,ZA,tCO2e,26051,244176,24558,180145,195998
+46,company-46,Power,GasCap,DE,tCO2e,39129,113134,NA,39215,376
+46,company-46,Power,GasCap,LK,tCO2e,212746,27431,180645,NA,182608
+46,company-46,Power,GasCap,JO,tCO2e,66512,45970,182800,66560,68560
+47,company-47,Power,OilCap,LK,tCO2e,73462,189311,419965,33929,185074
+47,company-47,Oil&Gas,Gas,DE,tCO2e,13707,NA,NA,106731,43881
+47,company-47,Oil&Gas,Gas,LK,tCO2e,178137,39272,114983,28342,NA
+47,company-47,Oil&Gas,Gas,ZA,tCO2e,38966,1347,44291,158696,93873
+47,company-47,Power,NuclearCap,DE,tCO2e,5423,43017,10270,1042,24
+47,company-47,Power,NuclearCap,FJ,tCO2e,NA,272168,72988,271483,263654
+47,company-47,Power,NuclearCap,LK,tCO2e,NA,109399,NA,95373,106531
+48,company-48,Power,CoalCap,FJ,tCO2e,34705,NA,97092,NA,48851
+48,company-48,Power,CoalCap,DE,tCO2e,69411,13238,10989,NA,NA
+48,company-48,Power,CoalCap,ZA,tCO2e,3168,100156,NA,451,84391
+48,company-48,Power,CoalCap,LK,tCO2e,3078,127268,37723,153101,24953
+48,company-48,Automotive,ICE,JO,tCO2,176286,77702,NA,1814,391506
+48,company-48,Automotive,ICE,LK,tCO2,66210,82567,70353,12105,21865
+48,company-48,Automotive,ICE,DE,tCO2,73824,8156,95463,91747,909
+48,company-48,Oil&Gas,Gas,CX,tCO2e,27831,162484,NA,72368,139
+48,company-48,Oil&Gas,Gas,DE,tCO2e,NA,6005,129191,107667,NA
+48,company-48,Oil&Gas,Gas,ZA,tCO2e,40864,NA,332833,NA,NA
+48,company-48,Oil&Gas,Gas,LK,tCO2e,35360,52684,NA,149320,138982
+48,company-48,Oil&Gas,Gas,JO,tCO2e,5665,103328,NA,40523,NA
+49,company-49,Power,OilCap,CX,tCO2e,354273,40109,21625,56596,58587
+49,company-49,Shipping,Passenger,CX,tCO2,NA,72678,43577,16181,26501
+49,company-49,Shipping,Passenger,FJ,tCO2,40844,70589,300664,63457,61638
+49,company-49,Steel,Open Hearth Furnace,LK,tCO2e,70721,NA,NA,114067,40763
+49,company-49,Steel,Open Hearth Furnace,FJ,tCO2e,NA,347424,126969,28694,50610
+49,company-49,Steel,Open Hearth Furnace,ZA,tCO2e,NA,94103,NA,183698,67395
+49,company-49,Steel,Open Hearth Furnace,CX,tCO2e,NA,143201,NA,369175,46728
+49,company-49,Steel,Open Hearth Furnace,JO,tCO2e,32881,NA,657336,217537,26423
+50,company-50,Cement,Integrated facility,JO,tCO2e,4203,NA,19684,49951,79917
+50,company-50,Cement,Integrated facility,ZA,tCO2e,282864,6082,NA,148474,86921
+50,company-50,Cement,Integrated facility,CX,tCO2e,NA,23351,NA,96476,41813
+50,company-50,Power,GasCap,ZA,tCO2e,NA,91854,NA,73234,7675
+50,company-50,Power,GasCap,LK,tCO2e,NA,271119,NA,9988,84216
+50,company-50,Power,GasCap,FJ,tCO2e,184516,54835,20986,249911,NA
+50,company-50,Steel,Open Hearth Furnace,FJ,tCO2e,153890,67555,15061,92318,NA
+50,company-50,Steel,Open Hearth Furnace,ZA,tCO2e,38055,14638,73347,156261,32701
+50,company-50,Steel,Open Hearth Furnace,JO,tCO2e,412203,77881,114219,NA,363413
+50,company-50,Steel,Open Hearth Furnace,CX,tCO2e,74309,20670,178694,36387,99603
+50,company-50,Steel,Open Hearth Furnace,DE,tCO2e,NA,392915,198727,NA,24572
+51,company-51,Coal,Coal,ZA,tCO2e,49227,245775,28236,50109,114348
+51,company-51,Coal,Coal,JO,tCO2e,NA,346156,14738,NA,143959
+51,company-51,Coal,Coal,FJ,tCO2e,58148,NA,49993,NA,8907
+51,company-51,Automotive,Hybrid,LK,tCO2,89507,32643,25015,28096,NA
+51,company-51,Automotive,Hybrid,DE,tCO2,84445,6804,NA,150803,NA
+51,company-51,Automotive,Hybrid,CX,tCO2,154388,42096,57591,121023,36980
+51,company-51,Automotive,Hybrid,JO,tCO2,NA,15593,NA,NA,125679
+51,company-51,Oil&Gas,Oil,CX,tCO2e,42897,178598,428329,18944,15919
+52,company-52,Power,CoalCap,DE,tCO2e,13988,243762,9417,41281,13679
+52,company-52,Power,CoalCap,LK,tCO2e,48910,271427,NA,322280,60532
+52,company-52,Automotive,Electric,FJ,tCO2,NA,5000,248563,NA,47178
+52,company-52,Automotive,Electric,DE,tCO2,76565,159738,369319,23720,2990
+52,company-52,Automotive,Electric,ZA,tCO2,85644,280632,25795,73034,40718
+52,company-52,Automotive,Electric,JO,tCO2,NA,36073,19144,94114,110123
+52,company-52,Power,RenewablesCap,ZA,tCO2e,26834,25406,9768,233318,194634
+52,company-52,Power,RenewablesCap,DE,tCO2e,95309,43552,41505,292567,251980
+52,company-52,Power,RenewablesCap,CX,tCO2e,1346654,115724,NA,40104,62201
+52,company-52,Power,RenewablesCap,FJ,tCO2e,407188,59797,192995,7096,NA
+53,company-53,Power,GasCap,DE,tCO2e,98909,28689,NA,NA,55008
+53,company-53,Power,GasCap,FJ,tCO2e,141873,179711,91558,NA,29915
+53,company-53,Power,GasCap,CX,tCO2e,NA,104056,135601,174123,28223
+53,company-53,Power,GasCap,ZA,tCO2e,4472,328742,16518,274298,26131
+53,company-53,Power,GasCap,JO,tCO2e,101500,14545,103003,4021,114688
+53,company-53,Oil&Gas,Gas,JO,tCO2e,84746,11201,439735,99782,NA
+53,company-53,Oil&Gas,Gas,ZA,tCO2e,44044,NA,177229,211787,NA
+53,company-53,Oil&Gas,Gas,LK,tCO2e,105280,22270,NA,NA,42886
+53,company-53,Oil&Gas,Gas,DE,tCO2e,104856,495558,94649,48483,254593
+53,company-53,Oil&Gas,Gas,CX,tCO2e,30414,NA,86321,89583,39434
+53,company-53,Automotive,Electric,ZA,tCO2,399070,6145,33070,15473,30149
+54,company-54,Cement,Integrated facility,LK,tCO2e,39213,183233,67915,31002,NA
+54,company-54,Cement,Integrated facility,ZA,tCO2e,161682,72531,331255,NA,42500
+54,company-54,Cement,Integrated facility,DE,tCO2e,14293,NA,25222,257981,337608
+54,company-54,Cement,Integrated facility,FJ,tCO2e,134805,68781,NA,75632,33078
+54,company-54,Cement,Integrated facility,CX,tCO2e,141703,1033,85000,87144,187735
+54,company-54,Coal,Coal,DE,tCO2e,114036,NA,20596,46959,65377
+54,company-54,Coal,Coal,ZA,tCO2e,NA,56066,135535,89079,137013
+54,company-54,Coal,Coal,CX,tCO2e,124350,177023,42438,161397,NA
+54,company-54,Automotive,ICE,ZA,tCO2,NA,NA,8749,113779,NA
+55,company-55,Automotive,ICE,FJ,tCO2,21697,16110,11062,84750,93261
+55,company-55,Automotive,ICE,LK,tCO2,103430,129052,21714,NA,88197
+55,company-55,Automotive,ICE,ZA,tCO2,193789,95152,31230,216727,142883
+55,company-55,Power,GasCap,ZA,tCO2e,58744,122918,NA,40544,73271
+55,company-55,Power,GasCap,CX,tCO2e,NA,NA,NA,NA,NA
+55,company-55,Power,GasCap,LK,tCO2e,39245,NA,121150,NA,33742
+55,company-55,Power,RenewablesCap,LK,tCO2e,115816,170566,NA,NA,25216
+55,company-55,Power,RenewablesCap,CX,tCO2e,13266,214717,23232,99446,NA
+55,company-55,Power,RenewablesCap,ZA,tCO2e,71198,34864,3428,32834,67420
+55,company-55,Power,RenewablesCap,FJ,tCO2e,83832,46157,257487,112886,NA
+55,company-55,Power,RenewablesCap,DE,tCO2e,348351,NA,NA,28088,70472
+56,company-56,Aviation,Passenger,JO,tCO2,1808,62988,56758,4877,285288
+56,company-56,Aviation,Passenger,ZA,tCO2,69036,219393,13008,29222,108586
+56,company-56,Aviation,Passenger,DE,tCO2,20532,NA,9161,214356,24687
+56,company-56,Aviation,Passenger,FJ,tCO2,171942,30065,4171,24769,14177
+56,company-56,Power,HydroCap,DE,tCO2e,NA,48876,31943,54187,69019
+56,company-56,Power,HydroCap,ZA,tCO2e,768,NA,NA,100948,496126
+56,company-56,Power,HydroCap,CX,tCO2e,182328,74292,10486,152566,170818
+56,company-56,Power,HydroCap,LK,tCO2e,69591,123801,99836,24573,103604
+56,company-56,Power,HydroCap,JO,tCO2e,NA,20549,27417,NA,43235
+56,company-56,Power,OilCap,JO,tCO2e,37056,160757,6006,73881,NA
+56,company-56,Power,OilCap,LK,tCO2e,210031,37211,7173,119367,149800
+57,company-57,Automotive,Electric,ZA,tCO2,82028,31290,48415,63879,63067
+57,company-57,Aviation,Passenger,DE,tCO2,7469,96958,155459,11556,114911
+57,company-57,Aviation,Passenger,LK,tCO2,NA,204873,NA,91377,NA
+57,company-57,Aviation,Passenger,ZA,tCO2,37286,60476,189180,52443,137314
+57,company-57,Aviation,Passenger,CX,tCO2,33951,137522,197053,1729,68744
+57,company-57,Shipping,Passenger,LK,tCO2,176176,180950,17249,370019,5467
+58,company-58,Steel,Open Hearth Furnace,DE,tCO2e,86839,582590,25645,NA,79152
+58,company-58,Steel,Open Hearth Furnace,LK,tCO2e,7054,NA,NA,34785,57933
+58,company-58,Steel,Open Hearth Furnace,FJ,tCO2e,24204,60958,139094,18003,107614
+58,company-58,Power,GasCap,CX,tCO2e,18114,212445,95265,424,72850
+58,company-58,Power,GasCap,DE,tCO2e,222671,NA,168096,NA,65495
+58,company-58,Power,GasCap,ZA,tCO2e,46779,53063,6481,141685,206773
+58,company-58,Oil&Gas,Gas,ZA,tCO2e,39336,NA,NA,53975,NA
+58,company-58,Oil&Gas,Gas,FJ,tCO2e,128682,22679,NA,190753,NA
+58,company-58,Oil&Gas,Gas,JO,tCO2e,313897,132491,12969,NA,141837
+58,company-58,Oil&Gas,Gas,LK,tCO2e,NA,12891,NA,115173,NA
+58,company-58,Oil&Gas,Gas,DE,tCO2e,NA,147196,239628,NA,9656
+59,company-59,Aviation,Freight,JO,tCO2,79604,30894,252745,NA,245368
+59,company-59,Aviation,Freight,FJ,tCO2,13643,45473,45528,153437,155829
+59,company-59,Aviation,Freight,DE,tCO2,31217,NA,36258,118436,11098
+59,company-59,Automotive,Electric,JO,tCO2,76186,NA,30217,137957,18980
+59,company-59,Steel,Electric Arc Furnace,FJ,tCO2e,51634,47331,171850,83349,27454
+59,company-59,Steel,Electric Arc Furnace,JO,tCO2e,12247,NA,109438,20975,37277
+59,company-59,Steel,Electric Arc Furnace,DE,tCO2e,37258,NA,179020,NA,96779
+60,company-60,Power,RenewablesCap,JO,tCO2e,NA,NA,NA,13903,NA
+60,company-60,Power,RenewablesCap,DE,tCO2e,41375,123296,14488,42880,9450
+60,company-60,Power,RenewablesCap,CX,tCO2e,74996,37259,20410,3414,66764
+60,company-60,Power,RenewablesCap,ZA,tCO2e,16349,NA,40928,NA,NA
+60,company-60,Shipping,Passenger,JO,tCO2,8139,24445,54675,NA,134811
+60,company-60,Shipping,Passenger,FJ,tCO2,74098,272450,68293,11080,NA
+60,company-60,Shipping,Passenger,ZA,tCO2,69933,140788,55656,NA,16827
+60,company-60,Shipping,Passenger,CX,tCO2,3697,96945,NA,NA,4423
+60,company-60,Power,GasCap,LK,tCO2e,98140,49331,99829,55986,381733
+60,company-60,Power,GasCap,JO,tCO2e,403998,247718,31489,21894,190234
+60,company-60,Power,GasCap,DE,tCO2e,430900,NA,NA,19240,119042
+61,company-61,Power,OilCap,DE,tCO2e,204865,NA,24821,73980,11838
+61,company-61,Power,OilCap,JO,tCO2e,50470,49111,17102,295733,62368
+61,company-61,Power,OilCap,FJ,tCO2e,85244,782,300585,194474,71049
+61,company-61,Power,OilCap,JO,tCO2e,54881,92668,98080,81519,270413
+61,company-61,Power,OilCap,LK,tCO2e,13898,58635,NA,64744,46083
+61,company-61,Power,OilCap,FJ,tCO2e,39830,354673,44569,93587,363958
+61,company-61,Automotive,Electric,FJ,tCO2,35965,26513,175692,104335,99129
+61,company-61,Automotive,Electric,JO,tCO2,NA,NA,13189,NA,21893
+62,company-62,Oil&Gas,Gas,DE,tCO2e,NA,17798,223621,NA,NA
+62,company-62,Cement,Integrated facility,CX,tCO2e,8682,NA,NA,8988,21529
+62,company-62,Cement,Integrated facility,JO,tCO2e,248930,118185,38303,67889,NA
+62,company-62,Cement,Integrated facility,ZA,tCO2e,18664,139551,110842,161416,257661
+62,company-62,Power,GasCap,FJ,tCO2e,63739,122369,46682,46724,NA
+62,company-62,Power,GasCap,LK,tCO2e,101562,43867,114539,113104,NA
+62,company-62,Power,GasCap,CX,tCO2e,78049,120130,103388,137563,141573
+62,company-62,Power,GasCap,JO,tCO2e,NA,16341,156986,NA,18661
+62,company-62,Power,GasCap,DE,tCO2e,22272,3943,175974,23983,191370
+63,company-63,Cement,Integrated facility,DE,tCO2e,345333,NA,1997,71460,137858
+63,company-63,Power,HydroCap,FJ,tCO2e,22901,99377,NA,176494,94083
+63,company-63,Power,RenewablesCap,JO,tCO2e,183393,69610,NA,74735,NA
+63,company-63,Power,RenewablesCap,CX,tCO2e,34577,225885,38735,NA,9100
+63,company-63,Power,RenewablesCap,DE,tCO2e,NA,NA,45918,153088,NA
+63,company-63,Power,RenewablesCap,FJ,tCO2e,7411,263643,63417,42758,90169
+64,company-64,Power,CoalCap,DE,tCO2e,98060,41125,41754,NA,52095
+64,company-64,Automotive,FuelCell,CX,tCO2,78950,188428,NA,234752,110185
+64,company-64,Automotive,FuelCell,ZA,tCO2,96304,NA,108649,18864,NA
+64,company-64,Automotive,FuelCell,LK,tCO2,34916,87577,110946,130455,NA
+64,company-64,Automotive,FuelCell,FJ,tCO2,109655,140022,362988,37548,354930
+64,company-64,Automotive,Hybrid,JO,tCO2,NA,142192,60974,NA,91231
+64,company-64,Automotive,Hybrid,FJ,tCO2,NA,NA,70658,NA,74195
+64,company-64,Automotive,Hybrid,ZA,tCO2,20615,106903,67952,NA,10602
+64,company-64,Automotive,Hybrid,LK,tCO2,12531,205293,NA,67156,67650
+64,company-64,Automotive,Hybrid,DE,tCO2,58860,3153,NA,NA,98106
+65,company-65,Shipping,Passenger,FJ,tCO2,2538,111759,40710,NA,98601
+65,company-65,Shipping,Passenger,LK,tCO2,NA,137240,NA,27386,19432
+65,company-65,Power,RenewablesCap,FJ,tCO2e,43265,132842,NA,156704,267891
+65,company-65,Power,RenewablesCap,LK,tCO2e,NA,8554,168004,NA,NA
+65,company-65,Power,RenewablesCap,CX,tCO2e,88131,166717,NA,340466,133634
+65,company-65,Power,RenewablesCap,DE,tCO2e,867,NA,107103,NA,95244
+65,company-65,Power,RenewablesCap,JO,tCO2e,13068,172975,2196,270674,NA
+65,company-65,Power,HydroCap,DE,tCO2e,105378,44891,59786,37308,262718
+65,company-65,Power,HydroCap,FJ,tCO2e,9721,4436,191380,61439,144305
+66,company-66,Coal,Coal,DE,tCO2e,23800,41882,NA,232922,75135
+66,company-66,Coal,Coal,JO,tCO2e,120276,54560,317811,NA,103683
+66,company-66,Coal,Coal,ZA,tCO2e,144007,17284,138934,122042,2253
+66,company-66,Shipping,Passenger,DE,tCO2,105005,14247,68246,240318,NA
+66,company-66,Shipping,Passenger,JO,tCO2,7021,76076,NA,74664,26507
+66,company-66,Shipping,Passenger,CX,tCO2,NA,97166,230149,28796,65362
+66,company-66,Power,HydroCap,ZA,tCO2e,NA,NA,79927,NA,44165
+67,company-67,Power,CoalCap,JO,tCO2e,40518,24917,80163,12365,142175
+67,company-67,Power,CoalCap,ZA,tCO2e,104670,58850,43294,NA,62824
+67,company-67,Power,CoalCap,LK,tCO2e,22957,61530,125308,51109,108506
+67,company-67,Power,CoalCap,FJ,tCO2e,70171,313263,39432,NA,47071
+67,company-67,Power,CoalCap,CX,tCO2e,NA,146604,75174,35826,NA
+67,company-67,Steel,Basic Oxygen Furnace,CX,tCO2e,122169,45731,NA,300497,57210
+67,company-67,Steel,Basic Oxygen Furnace,FJ,tCO2e,47636,160946,NA,102285,12602
+67,company-67,Steel,Basic Oxygen Furnace,JO,tCO2e,NA,NA,129728,422840,NA
+67,company-67,Steel,Basic Oxygen Furnace,ZA,tCO2e,NA,5348,9997,106452,208939
+67,company-67,Cement,Integrated facility,LK,tCO2e,422264,399230,142127,NA,124426
+67,company-67,Cement,Integrated facility,FJ,tCO2e,341013,96967,29955,53738,41542
+67,company-67,Cement,Integrated facility,DE,tCO2e,72180,59939,58625,146916,NA
+67,company-67,Cement,Integrated facility,JO,tCO2e,NA,121119,83478,138641,140644
+68,company-68,Power,OilCap,DE,tCO2e,78424,424595,166231,207116,236040
+68,company-68,Power,OilCap,ZA,tCO2e,NA,180888,101574,NA,60332
+68,company-68,Power,OilCap,CX,tCO2e,216555,41590,67879,535,121745
+68,company-68,Power,OilCap,LK,tCO2e,7743,22602,47835,3405,49706
+68,company-68,Power,OilCap,FJ,tCO2e,49819,NA,93541,253650,176696
+68,company-68,Steel,Basic Oxygen Furnace,CX,tCO2e,47263,62309,35195,23170,258863
+68,company-68,Oil&Gas,Oil,DE,tCO2e,39646,NA,61819,101408,69005
+68,company-68,Oil&Gas,Oil,LK,tCO2e,387936,NA,432372,NA,30196
+68,company-68,Oil&Gas,Oil,FJ,tCO2e,139313,128538,42555,379502,22650
+68,company-68,Oil&Gas,Oil,CX,tCO2e,26304,NA,47758,1731,102134
+68,company-68,Oil&Gas,Oil,JO,tCO2e,76309,191144,36943,12187,29280
+69,company-69,Power,RenewablesCap,FJ,tCO2e,94845,107891,315258,8107,47046
+69,company-69,Power,RenewablesCap,JO,tCO2e,169086,NA,69293,35653,90878
+69,company-69,Power,RenewablesCap,CX,tCO2e,38285,327800,20126,189663,NA
+69,company-69,Power,RenewablesCap,DE,tCO2e,52406,42788,274785,28130,229997
+69,company-69,Power,RenewablesCap,LK,tCO2e,377,27751,297630,4277,105929
+69,company-69,Power,RenewablesCap,ZA,tCO2e,161479,283073,21729,143501,39613
+69,company-69,Power,RenewablesCap,DE,tCO2e,1103,24023,119527,95350,128205
+69,company-69,Power,RenewablesCap,JO,tCO2e,157019,NA,26654,31887,NA
+69,company-69,Power,RenewablesCap,FJ,tCO2e,NA,15768,2955,188107,1547
+69,company-69,Coal,Coal,ZA,tCO2e,2200,967,NA,168726,60410
+69,company-69,Coal,Coal,DE,tCO2e,85605,7539,209149,158629,43595
+70,company-70,Power,HydroCap,FJ,tCO2e,NA,99732,16992,14432,331865
+70,company-70,Power,HydroCap,CX,tCO2e,NA,296963,NA,15825,78124
+70,company-70,Power,HydroCap,DE,tCO2e,101525,52969,107984,86390,NA
+70,company-70,Aviation,Freight,JO,tCO2,53825,85418,NA,NA,64384
+70,company-70,Aviation,Freight,DE,tCO2,138371,201891,139678,28539,7883
+70,company-70,Aviation,Freight,CX,tCO2,36854,NA,1733,134587,11274
+70,company-70,Aviation,Freight,LK,tCO2,NA,46770,NA,21309,8538
+70,company-70,Aviation,Freight,ZA,tCO2,180537,49272,21109,97887,87756
+70,company-70,Cement,Integrated facility,DE,tCO2e,48788,328552,NA,31176,49503
+70,company-70,Cement,Integrated facility,FJ,tCO2e,80669,16208,80726,57197,6366
+71,company-71,Power,CoalCap,LK,tCO2e,759374,NA,22155,49872,56234
+71,company-71,Power,CoalCap,DE,tCO2e,73932,42233,143659,NA,6018
+71,company-71,Power,CoalCap,JO,tCO2e,53470,51152,261390,740,37083
+71,company-71,Power,CoalCap,CX,tCO2e,16930,NA,NA,39102,147121
+71,company-71,Power,CoalCap,ZA,tCO2e,NA,15853,193748,NA,132282
+71,company-71,Oil&Gas,Gas,JO,tCO2e,155991,26626,100950,34160,501574
+71,company-71,Oil&Gas,Gas,LK,tCO2e,107475,867,81651,108665,NA
+71,company-71,Oil&Gas,Gas,CX,tCO2e,44293,43333,37663,191735,154650
+71,company-71,Oil&Gas,Gas,DE,tCO2e,NA,NA,70454,81773,224168
+71,company-71,Oil&Gas,Gas,ZA,tCO2e,210765,62321,4433,208941,1468
+71,company-71,Power,NuclearCap,CX,tCO2e,57791,54735,212631,18301,NA
+71,company-71,Power,NuclearCap,LK,tCO2e,73690,322325,88873,295142,20824
+71,company-71,Power,NuclearCap,JO,tCO2e,3371,97859,158490,23215,NA
+71,company-71,Power,NuclearCap,FJ,tCO2e,839,14875,NA,47786,10384
+72,company-72,Coal,Coal,JO,tCO2e,NA,21736,NA,7168,15990
+72,company-72,Power,CoalCap,JO,tCO2e,NA,54061,234040,232724,58166
+72,company-72,Power,HydroCap,JO,tCO2e,31375,102185,158579,NA,192655
+72,company-72,Power,HydroCap,LK,tCO2e,96447,199152,NA,41446,50264
+72,company-72,Power,HydroCap,ZA,tCO2e,80813,NA,NA,231531,170875
+72,company-72,Power,HydroCap,DE,tCO2e,382351,NA,142837,5637,NA
+72,company-72,Power,HydroCap,CX,tCO2e,260135,NA,66376,113106,176088
+73,company-73,Automotive,Electric,JO,tCO2,87426,NA,NA,31226,19751
+73,company-73,Automotive,Electric,ZA,tCO2,17431,103011,10534,1457,NA
+73,company-73,Automotive,Electric,CX,tCO2,376,78371,102046,168045,3789
+73,company-73,Automotive,Electric,DE,tCO2,387024,36329,NA,15389,233356
+73,company-73,Coal,Coal,FJ,tCO2e,75991,54118,NA,88401,238316
+73,company-73,Coal,Coal,CX,tCO2e,314183,129473,302207,NA,52875
+73,company-73,Coal,Coal,JO,tCO2e,156278,185189,88892,26569,NA
+73,company-73,Coal,Coal,LK,tCO2e,NA,28073,68894,52050,18650
+73,company-73,Coal,Coal,DE,tCO2e,75143,165231,107604,NA,135618
+73,company-73,Power,OilCap,CX,tCO2e,NA,43527,NA,66764,4068
+73,company-73,Power,OilCap,JO,tCO2e,67175,238924,197104,NA,11030
+73,company-73,Power,OilCap,FJ,tCO2e,90274,7071,12682,NA,8807
+74,company-74,Power,CoalCap,FJ,tCO2e,NA,51941,50586,160701,NA
+74,company-74,Power,CoalCap,DE,tCO2e,154664,27837,400588,NA,199186
+74,company-74,Power,CoalCap,JO,tCO2e,30764,NA,4286,28381,2830
+74,company-74,Steel,Open Hearth Furnace,CX,tCO2e,31861,316418,78640,NA,NA
+74,company-74,Steel,Open Hearth Furnace,LK,tCO2e,131924,NA,29531,NA,16900
+74,company-74,Steel,Open Hearth Furnace,ZA,tCO2e,65471,NA,78461,151248,63876
+74,company-74,Steel,Open Hearth Furnace,FJ,tCO2e,56980,102777,73612,10335,28395
+74,company-74,Steel,Open Hearth Furnace,JO,tCO2e,NA,NA,24949,17823,89725
+74,company-74,Automotive,Electric,CX,tCO2,178682,NA,121920,21921,42886
+74,company-74,Automotive,Electric,FJ,tCO2,28114,164909,238889,18689,3137
+74,company-74,Automotive,Electric,DE,tCO2,205792,30172,74791,NA,170399
+75,company-75,Aviation,Freight,JO,tCO2,156078,88332,508054,87687,119930
+75,company-75,Aviation,Freight,LK,tCO2,18102,125723,40935,91361,NA
+75,company-75,Aviation,Freight,CX,tCO2,26858,82737,232578,6841,43043
+75,company-75,Power,CoalCap,ZA,tCO2e,61953,124219,93847,15344,73141
+75,company-75,Power,NuclearCap,FJ,tCO2e,44042,53829,54059,37304,46870
+75,company-75,Power,NuclearCap,CX,tCO2e,45974,5307,50982,178598,88895
+76,company-76,Aviation,Freight,DE,tCO2,NA,NA,NA,NA,NA
+76,company-76,Power,NuclearCap,CX,tCO2e,12804,26803,91442,115184,2840
+76,company-76,Power,NuclearCap,FJ,tCO2e,11392,23531,NA,38994,181657
+76,company-76,Automotive,ICE,ZA,tCO2,94901,112135,3397,NA,168230
+76,company-76,Automotive,ICE,LK,tCO2,291425,NA,NA,112776,278082
+77,company-77,Steel,Electric Arc Furnace,FJ,tCO2e,30597,83336,69908,90643,159526
+77,company-77,Steel,Electric Arc Furnace,LK,tCO2e,50387,53244,5120,89072,236130
+77,company-77,Shipping,Passenger,JO,tCO2,23856,130044,56123,NA,NA
+77,company-77,Shipping,Passenger,FJ,tCO2,NA,36943,24666,53474,NA
+77,company-77,Shipping,Passenger,ZA,tCO2,77937,NA,9924,NA,141603
+77,company-77,Shipping,Passenger,LK,tCO2,105118,4753,131210,107125,186778
+77,company-77,Shipping,Passenger,CX,tCO2,NA,103007,225596,31930,161318
+77,company-77,Power,CoalCap,ZA,tCO2e,119517,48988,6809,47261,91815
+77,company-77,Power,CoalCap,DE,tCO2e,73477,78730,200203,52129,NA
+77,company-77,Power,CoalCap,FJ,tCO2e,274627,NA,112729,158997,152024
+77,company-77,Power,CoalCap,LK,tCO2e,33930,NA,52470,38371,142626
+77,company-77,Power,CoalCap,CX,tCO2e,62255,157921,8538,54306,22172
+78,company-78,Power,HydroCap,DE,tCO2e,NA,98842,18460,49095,62967
+78,company-78,Coal,Coal,DE,tCO2e,6560,4571,669679,23064,NA
+78,company-78,Coal,Coal,LK,tCO2e,NA,68340,39106,347171,31436
+78,company-78,Power,RenewablesCap,JO,tCO2e,36552,38581,13590,10923,160178
+79,company-79,Oil&Gas,Gas,LK,tCO2e,NA,537399,227921,101825,17017
+79,company-79,Oil&Gas,Gas,FJ,tCO2e,NA,93467,278242,30279,71334
+79,company-79,Oil&Gas,Gas,CX,tCO2e,85139,233311,147319,139460,132914
+79,company-79,Power,NuclearCap,CX,tCO2e,9181,60412,64057,117935,260665
+79,company-79,Power,NuclearCap,FJ,tCO2e,10499,6937,49273,35323,NA
+79,company-79,Power,NuclearCap,JO,tCO2e,107441,106512,73048,86978,123820
+79,company-79,Power,RenewablesCap,FJ,tCO2e,366029,69764,112188,401318,NA
+79,company-79,Power,RenewablesCap,ZA,tCO2e,52825,32689,124355,196714,NA
+79,company-79,Power,RenewablesCap,DE,tCO2e,NA,178828,52419,57850,33885
+80,company-80,Aviation,Freight,ZA,tCO2,19446,NA,7662,NA,36187
+80,company-80,Aviation,Freight,JO,tCO2,55011,NA,74570,NA,NA
+80,company-80,Aviation,Freight,FJ,tCO2,18194,45644,4630,14352,NA
+80,company-80,Cement,Integrated facility,ZA,tCO2e,9295,31351,120974,47847,284959
+80,company-80,Cement,Integrated facility,LK,tCO2e,229941,411135,318503,NA,19896
+80,company-80,Cement,Integrated facility,CX,tCO2e,6324,247441,34255,87438,138066
+80,company-80,Power,HydroCap,CX,tCO2e,78910,240141,78453,40768,46641
+80,company-80,Power,HydroCap,LK,tCO2e,64760,60749,NA,113369,282968
+80,company-80,Power,HydroCap,FJ,tCO2e,87443,65268,NA,12359,1262
+80,company-80,Power,HydroCap,JO,tCO2e,92740,210143,99411,NA,NA
+81,company-81,Coal,Coal,ZA,tCO2e,13944,11939,92232,51323,NA
+81,company-81,Coal,Coal,FJ,tCO2e,71205,NA,80468,213513,217332
+81,company-81,Coal,Coal,LK,tCO2e,NA,16084,111042,257526,175940
+81,company-81,Power,CoalCap,CX,tCO2e,141929,47825,95642,NA,518
+81,company-81,Aviation,Passenger,FJ,tCO2,18257,96485,45917,64339,NA
+82,company-82,Shipping,Passenger,FJ,tCO2,9834,48280,510143,38783,280130
+82,company-82,Shipping,Passenger,DE,tCO2,172223,145797,NA,49352,77159
+82,company-82,Shipping,Passenger,LK,tCO2,66320,86826,171797,NA,NA
+82,company-82,Shipping,Passenger,JO,tCO2,114196,64414,70974,120421,NA
+82,company-82,Shipping,Passenger,CX,tCO2,187122,NA,8635,NA,24975
+82,company-82,Power,NuclearCap,ZA,tCO2e,88095,1043,NA,NA,NA
+82,company-82,Power,NuclearCap,DE,tCO2e,59044,65448,NA,112080,71141
+82,company-82,Power,NuclearCap,CX,tCO2e,313250,122616,78597,5713,38084
+82,company-82,Aviation,Freight,JO,tCO2,3530,NA,68434,NA,12430
+82,company-82,Aviation,Freight,FJ,tCO2,11244,76939,NA,60172,NA
+83,company-83,Cement,Integrated facility,JO,tCO2e,52877,398447,NA,3248,NA
+83,company-83,Cement,Integrated facility,LK,tCO2e,18919,NA,42728,27011,54268
+83,company-83,Cement,Integrated facility,CX,tCO2e,191,82889,96234,191731,18262
+83,company-83,Cement,Integrated facility,ZA,tCO2e,NA,10083,25324,NA,110232
+83,company-83,Aviation,Freight,FJ,tCO2,283922,12370,17183,112892,74713
+83,company-83,Power,NuclearCap,DE,tCO2e,40687,304100,8064,379936,43382
+83,company-83,Power,NuclearCap,CX,tCO2e,33948,112083,10115,31148,33762
+83,company-83,Power,NuclearCap,ZA,tCO2e,300100,291826,NA,73014,400648
+84,company-84,Automotive,Hybrid,JO,tCO2,33664,6677,74815,152896,513837
+84,company-84,Automotive,Hybrid,LK,tCO2,87511,8945,58950,18271,115804
+84,company-84,Automotive,Hybrid,DE,tCO2,151573,NA,23487,NA,NA
+84,company-84,Steel,Open Hearth Furnace,LK,tCO2e,81212,61160,108399,148579,9921
+84,company-84,Steel,Open Hearth Furnace,CX,tCO2e,NA,NA,NA,18709,7987
+84,company-84,Steel,Open Hearth Furnace,FJ,tCO2e,22181,10617,NA,249622,101875
+84,company-84,Steel,Open Hearth Furnace,JO,tCO2e,35307,NA,NA,40379,NA
+84,company-84,Steel,Open Hearth Furnace,ZA,tCO2e,NA,NA,NA,236471,70313
+84,company-84,Power,HydroCap,CX,tCO2e,16795,18785,194997,83648,114489
+84,company-84,Power,HydroCap,ZA,tCO2e,266985,145711,10333,62353,107479
+84,company-84,Power,HydroCap,DE,tCO2e,74649,43165,30955,56312,125140
+84,company-84,Power,HydroCap,JO,tCO2e,400402,204157,13749,190716,113924
+85,company-85,Automotive,ICE,CX,tCO2,NA,394961,NA,262075,NA
+85,company-85,Automotive,ICE,DE,tCO2,181670,229800,126786,82247,30977
+85,company-85,Automotive,ICE,FJ,tCO2,65633,88521,171621,80880,61054
+85,company-85,Oil&Gas,Oil,JO,tCO2e,NA,29029,175283,13165,170482
+85,company-85,Oil&Gas,Oil,LK,tCO2e,NA,NA,NA,NA,NA
+85,company-85,Oil&Gas,Oil,FJ,tCO2e,14879,31020,27124,NA,1440
+85,company-85,Oil&Gas,Oil,ZA,tCO2e,NA,75315,NA,71913,20252
+85,company-85,Power,OilCap,FJ,tCO2e,75278,46980,14822,194311,27905
+85,company-85,Power,OilCap,CX,tCO2e,111492,23882,37782,31101,NA
+85,company-85,Power,OilCap,DE,tCO2e,51277,106941,95644,142641,69240
+85,company-85,Power,OilCap,ZA,tCO2e,NA,NA,114503,NA,87269
+85,company-85,Power,OilCap,LK,tCO2e,NA,51612,12305,27772,31317
+86,company-86,Cement,Integrated facility,ZA,tCO2e,NA,NA,22466,27502,46939
+86,company-86,Cement,Integrated facility,CX,tCO2e,3582,NA,16925,14914,NA
+86,company-86,Coal,Coal,DE,tCO2e,3432,110282,64127,NA,63248
+86,company-86,Coal,Coal,CX,tCO2e,18666,NA,47165,175856,19891
+86,company-86,Coal,Coal,JO,tCO2e,135482,50766,91749,NA,345810
+86,company-86,Coal,Coal,LK,tCO2e,39438,49058,45220,4698,45360
+86,company-86,Coal,Coal,FJ,tCO2e,75063,72711,60606,59979,23231
+86,company-86,Aviation,Passenger,JO,tCO2,NA,99151,291363,19706,NA
+86,company-86,Aviation,Passenger,FJ,tCO2,NA,225726,40159,294192,167989
+87,company-87,Power,RenewablesCap,FJ,tCO2e,258889,43392,24951,195323,138497
+87,company-87,Power,RenewablesCap,JO,tCO2e,246273,30106,205756,NA,17868
+87,company-87,Power,RenewablesCap,LK,tCO2e,127992,27425,NA,51805,94154
+87,company-87,Power,RenewablesCap,ZA,tCO2e,12291,27722,38721,44029,NA
+87,company-87,Steel,Electric Arc Furnace,FJ,tCO2e,74109,NA,4011,325,216965
+87,company-87,Steel,Electric Arc Furnace,CX,tCO2e,35079,2012,12686,14021,186192
+87,company-87,Power,GasCap,DE,tCO2e,140167,77952,44998,NA,54117
+87,company-87,Power,GasCap,JO,tCO2e,92018,115558,42827,92580,317902
+88,company-88,Automotive,ICE,DE,tCO2,145173,51776,253438,4054,57704
+88,company-88,Automotive,ICE,CX,tCO2,25421,179090,121591,20840,76998
+88,company-88,Automotive,ICE,JO,tCO2,141687,NA,NA,44128,19499
+88,company-88,Automotive,ICE,FJ,tCO2,131415,288050,114164,248140,12330
+88,company-88,Steel,Electric Arc Furnace,LK,tCO2e,124945,NA,130792,52557,NA
+88,company-88,Steel,Electric Arc Furnace,JO,tCO2e,NA,34894,54841,1034,146595
+88,company-88,Steel,Electric Arc Furnace,CX,tCO2e,7479,106477,27354,152452,21587
+88,company-88,Steel,Electric Arc Furnace,DE,tCO2e,85578,72881,96848,9010,89598
+88,company-88,Steel,Electric Arc Furnace,ZA,tCO2e,8715,98075,73649,83603,19215
+88,company-88,Power,HydroCap,JO,tCO2e,7615,87139,79202,184666,273292
+88,company-88,Power,HydroCap,FJ,tCO2e,81432,93609,35083,23092,NA
+88,company-88,Power,HydroCap,CX,tCO2e,35710,20087,68071,2301,96067
+89,company-89,Coal,Coal,ZA,tCO2e,NA,NA,NA,143114,15345
+89,company-89,Coal,Coal,FJ,tCO2e,168822,NA,101941,NA,42560
+89,company-89,Coal,Coal,JO,tCO2e,NA,83659,75726,74685,1824
+89,company-89,Coal,Coal,LK,tCO2e,NA,2473,42605,27098,NA
+89,company-89,Coal,Coal,CX,tCO2e,NA,194592,NA,113126,246472
+89,company-89,Aviation,Freight,ZA,tCO2,111521,142897,NA,113460,207820
+89,company-89,Aviation,Freight,CX,tCO2,NA,190329,23925,299243,28970
+89,company-89,Aviation,Freight,DE,tCO2,NA,NA,186378,43899,133558
+89,company-89,Cement,Integrated facility,DE,tCO2e,88801,104332,NA,138363,32348
+89,company-89,Cement,Integrated facility,ZA,tCO2e,83327,74294,138758,NA,NA
+89,company-89,Cement,Integrated facility,FJ,tCO2e,34284,NA,77535,164000,2941
+90,company-90,Automotive,ICE,CX,tCO2,94469,138466,30578,73820,41953
+90,company-90,Automotive,ICE,JO,tCO2,100693,120297,NA,68966,6361
+90,company-90,Automotive,ICE,ZA,tCO2,NA,41397,221838,NA,NA
+90,company-90,Automotive,Electric,DE,tCO2,13782,158192,60174,5133,NA
+90,company-90,Automotive,Electric,FJ,tCO2,NA,95242,1111,145753,369270
+90,company-90,Automotive,Electric,ZA,tCO2,27387,21082,119,289394,370337
+90,company-90,Automotive,Electric,CX,tCO2,69475,34066,80811,NA,8897
+90,company-90,Shipping,Passenger,DE,tCO2,94520,16205,234306,NA,269700
+90,company-90,Shipping,Passenger,LK,tCO2,NA,44648,NA,207905,34972
+91,company-91,Power,RenewablesCap,DE,tCO2e,101831,44194,2332,190345,222705
+91,company-91,Power,RenewablesCap,JO,tCO2e,69743,128896,10983,76040,42052
+91,company-91,Power,RenewablesCap,LK,tCO2e,108210,100534,34867,161996,24634
+91,company-91,Aviation,Freight,CX,tCO2,5509,82130,260021,NA,NA
+91,company-91,Aviation,Freight,DE,tCO2,7061,9885,NA,20368,NA
+91,company-91,Shipping,Passenger,DE,tCO2,279082,175706,108978,133501,90223
+91,company-91,Shipping,Passenger,FJ,tCO2,17442,17718,81551,78499,5573
+92,company-92,Shipping,Passenger,CX,tCO2,85518,33576,62707,204599,12578
+92,company-92,Shipping,Passenger,ZA,tCO2,129409,193452,NA,NA,21954
+92,company-92,Steel,Open Hearth Furnace,JO,tCO2e,49124,80246,NA,133018,NA
+92,company-92,Steel,Open Hearth Furnace,ZA,tCO2e,90811,75610,16752,115701,13597
+92,company-92,Steel,Open Hearth Furnace,CX,tCO2e,110724,116278,NA,636,84621
+92,company-92,Power,NuclearCap,DE,tCO2e,153585,NA,91904,90493,4657
+92,company-92,Power,NuclearCap,ZA,tCO2e,81016,51689,128433,94952,75029
+93,company-93,Automotive,ICE,LK,tCO2,100226,108327,NA,NA,179494
+93,company-93,Automotive,ICE,CX,tCO2,NA,43497,35335,NA,12541
+93,company-93,Automotive,ICE,JO,tCO2,10624,112405,NA,6135,87345
+93,company-93,Automotive,FuelCell,DE,tCO2,250,74453,29013,19406,69391
+93,company-93,Automotive,FuelCell,JO,tCO2,132571,27292,19041,137444,147377
+93,company-93,Automotive,FuelCell,LK,tCO2,34917,40997,51731,NA,41868
+93,company-93,Automotive,FuelCell,ZA,tCO2,16114,66542,14517,NA,233975
+93,company-93,Shipping,Passenger,LK,tCO2,7375,122854,106547,4130,65740
+93,company-93,Shipping,Passenger,FJ,tCO2,NA,68153,441784,143990,20102
+93,company-93,Shipping,Passenger,JO,tCO2,323258,42467,35984,NA,NA
+93,company-93,Shipping,Passenger,ZA,tCO2,61035,1109,279854,140786,120083
+94,company-94,Power,OilCap,DE,tCO2e,3421,43284,NA,262503,83345
+94,company-94,Power,RenewablesCap,DE,tCO2e,54594,NA,8768,81357,204227
+94,company-94,Power,HydroCap,FJ,tCO2e,36974,9858,NA,41058,160014
+94,company-94,Power,HydroCap,ZA,tCO2e,18504,125556,128304,270710,37872
+94,company-94,Power,HydroCap,CX,tCO2e,88329,114108,167833,57678,16387
+94,company-94,Power,HydroCap,DE,tCO2e,147150,145177,35704,181608,97023
+94,company-94,Power,HydroCap,LK,tCO2e,64076,23395,87294,NA,255985
+95,company-95,Power,CoalCap,DE,tCO2e,43968,NA,67311,4758,131846
+95,company-95,Power,CoalCap,CX,tCO2e,11267,53482,172476,NA,56278
+95,company-95,Power,CoalCap,LK,tCO2e,6025,35098,155230,118630,9943
+95,company-95,Power,CoalCap,ZA,tCO2e,155005,58725,38784,23683,24720
+95,company-95,Power,CoalCap,FJ,tCO2e,102599,128244,NA,87297,NA
+95,company-95,Automotive,FuelCell,CX,tCO2,NA,8821,155930,327465,12517
+95,company-95,Automotive,FuelCell,FJ,tCO2,132114,13604,38682,NA,102456
+95,company-95,Power,GasCap,DE,tCO2e,39793,170946,132862,25707,NA
+95,company-95,Power,GasCap,FJ,tCO2e,62551,294670,65437,67006,75368
+96,company-96,Power,HydroCap,CX,tCO2e,118256,127529,79741,49036,NA
+96,company-96,Power,HydroCap,JO,tCO2e,107935,9525,204720,65674,163729
+96,company-96,Power,HydroCap,FJ,tCO2e,41288,71583,104995,191416,6926
+96,company-96,Power,HydroCap,DE,tCO2e,NA,101124,NA,92514,32117
+96,company-96,Automotive,FuelCell,LK,tCO2,214414,63951,84219,60959,19182
+96,company-96,Automotive,FuelCell,FJ,tCO2,52561,NA,595434,63992,NA
+96,company-96,Automotive,FuelCell,ZA,tCO2,165198,47149,230333,77709,NA
+96,company-96,Power,GasCap,LK,tCO2e,NA,59842,97954,286157,24939
+96,company-96,Power,GasCap,FJ,tCO2e,90240,97157,490954,41362,88910
+97,company-97,Steel,Basic Oxygen Furnace,JO,tCO2e,117187,120947,100671,NA,NA
+97,company-97,Steel,Basic Oxygen Furnace,LK,tCO2e,20644,27220,291302,82084,143421
+97,company-97,Steel,Basic Oxygen Furnace,ZA,tCO2e,53550,98058,11294,52561,NA
+97,company-97,Steel,Basic Oxygen Furnace,DE,tCO2e,7147,112013,105408,216596,28957
+97,company-97,Steel,Basic Oxygen Furnace,FJ,tCO2e,59712,16036,52226,179033,171020
+97,company-97,Power,GasCap,DE,tCO2e,247425,23765,42239,NA,5573
+97,company-97,Power,GasCap,CX,tCO2e,47461,236403,48628,103269,57293
+97,company-97,Power,GasCap,ZA,tCO2e,303024,313,961221,63468,NA
+97,company-97,Power,GasCap,JO,tCO2e,296257,137138,22881,58021,32688
+97,company-97,Power,RenewablesCap,ZA,tCO2e,83433,19055,NA,NA,3393
+98,company-98,Coal,Coal,CX,tCO2e,54072,133729,NA,NA,450011
+98,company-98,Coal,Coal,ZA,tCO2e,344033,140774,58178,170533,3760
+98,company-98,Coal,Coal,JO,tCO2e,NA,170430,243851,93686,14724
+98,company-98,Power,CoalCap,ZA,tCO2e,60266,28391,68784,62592,9148
+98,company-98,Power,CoalCap,JO,tCO2e,NA,77935,NA,24976,4682
+98,company-98,Power,CoalCap,CX,tCO2e,198477,39983,1341,141242,35801
+98,company-98,Power,CoalCap,LK,tCO2e,104136,15889,115379,121717,72016
+98,company-98,Automotive,ICE,DE,tCO2,139245,45469,178292,34850,NA
+99,company-99,Power,HydroCap,LK,tCO2e,16955,233333,242487,68870,NA
+99,company-99,Power,HydroCap,ZA,tCO2e,230807,80622,2954,11625,137296
+99,company-99,Power,HydroCap,FJ,tCO2e,NA,290367,34017,2973,5531
+99,company-99,Power,HydroCap,CX,tCO2e,467246,59656,31324,NA,59350
+99,company-99,Power,HydroCap,DE,tCO2e,108631,14776,76284,133821,130486
+99,company-99,Power,HydroCap,JO,tCO2e,NA,30913,3535,112574,28184
+99,company-99,Aviation,Passenger,FJ,tCO2,83436,18144,16684,28707,317776
+99,company-99,Aviation,Passenger,DE,tCO2,105955,7493,NA,295582,414518
+99,company-99,Aviation,Passenger,CX,tCO2,43863,49816,NA,81733,NA
+99,company-99,Aviation,Passenger,JO,tCO2,58897,60945,NA,164629,271919
+100,company-100,Automotive,ICE,JO,tCO2,72784,11465,28647,248136,11544
+100,company-100,Automotive,ICE,ZA,tCO2,5391,NA,110009,176887,17323
+100,company-100,Oil&Gas,Gas,ZA,tCO2e,18902,111864,30006,NA,1834
+100,company-100,Power,GasCap,ZA,tCO2e,3692,6490,45636,172029,59440
+100,company-100,Power,GasCap,LK,tCO2e,233097,216270,5706,NA,NA
+1,company-1,Power,OilCap,CX,tCO2e,NA,37857,278500,NA,64651
+1,company-1,Power,OilCap,FJ,tCO2e,4786,423023,80694,118174,NA
+1,company-1,Power,OilCap,DE,tCO2e,14064,49313,NA,179530,NA
+1,company-1,Power,OilCap,LK,tCO2e,37276,12766,23999,54844,111905
+1,company-1,Power,RenewablesCap,FJ,tCO2e,327801,NA,97939,2792,160343
+1,company-1,Power,RenewablesCap,LK,tCO2e,21172,19888,35176,102562,127282
+1,company-1,Power,RenewablesCap,CX,tCO2e,351750,NA,40231,83011,29634
+1,company-1,Power,RenewablesCap,JO,tCO2e,NA,56677,40379,35591,NA
+1,company-1,Power,RenewablesCap,ZA,tCO2e,34258,4534,101017,115836,50850
+2,company-2,Power,NuclearCap,LK,tCO2e,72825,54220,NA,134681,42037
+2,company-2,Power,NuclearCap,ZA,tCO2e,80821,72865,61988,61331,93177
+2,company-2,Power,NuclearCap,FJ,tCO2e,64949,14687,71308,20809,NA
+2,company-2,Power,NuclearCap,JO,tCO2e,34454,42989,NA,NA,NA
+3,company-3,Power,GasCap,ZA,tCO2e,NA,19368,533127,70998,23028
+3,company-3,Power,GasCap,JO,tCO2e,7964,NA,NA,4839,NA
+3,company-3,Power,GasCap,DE,tCO2e,42529,72012,64346,254628,189839
+4,company-4,Power,HydroCap,JO,tCO2e,NA,24327,NA,NA,75914
+4,company-4,Power,HydroCap,DE,tCO2e,57043,62897,NA,120008,66583
+4,company-4,Power,HydroCap,LK,tCO2e,225762,47814,51160,85513,66061
+4,company-4,Power,HydroCap,CX,tCO2e,64396,255301,40740,161039,36294
+4,company-4,Power,HydroCap,ZA,tCO2e,NA,12290,NA,148357,NA
+5,company-5,Power,GasCap,FJ,tCO2e,NA,NA,213382,80610,95344
+5,company-5,Power,GasCap,LK,tCO2e,2377,NA,55988,17457,135567
+5,company-5,Power,GasCap,ZA,tCO2e,NA,69331,63141,36089,NA
+5,company-5,Power,GasCap,CX,tCO2e,7114,NA,112154,382337,20766
+5,company-5,Power,GasCap,JO,tCO2e,63558,14636,44542,313746,4192
+5,company-5,Power,CoalCap,JO,tCO2e,209887,165275,NA,222873,NA
+5,company-5,Power,CoalCap,ZA,tCO2e,NA,168322,187010,NA,307457
+5,company-5,Power,CoalCap,CX,tCO2e,NA,93611,93385,178267,NA
+5,company-5,Power,CoalCap,DE,tCO2e,36006,31901,NA,NA,165853
+6,company-6,Power,RenewablesCap,LK,tCO2e,NA,26718,25007,NA,NA
+6,company-6,Power,RenewablesCap,DE,tCO2e,78227,191612,29498,NA,18808
+7,company-7,Power,GasCap,ZA,tCO2e,NA,169402,35951,NA,49486
+7,company-7,Power,GasCap,DE,tCO2e,41632,50052,38201,NA,4488
+7,company-7,Power,GasCap,JO,tCO2e,94582,73417,251314,71655,187103
+8,company-8,Power,GasCap,LK,tCO2e,25296,19744,54259,64407,46060
+8,company-8,Power,GasCap,DE,tCO2e,NA,42271,70579,7763,NA
+8,company-8,Power,GasCap,ZA,tCO2e,25887,31799,44436,196445,70568
+9,company-9,Power,RenewablesCap,DE,tCO2e,7194,249526,71743,89017,42487
+9,company-9,Power,RenewablesCap,LK,tCO2e,103164,NA,298277,61133,94750
+10,company-10,Power,GasCap,JO,tCO2e,20727,223402,43590,47948,101111
+10,company-10,Power,GasCap,DE,tCO2e,26022,6981,137630,81241,2521
+10,company-10,Power,GasCap,ZA,tCO2e,4094,NA,NA,165974,350046
+10,company-10,Power,GasCap,LK,tCO2e,145200,NA,NA,129243,341127
+10,company-10,Power,GasCap,FJ,tCO2e,20296,11815,NA,NA,5192
+12,company-12,Power,NuclearCap,CX,tCO2e,65715,82455,30301,NA,66447
+12,company-12,Power,NuclearCap,FJ,tCO2e,250375,221981,32267,37943,61060
+12,company-12,Power,NuclearCap,LK,tCO2e,220424,154330,73137,70584,NA
+14,company-14,Power,NuclearCap,JO,tCO2e,103083,49112,168979,437340,120861
+14,company-14,Power,NuclearCap,DE,tCO2e,NA,NA,50258,38914,148613
+14,company-14,Power,NuclearCap,LK,tCO2e,150170,NA,NA,25208,45831
+14,company-14,Power,NuclearCap,FJ,tCO2e,7399,NA,59950,44658,176508
+14,company-14,Power,RenewablesCap,DE,tCO2e,75700,335451,NA,134830,21327
+14,company-14,Power,RenewablesCap,CX,tCO2e,278112,15772,NA,NA,96258
+14,company-14,Power,RenewablesCap,FJ,tCO2e,77645,7675,361801,13300,11442
+14,company-14,Power,RenewablesCap,ZA,tCO2e,80491,44605,18939,22678,8952
+15,company-15,Power,OilCap,CX,tCO2e,NA,124363,7601,6601,33476
+15,company-15,Power,OilCap,ZA,tCO2e,NA,13605,14607,285841,205633
+15,company-15,Power,OilCap,DE,tCO2e,NA,NA,49267,78110,53132
+15,company-15,Power,OilCap,LK,tCO2e,2387,95564,132045,272346,181336
+17,company-17,Power,CoalCap,DE,tCO2e,35304,NA,NA,103182,8221
+18,company-18,Power,GasCap,ZA,tCO2e,237422,NA,302395,284191,187624
+18,company-18,Power,GasCap,CX,tCO2e,NA,537,20078,110612,95902
+18,company-18,Power,GasCap,FJ,tCO2e,NA,162948,NA,60929,150442
+18,company-18,Power,GasCap,LK,tCO2e,24657,173314,156843,54797,NA
+18,company-18,Power,GasCap,DE,tCO2e,34102,229670,47149,NA,50560
+20,company-20,Power,NuclearCap,JO,tCO2e,145777,NA,49178,75577,29059
+20,company-20,Power,NuclearCap,ZA,tCO2e,162838,NA,130523,177071,28727
+20,company-20,Power,NuclearCap,DE,tCO2e,23229,13969,62147,24498,17953
+20,company-20,Power,NuclearCap,CX,tCO2e,62609,NA,7384,91109,NA
+20,company-20,Power,HydroCap,DE,tCO2e,NA,NA,274940,14186,37518
+20,company-20,Power,HydroCap,CX,tCO2e,166561,353212,64506,160111,2354
+20,company-20,Power,HydroCap,LK,tCO2e,68517,NA,NA,27729,82486
+20,company-20,Power,HydroCap,JO,tCO2e,118033,140844,NA,356688,84584
+20,company-20,Power,HydroCap,ZA,tCO2e,NA,68090,NA,62107,176389
+21,company-21,Power,OilCap,CX,tCO2e,119130,40136,44127,54925,25128
+21,company-21,Power,OilCap,DE,tCO2e,2813,NA,90809,NA,NA
+21,company-21,Power,OilCap,FJ,tCO2e,297120,NA,NA,12166,NA
+21,company-21,Power,OilCap,ZA,tCO2e,NA,173169,111214,159161,304496
+26,company-26,Power,RenewablesCap,CX,tCO2e,NA,278521,NA,19708,20808
+26,company-26,Power,RenewablesCap,LK,tCO2e,130083,113470,100758,41723,NA
+26,company-26,Power,RenewablesCap,ZA,tCO2e,39339,76994,41654,14838,NA
+26,company-26,Power,RenewablesCap,FJ,tCO2e,NA,NA,NA,218841,NA
+27,company-27,Power,NuclearCap,JO,tCO2e,NA,48737,62833,68232,23877
+27,company-27,Power,NuclearCap,ZA,tCO2e,17310,97302,66288,53951,NA
+28,company-28,Power,NuclearCap,FJ,tCO2e,144952,86205,51743,30465,NA
+29,company-29,Power,HydroCap,LK,tCO2e,45235,38167,89885,129443,245814
+29,company-29,Power,HydroCap,JO,tCO2e,27158,11991,177613,153624,441627
+29,company-29,Power,HydroCap,FJ,tCO2e,41589,52959,NA,68547,12661
+30,company-30,Power,CoalCap,DE,tCO2e,2315,NA,249902,254646,6265
+30,company-30,Power,NuclearCap,FJ,tCO2e,15733,149065,109766,37089,1282
+30,company-30,Power,NuclearCap,ZA,tCO2e,76589,757,86409,NA,73662
+30,company-30,Power,NuclearCap,LK,tCO2e,26751,367496,NA,118105,33308
+33,company-33,Power,NuclearCap,CX,tCO2e,173750,NA,311989,NA,75724
+33,company-33,Power,NuclearCap,FJ,tCO2e,25729,129360,34048,26281,36164
+33,company-33,Power,NuclearCap,DE,tCO2e,50604,NA,243496,NA,182717
+35,company-35,Power,CoalCap,DE,tCO2e,152463,119299,128353,65275,27058
+35,company-35,Power,CoalCap,JO,tCO2e,66566,183825,8728,93145,34842
+37,company-37,Power,NuclearCap,DE,tCO2e,26073,12007,42079,15349,65968
+37,company-37,Power,NuclearCap,ZA,tCO2e,24654,51472,10089,155568,138808
+37,company-37,Power,NuclearCap,LK,tCO2e,7262,NA,29621,49715,116039
+38,company-38,Power,CoalCap,LK,tCO2e,295226,13612,34627,NA,426833
+38,company-38,Power,HydroCap,JO,tCO2e,75522,221540,18114,292604,51522
+38,company-38,Power,HydroCap,FJ,tCO2e,NA,254986,54003,368577,9662
+38,company-38,Power,HydroCap,CX,tCO2e,139056,NA,NA,103582,99850
+39,company-39,Power,GasCap,DE,tCO2e,24350,138250,5842,NA,NA
+39,company-39,Power,GasCap,LK,tCO2e,NA,NA,39240,466235,288650
+39,company-39,Power,GasCap,FJ,tCO2e,NA,102014,23706,NA,33859
+39,company-39,Power,GasCap,CX,tCO2e,NA,NA,36987,25839,NA
+40,company-40,Power,NuclearCap,DE,tCO2e,147320,279480,NA,53506,NA
+40,company-40,Power,NuclearCap,JO,tCO2e,NA,NA,48439,51554,NA
+40,company-40,Power,NuclearCap,ZA,tCO2e,NA,38681,125108,27634,139785
+42,company-42,Power,RenewablesCap,ZA,tCO2e,NA,NA,79272,44901,NA
+42,company-42,Power,RenewablesCap,JO,tCO2e,197586,29660,167167,NA,151906
+44,company-44,Power,OilCap,DE,tCO2e,NA,12806,150672,4717,NA
+44,company-44,Power,OilCap,FJ,tCO2e,NA,46624,136744,126153,107190
+47,company-47,Power,NuclearCap,ZA,tCO2e,33915,3455,NA,2017,45765
+47,company-47,Power,NuclearCap,CX,tCO2e,5911,3715,NA,183825,18260
+47,company-47,Power,NuclearCap,DE,tCO2e,2290,761,183191,121308,60883
+48,company-48,Power,CoalCap,FJ,tCO2e,52614,NA,6793,NA,35609
+48,company-48,Power,CoalCap,DE,tCO2e,NA,415093,232326,NA,192118
+52,company-52,Power,CoalCap,FJ,tCO2e,NA,22400,NA,426872,NA
+52,company-52,Power,CoalCap,CX,tCO2e,21083,8953,NA,13422,45757
+52,company-52,Power,CoalCap,JO,tCO2e,NA,13706,18552,129246,NA
+52,company-52,Power,CoalCap,DE,tCO2e,140550,NA,143985,27259,NA
+52,company-52,Power,RenewablesCap,ZA,tCO2e,33493,40103,224790,NA,271878
+53,company-53,Power,GasCap,DE,tCO2e,63021,19691,74991,NA,53151
+53,company-53,Power,GasCap,LK,tCO2e,214576,19873,268026,234073,6646
+53,company-53,Power,GasCap,CX,tCO2e,73244,35342,NA,46027,10239
+53,company-53,Power,GasCap,FJ,tCO2e,NA,10576,9537,224553,78997
+56,company-56,Power,HydroCap,DE,tCO2e,57454,26793,17543,NA,57042
+56,company-56,Power,HydroCap,FJ,tCO2e,81087,NA,NA,46348,57733
+56,company-56,Power,HydroCap,JO,tCO2e,126115,87300,21404,1470,115609
+60,company-60,Power,RenewablesCap,LK,tCO2e,NA,67150,109978,84073,69221
+62,company-62,Power,GasCap,DE,tCO2e,17289,90640,159046,32903,12844
+62,company-62,Power,GasCap,ZA,tCO2e,5992,16477,10536,80196,22796
+63,company-63,Power,RenewablesCap,JO,tCO2e,NA,9123,NA,188131,57830
+63,company-63,Power,RenewablesCap,CX,tCO2e,115066,NA,95861,28762,16924
+63,company-63,Power,RenewablesCap,LK,tCO2e,NA,35140,14922,54671,106107
+63,company-63,Power,RenewablesCap,FJ,tCO2e,408420,150815,NA,44917,18125
+63,company-63,Power,RenewablesCap,DE,tCO2e,25883,111251,21410,1440,129690
+64,company-64,Power,CoalCap,FJ,tCO2e,119021,77933,107372,396016,108979
+64,company-64,Power,CoalCap,DE,tCO2e,34807,90683,315767,52700,245622
+64,company-64,Power,CoalCap,CX,tCO2e,25437,264721,213768,56972,38900
+64,company-64,Power,CoalCap,ZA,tCO2e,149342,168772,51764,435615,146802
+66,company-66,Power,HydroCap,ZA,tCO2e,309473,NA,609861,NA,57659
+66,company-66,Power,HydroCap,DE,tCO2e,NA,179420,597,162537,405165
+66,company-66,Power,HydroCap,LK,tCO2e,22417,128770,24825,33986,40292
+66,company-66,Power,HydroCap,FJ,tCO2e,214664,2782,53392,132230,11566
+66,company-66,Power,HydroCap,JO,tCO2e,NA,21643,NA,55271,NA
+68,company-68,Power,OilCap,DE,tCO2e,123790,NA,95412,23304,235394
+68,company-68,Power,OilCap,CX,tCO2e,48347,5722,NA,118486,25505
+68,company-68,Power,OilCap,JO,tCO2e,72508,114851,76585,129473,NA
+68,company-68,Power,OilCap,ZA,tCO2e,169273,2618,11915,77785,83758
+70,company-70,Power,HydroCap,DE,tCO2e,NA,NA,179951,NA,298658
+70,company-70,Power,HydroCap,CX,tCO2e,155695,12711,45042,95190,118886
+70,company-70,Power,HydroCap,ZA,tCO2e,1962,250156,58623,NA,10850
+70,company-70,Power,HydroCap,LK,tCO2e,75315,NA,74968,52698,39454
+70,company-70,Power,HydroCap,JO,tCO2e,12355,71807,NA,NA,107918
+71,company-71,Power,NuclearCap,ZA,tCO2e,113067,NA,NA,179046,173524
+71,company-71,Power,NuclearCap,FJ,tCO2e,62326,259001,5941,169715,293702
+71,company-71,Power,NuclearCap,LK,tCO2e,110901,38733,63217,NA,25670
+71,company-71,Power,NuclearCap,DE,tCO2e,NA,NA,224377,292305,31831
+75,company-75,Power,CoalCap,CX,tCO2e,NA,184508,241943,220631,36478
+75,company-75,Power,CoalCap,LK,tCO2e,NA,45758,130107,65373,NA
+75,company-75,Power,CoalCap,DE,tCO2e,89959,81979,176615,NA,126617
+75,company-75,Power,CoalCap,JO,tCO2e,NA,267239,95378,162597,63022
+75,company-75,Power,CoalCap,ZA,tCO2e,25180,113373,23847,104239,22675
+75,company-75,Power,NuclearCap,JO,tCO2e,56612,NA,256052,9534,180769
+75,company-75,Power,NuclearCap,LK,tCO2e,121021,22442,18300,108661,255844
+75,company-75,Power,NuclearCap,CX,tCO2e,102885,33074,36407,55917,186223
+78,company-78,Power,RenewablesCap,CX,tCO2e,NA,129635,8794,41566,8386
+78,company-78,Power,RenewablesCap,JO,tCO2e,59731,224009,102841,1857,93340
+79,company-79,Power,NuclearCap,CX,tCO2e,NA,9421,138597,13791,27265
+79,company-79,Power,NuclearCap,JO,tCO2e,66605,30734,185478,44203,34408
+79,company-79,Power,RenewablesCap,FJ,tCO2e,1934,28765,NA,141035,22519
+80,company-80,Power,HydroCap,FJ,tCO2e,NA,57838,301901,187851,157908
+80,company-80,Power,HydroCap,CX,tCO2e,5613,451067,355584,4449,148606
+80,company-80,Power,HydroCap,DE,tCO2e,NA,NA,28407,432585,387646
+80,company-80,Power,HydroCap,JO,tCO2e,NA,1817,NA,83239,51146
+80,company-80,Power,HydroCap,LK,tCO2e,NA,NA,47742,7439,32890
+83,company-83,Power,NuclearCap,FJ,tCO2e,62452,105858,85994,NA,225649
+83,company-83,Power,NuclearCap,CX,tCO2e,31808,58484,175188,796,9201
+83,company-83,Power,NuclearCap,LK,tCO2e,73191,16857,431168,40865,NA
+83,company-83,Power,NuclearCap,ZA,tCO2e,288603,125177,228523,202036,125317
+84,company-84,Power,HydroCap,JO,tCO2e,NA,2525,303912,147046,247636
+84,company-84,Power,HydroCap,CX,tCO2e,93078,69982,187028,205674,33257
+85,company-85,Power,OilCap,FJ,tCO2e,80783,NA,55337,307525,NA
+85,company-85,Power,OilCap,LK,tCO2e,22393,425,182353,388419,109226
+85,company-85,Power,OilCap,CX,tCO2e,12010,240075,116352,12876,37959
+87,company-87,Power,RenewablesCap,CX,tCO2e,42963,258243,1168,NA,20602
+87,company-87,Power,RenewablesCap,DE,tCO2e,NA,17040,10987,56963,NA
+87,company-87,Power,RenewablesCap,JO,tCO2e,139345,44193,253136,15220,NA
+87,company-87,Power,RenewablesCap,ZA,tCO2e,47818,27791,129481,182680,41536
+88,company-88,Power,HydroCap,LK,tCO2e,114175,79230,NA,NA,NA
+88,company-88,Power,HydroCap,ZA,tCO2e,115840,341673,79529,2397,23244
+88,company-88,Power,HydroCap,JO,tCO2e,85814,40015,15439,NA,70243
+88,company-88,Power,HydroCap,DE,tCO2e,106428,39099,6136,39516,145016
+88,company-88,Power,HydroCap,FJ,tCO2e,NA,308005,37163,NA,96640
+94,company-94,Power,OilCap,JO,tCO2e,44692,199655,65585,NA,151758
+94,company-94,Power,RenewablesCap,ZA,tCO2e,5675,112243,173242,6628,188918
+94,company-94,Power,RenewablesCap,FJ,tCO2e,NA,105073,23100,91121,248031
+94,company-94,Power,RenewablesCap,CX,tCO2e,40270,66337,34545,NA,16768
+95,company-95,Power,GasCap,FJ,tCO2e,15329,502612,51724,NA,6117
+95,company-95,Power,GasCap,ZA,tCO2e,324131,NA,48481,1003,NA
+98,company-98,Power,CoalCap,DE,tCO2e,35870,42629,22802,93147,136491
+98,company-98,Power,CoalCap,JO,tCO2e,12276,NA,30899,199573,NA
+3,company-3,Power,CoalCap,DE,tCO2e,NA,62962,NA,17467,48873
+4,company-4,Power,OilCap,LK,tCO2e,28706,NA,NA,62526,NA
+6,company-6,Power,GasCap,DE,tCO2e,35528,130203,252635,224,43904
+6,company-6,Power,GasCap,LK,tCO2e,115635,211276,30754,269590,104737
+7,company-7,Power,NuclearCap,ZA,tCO2e,209136,59416,76548,NA,NA
+8,company-8,Power,CoalCap,CX,tCO2e,207477,53856,44000,77446,59931
+8,company-8,Power,CoalCap,ZA,tCO2e,40664,307,112133,NA,76202
+8,company-8,Power,CoalCap,DE,tCO2e,257629,62265,72555,NA,NA
+8,company-8,Power,CoalCap,FJ,tCO2e,189514,198168,NA,36996,NA
+10,company-10,Power,RenewablesCap,CX,tCO2e,5006,201772,545955,NA,18089
+11,company-11,Power,HydroCap,CX,tCO2e,137389,43106,2153,144352,NA
+11,company-11,Power,HydroCap,LK,tCO2e,18866,22533,50416,74209,NA
+11,company-11,Power,HydroCap,DE,tCO2e,NA,93448,79219,47027,NA
+11,company-11,Power,HydroCap,FJ,tCO2e,46748,14642,NA,NA,5480
+11,company-11,Power,HydroCap,ZA,tCO2e,56230,22375,314535,95715,23845
+15,company-15,Power,GasCap,LK,tCO2e,50439,116659,25373,12271,80469
+15,company-15,Power,GasCap,FJ,tCO2e,9100,72066,338989,16553,27537
+15,company-15,Power,HydroCap,CX,tCO2e,44439,127753,23582,119494,133656
+15,company-15,Power,HydroCap,ZA,tCO2e,52895,42592,39234,67139,2485
+15,company-15,Power,HydroCap,LK,tCO2e,69391,58443,19755,NA,97553
+15,company-15,Power,HydroCap,FJ,tCO2e,141484,NA,204209,53641,84328
+15,company-15,Power,HydroCap,JO,tCO2e,55095,NA,83299,269,9165
+16,company-16,Power,GasCap,LK,tCO2e,411,15081,9922,NA,52187
+16,company-16,Power,GasCap,JO,tCO2e,NA,17493,62471,49818,12359
+16,company-16,Power,GasCap,ZA,tCO2e,115648,15173,82057,25979,16774
+16,company-16,Power,GasCap,FJ,tCO2e,74338,43371,61531,43699,NA
+17,company-17,Power,RenewablesCap,ZA,tCO2e,134100,NA,121945,NA,15880
+17,company-17,Power,RenewablesCap,JO,tCO2e,38344,NA,170254,444876,NA
+17,company-17,Power,RenewablesCap,DE,tCO2e,75372,50631,60705,28043,34430
+19,company-19,Power,RenewablesCap,DE,tCO2e,6601,14857,52967,NA,NA
+19,company-19,Power,RenewablesCap,LK,tCO2e,41628,401942,111004,12509,73429
+19,company-19,Power,RenewablesCap,CX,tCO2e,NA,NA,NA,10469,351504
+19,company-19,Power,RenewablesCap,JO,tCO2e,345029,1393,60324,169263,245328
+21,company-21,Power,GasCap,DE,tCO2e,23112,61994,56984,NA,NA
+22,company-22,Power,GasCap,JO,tCO2e,82015,197348,50721,11301,108722
+22,company-22,Power,GasCap,CX,tCO2e,NA,251035,NA,308295,46986
+22,company-22,Power,GasCap,FJ,tCO2e,29180,NA,177411,106471,NA
+22,company-22,Power,GasCap,DE,tCO2e,49500,75117,164038,151682,75796
+22,company-22,Power,GasCap,ZA,tCO2e,NA,99956,14700,177019,231585
+23,company-23,Power,OilCap,FJ,tCO2e,10517,36936,6017,58003,30800
+24,company-24,Power,NuclearCap,LK,tCO2e,28655,123176,NA,115025,209158
+24,company-24,Power,NuclearCap,CX,tCO2e,33880,208438,56441,13535,142362
+24,company-24,Power,NuclearCap,DE,tCO2e,NA,6285,15763,NA,104383
+24,company-24,Power,NuclearCap,ZA,tCO2e,116262,123543,NA,120000,39228
+24,company-24,Power,NuclearCap,JO,tCO2e,225106,45294,76802,NA,179203
+25,company-25,Power,OilCap,DE,tCO2e,177395,8721,8550,NA,NA
+26,company-26,Power,OilCap,FJ,tCO2e,NA,78637,33399,20676,52994
+26,company-26,Power,OilCap,ZA,tCO2e,NA,222016,55533,435399,NA
+26,company-26,Power,OilCap,LK,tCO2e,33149,NA,119058,44183,462666
+26,company-26,Power,OilCap,DE,tCO2e,45868,155829,NA,270481,NA
+27,company-27,Power,RenewablesCap,JO,tCO2e,341968,409653,NA,295642,132252
+27,company-27,Power,RenewablesCap,CX,tCO2e,74799,135832,16893,11128,20283
+27,company-27,Power,RenewablesCap,LK,tCO2e,NA,134033,809,66938,80966
+27,company-27,Power,RenewablesCap,DE,tCO2e,217594,98114,123207,NA,480435
+27,company-27,Power,RenewablesCap,ZA,tCO2e,315595,NA,NA,203406,34814
+28,company-28,Power,GasCap,LK,tCO2e,70525,NA,73356,24415,9719
+28,company-28,Power,GasCap,ZA,tCO2e,225,NA,56443,199665,112038
+30,company-30,Power,OilCap,DE,tCO2e,98803,94851,120200,113250,6473
+30,company-30,Power,OilCap,FJ,tCO2e,143466,38113,NA,45316,17995
+30,company-30,Power,OilCap,ZA,tCO2e,40383,73823,120552,48000,45115
+30,company-30,Power,OilCap,LK,tCO2e,52592,15833,NA,NA,328
+30,company-30,Power,OilCap,JO,tCO2e,220232,33377,9206,56795,83519
+31,company-31,Power,NuclearCap,FJ,tCO2e,137136,167727,146532,NA,8335
+31,company-31,Power,NuclearCap,DE,tCO2e,108558,252285,108598,55481,55969
+31,company-31,Power,NuclearCap,ZA,tCO2e,253148,37621,112141,NA,264606
+33,company-33,Power,OilCap,LK,tCO2e,245331,37856,32497,9279,84701
+33,company-33,Power,OilCap,FJ,tCO2e,39017,382725,213672,26596,133474
+35,company-35,Power,HydroCap,CX,tCO2e,41236,199365,30848,NA,12904
+35,company-35,Power,HydroCap,ZA,tCO2e,201626,NA,104328,101036,NA
+35,company-35,Power,HydroCap,FJ,tCO2e,11269,72019,154750,66419,172519
+36,company-36,Power,CoalCap,ZA,tCO2e,16494,68124,43616,254429,515128
+36,company-36,Power,CoalCap,LK,tCO2e,86191,33394,54159,9997,25223
+36,company-36,Power,CoalCap,FJ,tCO2e,89622,58721,4168,86960,324791
+38,company-38,Power,NuclearCap,FJ,tCO2e,64683,46973,24961,297952,44342
+38,company-38,Power,NuclearCap,CX,tCO2e,NA,314019,5375,20556,57301
+38,company-38,Power,NuclearCap,JO,tCO2e,205785,34167,382737,367619,23577
+38,company-38,Power,NuclearCap,ZA,tCO2e,NA,246594,22520,99786,45097
+38,company-38,Power,NuclearCap,DE,tCO2e,9027,146128,321342,NA,181872
+39,company-39,Power,HydroCap,FJ,tCO2e,79564,105201,91106,20806,114870
+39,company-39,Power,HydroCap,DE,tCO2e,50453,187304,181632,374790,22257
+39,company-39,Power,HydroCap,JO,tCO2e,22563,170054,15706,133918,NA
+43,company-43,Power,NuclearCap,DE,tCO2e,NA,128216,166570,7518,60246
+43,company-43,Power,NuclearCap,JO,tCO2e,61333,NA,150723,NA,84392
+43,company-43,Power,NuclearCap,LK,tCO2e,10942,NA,28291,NA,NA
+43,company-43,Power,NuclearCap,CX,tCO2e,141300,25699,97257,126432,56260
+43,company-43,Power,NuclearCap,FJ,tCO2e,29876,49017,152600,28106,186521
+44,company-44,Power,CoalCap,LK,tCO2e,69875,122182,105509,101795,NA
+44,company-44,Power,CoalCap,DE,tCO2e,35292,14925,181579,27519,NA
+45,company-45,Power,HydroCap,JO,tCO2e,41899,22452,6333,91119,112586
+45,company-45,Power,HydroCap,DE,tCO2e,NA,44153,28374,25858,53032
+46,company-46,Power,GasCap,FJ,tCO2e,58885,49733,78338,96272,16812
+47,company-47,Power,OilCap,ZA,tCO2e,20625,47600,12796,NA,100604
+49,company-49,Power,OilCap,LK,tCO2e,35319,229945,76023,105495,10917
+49,company-49,Power,OilCap,FJ,tCO2e,128552,284174,12120,204962,76218
+50,company-50,Power,GasCap,DE,tCO2e,NA,23470,118716,2429,NA
+55,company-55,Power,GasCap,DE,tCO2e,8404,9638,106366,368587,53538
+55,company-55,Power,GasCap,CX,tCO2e,67596,47966,87473,NA,70219
+55,company-55,Power,GasCap,JO,tCO2e,68522,30024,248305,10406,134554
+55,company-55,Power,RenewablesCap,JO,tCO2e,79557,46881,1713,NA,24268
+55,company-55,Power,RenewablesCap,LK,tCO2e,42698,NA,4993,183277,84978
+55,company-55,Power,RenewablesCap,DE,tCO2e,89363,104751,385935,73628,83374
+55,company-55,Power,RenewablesCap,CX,tCO2e,NA,45715,NA,NA,NA
+55,company-55,Power,RenewablesCap,ZA,tCO2e,24846,35606,31928,110610,NA
+56,company-56,Power,OilCap,JO,tCO2e,337259,30143,31623,27347,184504
+56,company-56,Power,OilCap,CX,tCO2e,24154,89186,186671,89680,137099
+58,company-58,Power,GasCap,ZA,tCO2e,NA,42581,125684,92390,48489
+60,company-60,Power,GasCap,JO,tCO2e,227031,100471,NA,264776,137903
+60,company-60,Power,GasCap,DE,tCO2e,46578,143659,NA,34759,46340
+60,company-60,Power,GasCap,FJ,tCO2e,54450,33569,NA,274910,209134
+60,company-60,Power,GasCap,ZA,tCO2e,210119,NA,45294,3131,NA
+60,company-60,Power,GasCap,LK,tCO2e,7608,12401,217957,NA,NA
+63,company-63,Power,HydroCap,FJ,tCO2e,406678,NA,77781,NA,62741
+63,company-63,Power,HydroCap,DE,tCO2e,39726,118683,13746,26960,5102
+63,company-63,Power,HydroCap,LK,tCO2e,15472,NA,39289,NA,85106
+63,company-63,Power,HydroCap,ZA,tCO2e,76908,240588,34573,NA,11553
+65,company-65,Power,RenewablesCap,LK,tCO2e,NA,NA,NA,90644,50168
+65,company-65,Power,RenewablesCap,JO,tCO2e,36126,111229,NA,369509,189634
+65,company-65,Power,RenewablesCap,ZA,tCO2e,NA,266871,27152,32732,1466
+65,company-65,Power,RenewablesCap,DE,tCO2e,162367,NA,39590,110889,113080
+65,company-65,Power,HydroCap,ZA,tCO2e,180858,1507,11438,30691,22992
+67,company-67,Power,CoalCap,DE,tCO2e,102861,NA,16758,403872,7787
+71,company-71,Power,CoalCap,LK,tCO2e,126365,189988,NA,39281,80429
+71,company-71,Power,CoalCap,CX,tCO2e,66126,NA,NA,155009,14469
+71,company-71,Power,CoalCap,JO,tCO2e,223421,226562,85477,35055,10858
+72,company-72,Power,CoalCap,LK,tCO2e,129530,28933,222297,15679,140925
+72,company-72,Power,CoalCap,DE,tCO2e,217982,6249,11993,306981,NA
+72,company-72,Power,HydroCap,JO,tCO2e,9331,282190,NA,21449,NA
+72,company-72,Power,HydroCap,LK,tCO2e,106745,2469,9295,145123,NA
+73,company-73,Power,OilCap,JO,tCO2e,30052,168480,7116,NA,44855
+74,company-74,Power,CoalCap,JO,tCO2e,NA,NA,128594,NA,36692
+74,company-74,Power,CoalCap,FJ,tCO2e,NA,207496,250544,NA,67235
+74,company-74,Power,CoalCap,DE,tCO2e,NA,94000,51892,55541,12964
+74,company-74,Power,CoalCap,CX,tCO2e,31762,78915,NA,NA,NA
+76,company-76,Power,NuclearCap,DE,tCO2e,228193,183045,NA,254110,NA
+76,company-76,Power,NuclearCap,ZA,tCO2e,243,NA,49723,406203,194980
+76,company-76,Power,NuclearCap,LK,tCO2e,163881,95313,92891,57975,69278
+76,company-76,Power,NuclearCap,JO,tCO2e,52891,114185,80248,46974,11071
+76,company-76,Power,NuclearCap,CX,tCO2e,367177,101296,NA,55175,NA
+77,company-77,Power,CoalCap,ZA,tCO2e,336844,30177,58117,126894,94174
+77,company-77,Power,CoalCap,CX,tCO2e,81261,53551,88487,24501,NA
+77,company-77,Power,CoalCap,LK,tCO2e,87995,130368,213575,NA,56693
+78,company-78,Power,HydroCap,DE,tCO2e,137120,335388,187746,148243,15264
+78,company-78,Power,HydroCap,JO,tCO2e,268157,NA,14594,18664,17699
+81,company-81,Power,CoalCap,ZA,tCO2e,44978,NA,100858,76602,NA
+82,company-82,Power,NuclearCap,FJ,tCO2e,NA,12785,6656,59538,NA
+82,company-82,Power,NuclearCap,LK,tCO2e,71520,24405,NA,76490,NA
+82,company-82,Power,NuclearCap,ZA,tCO2e,50683,55443,1944,53068,954
+82,company-82,Power,NuclearCap,JO,tCO2e,143054,NA,28792,89962,NA
+82,company-82,Power,NuclearCap,DE,tCO2e,NA,NA,NA,NA,NA
+87,company-87,Power,GasCap,ZA,tCO2e,123308,8137,17253,NA,NA
+87,company-87,Power,GasCap,CX,tCO2e,27277,32105,163966,104483,212985
+87,company-87,Power,GasCap,FJ,tCO2e,23868,45620,86353,NA,257578
+87,company-87,Power,GasCap,LK,tCO2e,20723,152286,38413,179148,NA
+87,company-87,Power,GasCap,DE,tCO2e,NA,NA,70644,22876,248702
+91,company-91,Power,RenewablesCap,ZA,tCO2e,41413,193187,137630,218517,26901
+91,company-91,Power,RenewablesCap,CX,tCO2e,15629,273246,77642,76317,91404
+91,company-91,Power,RenewablesCap,JO,tCO2e,255399,7138,NA,NA,27777
+92,company-92,Power,NuclearCap,FJ,tCO2e,85220,86701,108470,44839,211390
+92,company-92,Power,NuclearCap,JO,tCO2e,34565,152035,NA,65067,82911
+92,company-92,Power,NuclearCap,CX,tCO2e,44601,126366,NA,186007,12755
+94,company-94,Power,HydroCap,FJ,tCO2e,132421,9852,69751,40141,27583
+94,company-94,Power,HydroCap,JO,tCO2e,53067,26679,271220,NA,NA
+94,company-94,Power,HydroCap,DE,tCO2e,NA,149061,NA,54701,158507
+94,company-94,Power,HydroCap,ZA,tCO2e,136142,23705,13616,481175,13578
+95,company-95,Power,CoalCap,LK,tCO2e,86596,105454,NA,183262,105539
+95,company-95,Power,CoalCap,FJ,tCO2e,51829,128028,NA,NA,181786
+95,company-95,Power,CoalCap,CX,tCO2e,90065,239995,NA,NA,15854
+95,company-95,Power,CoalCap,DE,tCO2e,33357,23588,46770,24622,NA
+96,company-96,Power,HydroCap,FJ,tCO2e,37473,NA,1127,33002,18222
+96,company-96,Power,HydroCap,ZA,tCO2e,220393,12795,204660,61430,29501
+96,company-96,Power,GasCap,JO,tCO2e,40229,242,98212,48666,46186
+96,company-96,Power,GasCap,DE,tCO2e,51869,44081,84306,NA,NA
+97,company-97,Power,GasCap,LK,tCO2e,NA,NA,NA,14260,177147
+97,company-97,Power,GasCap,FJ,tCO2e,50721,44642,1097,62868,NA
+97,company-97,Power,GasCap,ZA,tCO2e,29211,108000,3602,90283,47622
+97,company-97,Power,GasCap,JO,tCO2e,NA,152230,91061,264687,50391
+97,company-97,Power,GasCap,DE,tCO2e,6780,NA,85246,NA,NA
+97,company-97,Power,RenewablesCap,FJ,tCO2e,264959,128890,75441,58244,NA
+97,company-97,Power,RenewablesCap,LK,tCO2e,NA,166247,16147,NA,NA
+97,company-97,Power,RenewablesCap,CX,tCO2e,47830,238888,66212,103252,151927
+97,company-97,Power,RenewablesCap,ZA,tCO2e,49812,14319,327931,39643,50189
+100,company-100,Power,GasCap,FJ,tCO2e,7929,91005,NA,164095,67989
+100,company-100,Power,GasCap,LK,tCO2e,60983,66641,151060,107019,50439
+100,company-100,Power,GasCap,DE,tCO2e,50267,112702,NA,5807,NA
+100,company-100,Power,GasCap,CX,tCO2e,235282,105030,NA,64575,24800

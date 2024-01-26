@@ -11,7 +11,11 @@ prepare_for_exposure_plot(
 )
 }
 \arguments{
-\item{value_to_plot_char}{}
+\item{group_variable_char}{group_variable_char}
+
+\item{value_to_plot_char}{value_to_plot_char}
+
+\item{analysis_data}{analysis_data}
 }
 \description{
 the data in output of this function is NOT aggregated on the group variable

@@ -11,7 +11,11 @@ main_load_analysis_data(
 )
 }
 \arguments{
-\item{portfolio_crispy_merge_cols}{}
+\item{portfolio_data}{portfolio_data}
+
+\item{portfolio_crispy_merge_cols}{portfolio_crispy_merge_cols}
+
+\item{multi_crispy}{multi_crispy}
 }
 \description{
 Title

@@ -4,10 +4,12 @@
 \alias{main_load_multi_crispy_data}
 \title{Title}
 \usage{
-main_load_multi_crispy_data(crispy_outputs_dir, max_crispy_granularity)
+main_load_multi_crispy_data(multi_crispy_data, max_crispy_granularity)
 }
 \arguments{
-\item{max_crispy_granularity}{}
+\item{max_crispy_granularity}{max_crispy_granularity}
+
+\item{crispy_outputs_dir}{crispy_outputs_dir}
 }
 \description{
 Title

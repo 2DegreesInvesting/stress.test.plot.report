@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_load_portfolio.R
 \name{map_portfolio_maturity_to_term}
 \alias{map_portfolio_maturity_to_term}
-\title{Title}
+\title{Convert column year to term}
 \usage{
 map_portfolio_maturity_to_term(
   portfolio_data,
@@ -11,8 +11,12 @@ map_portfolio_maturity_to_term(
 )
 }
 \arguments{
-\item{start_year}{}
+\item{portfolio_data}{portfolio_data}
+
+\item{maturity_month_term_bridge}{maturity_month_term_bridge}
+
+\item{start_year}{start_year}
 }
 \description{
-Title
+Convert column year to term
 }

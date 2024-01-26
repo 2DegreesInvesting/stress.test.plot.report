@@ -56,8 +56,8 @@ run_trisk(
 run_trisk(
   input_path = mock_filepaths$trisk_input_path,
   output_path = mock_filepaths$trisk_output_path,
-  baseline_scenario = "IPR2023_baseline",
-  shock_scenario = "IPR2023_FPS"
+  baseline_scenario = "Oxford2021_base",
+  shock_scenario = "Oxford2021_fast"
 )
 
 

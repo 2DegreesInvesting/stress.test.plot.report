@@ -11,7 +11,11 @@ prepare_for_cdi_el_plots(
 )
 }
 \arguments{
-\item{metrics_el}{}
+\item{analysis_data}{analysis_data}
+
+\item{group_variables_vec}{group_variables_vec}
+
+\item{metrics_el}{metrics_el}
 }
 \description{
 Title

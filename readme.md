@@ -1,3 +1,16 @@
+## Using this repo
+
+The input files for the plot are a folder of ouputs obtained from run_trisk from the r2dii.climate.stress.test package, and optionally a portfolio dataset.
+
+Examples of those dataset can be found in 
+- data-raw/mock_st_outputs/*
+- data-raw/synthetic_portfolio.csv
+
+The vignettes present the usage of the plots packaged in this repository, by using those synthetic datasets.
+
+Re-generate a set of synthetic inputs by using data-raw/gen_synthetic_workflow.R
+
+
 ## Plots good practices
 
 Plots in this repository should follow as much as possible the following guidelines. General idea is to make the plots easier to understand when reading the code, easily reusable for different studies with different inputs, and quickly integrable in RShiny.

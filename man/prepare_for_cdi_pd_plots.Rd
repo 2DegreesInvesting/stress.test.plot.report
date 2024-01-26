@@ -12,7 +12,13 @@ prepare_for_cdi_pd_plots(
 )
 }
 \arguments{
-\item{metrics_pd}{}
+\item{analysis_data}{analysis_data}
+
+\item{group_variables_vec}{group_variables_vec}
+
+\item{weight_variable_char}{weight_variable_char}
+
+\item{metrics_pd}{metrics_pd}
 }
 \description{
 Title

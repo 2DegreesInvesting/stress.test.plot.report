@@ -7,7 +7,11 @@
 prepare_for_cdi_npv_plots(analysis_data, group_variables_vec, metrics_npv)
 }
 \arguments{
-\item{metrics_npv}{}
+\item{analysis_data}{analysis_data}
+
+\item{group_variables_vec}{group_variables_vec}
+
+\item{metrics_npv}{metrics_npv}
 }
 \description{
 Title
