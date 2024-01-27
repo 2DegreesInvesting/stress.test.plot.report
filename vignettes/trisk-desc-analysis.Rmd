@@ -58,7 +58,7 @@ abcd_full_global <-
 
 raw_asset_impact <-readr::read_csv(companies_activites_rawdata_path)
 
-pick_run_ids <-  sample(unique(analysis_data_full_global$run_id), 4)
+pick_run_ids <-  sample(unique(analysis_data_full_global$run_id), 2)
 
 ```
 

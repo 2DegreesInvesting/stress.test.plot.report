@@ -23,6 +23,8 @@ Imports:
     tidyr,
     tidytext
 Remotes:
+    2DegreesInvesting/r2dii.climate.stress.test,
+    2DegreesInvesting/STDataMGMT,
     RMI-PACTA/r2dii.colours
 Suggests: 
     knitr,

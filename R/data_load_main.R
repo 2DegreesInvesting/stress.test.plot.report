@@ -206,3 +206,12 @@ main_data_load_trajectories_data <- function(company_trajectories_data, granular
     convert_trajectories_as_percentages(group_cols = group_cols[group_cols!="year"])
   return(company_trajectories_data)
 }
+
+main_data_load_trajectories_data_from_file <- function(
+  crispy_outputs_dir,
+  granularity, param_cols = c("run_id", "year")
+){
+  company_trajectories_data <- load_multiple_trajectories(crispy_outputs_dir) |>
+    main_data_load_trajectories_data(granularity=granularity, param_cols=param_cols)
+  return(company_trajectories_data)
+}

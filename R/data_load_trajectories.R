@@ -1,3 +1,39 @@
+load_multiple_trajectories <- function(crispy_outputs_dir) {
+  # Required Libraries
+
+  # Get file paths
+  files_path <- list.files(
+    path = crispy_outputs_dir,
+    pattern = "^company_trajectories_(.*).csv",
+    recursive = TRUE,
+    full.names = TRUE
+  )
+
+  stopifnot(length(files_path) > 0)
+
+  # Load all files into a list and add a run_id column for each dataframe
+  data_list <- purrr::map(files_path, function(fp) {
+    df <- readr::read_csv(fp,
+      col_types = readr::cols_only(
+      run_id = "c",
+      company_id = "c",
+      company_name = "c",
+      ald_sector = "c",
+      ald_business_unit = "c",
+      year = "d",
+      production_baseline_scenario = "c",
+      production_target_scenario = "c",
+      production_shock_scenario = "c"
+      )
+    )
+  })
+
+  multi_trajectories_data <- dplyr::bind_rows(data_list)
+
+  return(multi_trajectories_data)
+}
+
+
 #' Aggregate numerical trajectories columns
 #'
 #' @param multi_trajectories dataframe of trajectories from 1 or multiple trisk truns

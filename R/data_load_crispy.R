@@ -1,4 +1,4 @@
-load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
+load_multiple_crispy <- function(crispy_outputs_dir) {
   # Required Libraries
 
   # Get file paths
