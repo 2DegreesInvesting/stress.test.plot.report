@@ -108,6 +108,6 @@ remove_outliers_per_group <- function(multi_crispy, group_cols) {
   multi_crispy <- multi_crispy |>
     dplyr::group_by_at(group_cols) |>
     dplyr::group_modify(~ remove_outliers(.x, column = "crispy_perc_value_change")) |>
-    ungroup()
+    dplyr::ungroup()
   return(multi_crispy)
 }

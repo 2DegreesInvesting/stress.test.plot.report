@@ -1,3 +1,9 @@
+#' Title
+#'
+#' @param portfolio_data portfolio_data
+#' @param multi_crispy_data multi_crispy_data
+#' @param portfolio_crispy_merge_cols portfolio_crispy_merge_cols
+#'
 create_analysis_data <-
   function(portfolio_data,
            multi_crispy_data,
@@ -23,11 +29,8 @@ create_analysis_data <-
 #' Compute Analysis Metrics
 #'
 #' @description Function computing financial metrics to use for analysis
-#' @param analysis_data
+#' @param analysis_data analysis_data
 #'
-#' @return
-#'
-#' @examples
 compute_analysis_metrics <- function(analysis_data) {
   analysis_data <- analysis_data |>
     dplyr::mutate(
