@@ -148,7 +148,8 @@ main_load_multi_crispy_data <-
   function(multi_crispy_data,
            max_crispy_granularity) {
     multi_crispy_data <- multi_crispy_data |>
-      aggregate_crispy_facts(group_cols = max_crispy_granularity)
+      aggregate_crispy_facts(group_cols = max_crispy_granularity) |>
+      remove_outliers_per_group(group_cols = max_crispy_granularity)
     return(multi_crispy_data)
   }
 

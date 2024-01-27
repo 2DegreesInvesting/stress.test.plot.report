@@ -73,3 +73,46 @@ aggregate_crispy_facts <- function(multi_crispy, group_cols, param_cols = c(
     )
   return(multi_crispy)
 }
+
+
+
+#' Title
+#'
+#' @description
+#' Function to remove outliers based on z-score
+#'
+#'
+#' @param df df
+#' @param column column name
+#' @param max_zscore max_zscore
+#'
+remove_outliers <- function(df, column, max_zscore = 3) {
+  # Compute the mean and standard deviation of the column
+  mean_value <- mean(df[[column]], na.rm = TRUE)
+  sd_value <- sd(df[[column]], na.rm = TRUE)
+
+  # Calculate the Z-scores for the column
+  z_scores <- (df[[column]] - mean_value) / sd_value
+
+  outlier_companies <- unique(df[abs(z_scores) > max_zscore, "company_id"]) |>
+    dplyr::pull()
+
+  # Filter out rows where the absolute z-score is greater than 3
+  df_filtered <- df |>
+    dplyr::filter(!(.data$company_id %in% outlier_companies))
+
+  return(df_filtered)
+}
+
+#' Title
+#'
+#' @param multi_crispy multi_crispy
+#' @param group_cols group_cols
+#'
+remove_outliers_per_group <- function(multi_crispy, group_cols){
+  multi_crispy <- multi_crispy |>
+    group_by_at(group_cols) |>
+    group_modify(~ remove_outliers(.x, column = "crispy_perc_value_change")) |>
+    ungroup()
+  return(multi_crispy)
+}
