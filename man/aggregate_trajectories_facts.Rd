@@ -4,19 +4,12 @@
 \alias{aggregate_trajectories_facts}
 \title{Aggregate numerical trajectories columns}
 \usage{
-aggregate_trajectories_facts(
-  multi_trajectories,
-  group_cols,
-  param_cols = c("run_id", "scenario_geography", "baseline_scenario", "shock_scenario",
-    "year")
-)
+aggregate_trajectories_facts(multi_trajectories, group_cols)
 }
 \arguments{
 \item{multi_trajectories}{dataframe of trajectories from 1 or multiple trisk truns}
 
 \item{group_cols}{group_cols}
-
-\item{param_cols}{param_cols}
 }
 \description{
 Aggregate numerical trajectories columns

@@ -8,8 +8,6 @@ map_portfolio_maturity_to_term(portfolio_data, trisk_start_year)
 }
 \arguments{
 \item{portfolio_data}{portfolio_data}
-
-\item{start_year}{start_year}
 }
 \description{
 Convert column year to term

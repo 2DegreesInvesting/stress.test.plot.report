@@ -4,7 +4,12 @@
 \alias{main_data_load_trajectories_data}
 \title{Title}
 \usage{
-main_data_load_trajectories_data(company_trajectories_data, granularity)
+main_data_load_trajectories_data(
+  company_trajectories_data,
+  granularity,
+  param_cols = c("run_id", "scenario_geography", "baseline_scenario", "shock_scenario",
+    "year")
+)
 }
 \arguments{
 \item{company_trajectories_data}{company_trajectories_data}

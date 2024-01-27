@@ -56,14 +56,9 @@ load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
 #' @param group_cols group_cols
 #' @param param_cols TODO the parameters should be stored in a dataframe other than crispy and use the run_id as key to join
 #'
-aggregate_crispy_facts <- function(multi_crispy, group_cols, param_cols = c(
-                                     "term", "run_id", "roll_up_type", "scenario_geography", "baseline_scenario",
-                                     "shock_scenario", "risk_free_rate", "discount_rate", "div_netprofit_prop_coef",
-                                     "carbon_price_model", "market_passthrough", "financial_stimulus", "start_year",
-                                     "growth_rate", "shock_year"
-                                   )) {
+aggregate_crispy_facts <- function(multi_crispy, group_cols) {
   multi_crispy <- multi_crispy |>
-    dplyr::group_by_at(unique(c(group_cols, param_cols))) |>
+    dplyr::group_by_at(group_cols) |>
     dplyr::summarise(
       net_present_value_baseline = sum(net_present_value_baseline, na.rm = T),
       net_present_value_shock = sum(net_present_value_shock, na.rm = T),
@@ -111,8 +106,8 @@ remove_outliers <- function(df, column, max_zscore = 3) {
 #'
 remove_outliers_per_group <- function(multi_crispy, group_cols) {
   multi_crispy <- multi_crispy |>
-    group_by_at(group_cols) |>
-    group_modify(~ remove_outliers(.x, column = "crispy_perc_value_change")) |>
+    dplyr::group_by_at(group_cols) |>
+    dplyr::group_modify(~ remove_outliers(.x, column = "crispy_perc_value_change")) |>
     ungroup()
   return(multi_crispy)
 }

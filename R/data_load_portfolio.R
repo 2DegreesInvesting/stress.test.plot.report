@@ -1,3 +1,7 @@
+#' Title
+#'
+#' @param portfolio_data_path
+#'
 load_portfolio_data <- function(portfolio_data_path) {
   if (!is.null(portfolio_data_path)) {
     portfolio_data <- readr::read_csv(
@@ -36,8 +40,8 @@ load_portfolio_data <- function(portfolio_data_path) {
 
 #' Convert column year to term
 #'
+#' @param trisk_start_year
 #' @param portfolio_data portfolio_data
-#' @param start_year start_year
 #'
 map_portfolio_maturity_to_term <-
   function(portfolio_data,
@@ -69,9 +73,9 @@ map_portfolio_maturity_to_term <-
 #' @return
 #'
 #' @examples
-aggregate_portfolio_facts <- function(portfolio_data, group_cols, param_cols = c("portfolio_id", "term")) {
+aggregate_portfolio_facts <- function(portfolio_data, group_cols) {
   portfolio_data <- portfolio_data |>
-    dplyr::group_by_at(unique(c(group_cols, param_cols))) |>
+    dplyr::group_by_at(group_cols) |>
     dplyr::summarize(
       exposure_value_usd = sum(.data$exposure_value_usd),
       loss_given_default = stats::median(loss_given_default, na.rm = T),

@@ -49,10 +49,10 @@ load_input_plots_data_from_files <-
 #'  The dataframe in output of this function should always be
 #'  the one used as input for the plots preprocessing functions
 #'
-#' @param crispy_outputs_dir crispy_outputs_dir
-#' @param portfolio_data_path portfolio_data_path
 #' @param granularity granularity
 #' @param trisk_start_year (default) sets to the earliest year of multi_cripy_data
+#' @param multi_crispy_data
+#' @param portfolio_data
 #'
 #' @return
 #' @export
@@ -93,9 +93,9 @@ load_input_plots_data_from_tibble <-
 #'
 #'
 #'
-#' @param multi_crispy multi_crispy
 #' @param portfolio_data portfolio_data
 #' @param portfolio_crispy_merge_cols portfolio_crispy_merge_cols
+#' @param multi_crispy_data
 #'
 #' @return
 #'
@@ -116,7 +116,10 @@ main_load_analysis_data <-
 
 #' Title
 #'
-#' @param max_portfolio_granularity max_portfolio_granularity
+#' @param portfolio_data
+#' @param granularity
+#' @param param_cols
+#' @param trisk_start_year
 #'
 #' @return
 #'
@@ -124,30 +127,41 @@ main_load_analysis_data <-
 main_load_portfolio_data <-
   function(portfolio_data,
            granularity,
+           param_cols = c("portfolio_id", "term"),
            trisk_start_year) {
+    group_cols <- unique(c(granularity, param_cols))
+
     portfolio_data <- portfolio_data |>
       map_portfolio_maturity_to_term(
         trisk_start_year = trisk_start_year
       ) |>
-      aggregate_portfolio_facts(group_cols = granularity)
+      aggregate_portfolio_facts(group_cols = group_cols)
 
     return(portfolio_data)
   }
 
 #' Title
 #'
-#' @param crispy_outputs_dir crispy_outputs_dir
-#' @param max_crispy_granularity max_crispy_granularity
+#' @param multi_crispy_data
+#' @param granularity
+#' @param param_cols
 #'
 #' @return
 #'
 #' @export
 main_load_multi_crispy_data <-
   function(multi_crispy_data,
-           granularity) {
+           granularity, param_cols = c(
+             "term", "run_id", "roll_up_type", "scenario_geography", "baseline_scenario",
+             "shock_scenario", "risk_free_rate", "discount_rate", "div_netprofit_prop_coef",
+             "carbon_price_model", "market_passthrough", "financial_stimulus", "start_year",
+             "growth_rate", "shock_year"
+           )) {
+    group_cols <- unique(c(granularity, param_cols))
+
     multi_crispy_data <- multi_crispy_data |>
-      aggregate_crispy_facts(group_cols = granularity) |>
-      remove_outliers_per_group(group_cols = granularity)
+      aggregate_crispy_facts(group_cols = group_cols) |>
+      remove_outliers_per_group(group_cols = group_cols)
     return(multi_crispy_data)
   }
 
@@ -161,9 +175,14 @@ main_load_multi_crispy_data <-
 #' @return
 #' @export
 #'
-main_data_load_trajectories_data <- function(company_trajectories_data, granularity) {
+main_data_load_trajectories_data <- function(company_trajectories_data, granularity, param_cols = c(
+                                               "run_id", "scenario_geography", "baseline_scenario",
+                                               "shock_scenario", "year"
+                                             )) {
+  group_cols <- unique(c(granularity, param_cols))
+
   company_trajectories_data <- company_trajectories_data |>
-    aggregate_trajectories_facts(group_cols = granularity) |>
-    convert_trajectories_as_percentages(group_cols = granularity)
+    aggregate_trajectories_facts(group_cols = group_cols) |>
+    convert_trajectories_as_percentages(group_cols = group_cols)
   return(company_trajectories_data)
 }

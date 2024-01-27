@@ -2,18 +2,14 @@
 #'
 #' @param multi_trajectories dataframe of trajectories from 1 or multiple trisk truns
 #' @param group_cols group_cols
-#' @param param_cols param_cols
 #'
 #' @return
 #' @export
 #'
 aggregate_trajectories_facts <-
-  function(multi_trajectories, group_cols, param_cols = c(
-             "run_id", "scenario_geography", "baseline_scenario",
-             "shock_scenario", "year"
-           )) {
+  function(multi_trajectories, group_cols) {w
     multi_trajectories <- multi_trajectories |>
-      dplyr::group_by_at(unique(c(group_cols, param_cols))) |>
+      dplyr::group_by_at(group_cols) |>
       dplyr::summarise(
         production_baseline_scenario = sum(production_baseline_scenario, na.rm = TRUE),
         production_target_scenario = sum(production_target_scenario, na.rm = TRUE),

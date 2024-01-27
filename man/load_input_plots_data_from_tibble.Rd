@@ -12,13 +12,11 @@ load_input_plots_data_from_tibble(
 )
 }
 \arguments{
+\item{portfolio_data}{}
+
 \item{granularity}{granularity}
 
 \item{trisk_start_year}{(default) sets to the earliest year of multi_cripy_data}
-
-\item{crispy_outputs_dir}{crispy_outputs_dir}
-
-\item{portfolio_data_path}{portfolio_data_path}
 }
 \description{
 The dataframe in output of this function should always be
