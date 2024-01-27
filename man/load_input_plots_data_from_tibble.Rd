@@ -8,15 +8,16 @@ load_input_plots_data_from_tibble(
   multi_crispy_data,
   portfolio_data = tibble::tibble(),
   granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
-  trisk_start_year = NA
+  trisk_start_year = NA,
+  filter_outliers = FALSE
 )
 }
 \arguments{
-\item{portfolio_data}{}
-
 \item{granularity}{granularity}
 
 \item{trisk_start_year}{(default) sets to the earliest year of multi_cripy_data}
+
+\item{filter_outliers}{}
 }
 \description{
 The dataframe in output of this function should always be

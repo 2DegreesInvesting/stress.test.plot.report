@@ -7,7 +7,7 @@
 #' @export
 #'
 aggregate_trajectories_facts <-
-  function(multi_trajectories, group_cols) {w
+  function(multi_trajectories, group_cols) {
     multi_trajectories <- multi_trajectories |>
       dplyr::group_by_at(group_cols) |>
       dplyr::summarise(

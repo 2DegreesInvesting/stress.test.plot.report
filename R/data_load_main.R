@@ -6,9 +6,8 @@
 #'
 #' @param crispy_outputs_dir crispy_outputs_dir
 #' @param portfolio_data_path portfolio_data_path
+#' @param filter_outliers
 #' @param granularity granularity
-#' @param maturity_month_term_bridge_fp see in data-raw in the source package
-#' @param trisk_start_year (default) sets to the earliest year of multi_cripy_data
 #'
 #' @return
 #' @export
@@ -16,11 +15,14 @@
 load_input_plots_data_from_files <-
   function(crispy_outputs_dir,
            portfolio_data_path = NULL,
-           granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit")) {
+           granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
+           filter_outliers = FALSE) {
+
     multi_crispy_data <-
       load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
       main_load_multi_crispy_data(
-        granularity = granularity
+        granularity = granularity,
+        filter_outliers = filter_outliers
       )
 
     stopifnot(length(unique(multi_crispy_data$start_year)) == 1)
@@ -53,6 +55,7 @@ load_input_plots_data_from_files <-
 #' @param trisk_start_year (default) sets to the earliest year of multi_cripy_data
 #' @param multi_crispy_data
 #' @param portfolio_data
+#' @param filter_outliers
 #'
 #' @return
 #' @export
@@ -61,12 +64,13 @@ load_input_plots_data_from_tibble <-
   function(multi_crispy_data,
            portfolio_data = tibble::tibble(),
            granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
-           trisk_start_year = NA) {
+           trisk_start_year = NA,
+           filter_outliers = FALSE) {
     multi_crispy_data <-
       multi_crispy_data |>
       main_load_multi_crispy_data(
-        max_crispy_granularity =
-          c("run_id", "term", "scenario_geography", granularity)
+        granularity = granularity,
+        filter_outliers = filter_outliers
       )
     stopifnot(length(unique(multi_crispy_data$start_year)) == 1)
     trisk_start_year <- unique(multi_crispy_data$start_year)[1]
@@ -74,7 +78,7 @@ load_input_plots_data_from_tibble <-
     portfolio_data <-
       portfolio_data |>
       main_load_portfolio_data(
-        max_portfolio_granularity = c("portfolio_id", "term", granularity),
+        granularity = granularity,
         trisk_start_year = trisk_start_year
       )
 
@@ -145,6 +149,7 @@ main_load_portfolio_data <-
 #' @param multi_crispy_data
 #' @param granularity
 #' @param param_cols
+#' @param filter_outliers filter_outliers
 #'
 #' @return
 #'
@@ -156,12 +161,23 @@ main_load_multi_crispy_data <-
              "shock_scenario", "risk_free_rate", "discount_rate", "div_netprofit_prop_coef",
              "carbon_price_model", "market_passthrough", "financial_stimulus", "start_year",
              "growth_rate", "shock_year"
-           )) {
+           ),
+           filter_outliers = FALSE) {
     group_cols <- unique(c(granularity, param_cols))
 
     multi_crispy_data <- multi_crispy_data |>
-      aggregate_crispy_facts(group_cols = group_cols) |>
-      remove_outliers_per_group(group_cols = group_cols)
+      aggregate_crispy_facts(group_cols = group_cols)
+
+    # Conditionally apply remove_outliers_per_group based on the filter_outliers parameter
+    multi_crispy_data <- if (filter_outliers) {
+      multi_crispy_data |>
+        remove_outliers_per_group(
+          group_cols = group_cols,
+          column_filtered = "crispy_perc_value_change"
+        )
+    } else {
+      multi_crispy_data
+    }
     return(multi_crispy_data)
   }
 

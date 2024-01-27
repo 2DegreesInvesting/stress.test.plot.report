@@ -7,7 +7,8 @@
 load_input_plots_data_from_files(
   crispy_outputs_dir,
   portfolio_data_path = NULL,
-  granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit")
+  granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
+  filter_outliers = FALSE
 )
 }
 \arguments{
@@ -16,10 +17,6 @@ load_input_plots_data_from_files(
 \item{portfolio_data_path}{portfolio_data_path}
 
 \item{granularity}{granularity}
-
-\item{maturity_month_term_bridge_fp}{see in data-raw in the source package}
-
-\item{trisk_start_year}{(default) sets to the earliest year of multi_cripy_data}
 }
 \description{
 The dataframe in output of this function should always be

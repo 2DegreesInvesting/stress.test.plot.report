@@ -35,7 +35,8 @@ analysis_data <-
   load_input_plots_data_from_files(
     crispy_outputs_dir = crispy_outputs_dir,
     portfolio_data_path = portfolio_data_path,
-    granularity = granularity
+    granularity = granularity,
+    filter_outliers=TRUE
   )
 ```
 
@@ -201,11 +202,11 @@ Require the data to be at a higher level than ald_sector
 
 ```{r}
 analysis_data_company <-
-  load_input_plots_data(
+  load_input_plots_data_from_files(
     crispy_outputs_dir = crispy_outputs_dir,
     portfolio_data_path = NULL,
     granularity = c("company_id", "ald_sector"),
-    trisk_start_year = trisk_start_year
+    filter_outliers=TRUE
   )
 
 
@@ -214,7 +215,7 @@ data_cdi_pd_plot_company <- analysis_data_company |>
   dplyr::group_modify(
     ~ prepare_for_cdi_pd_plots(
       .,
-      group_variables_vec = c("portfolio.company_id", group_variables_vec),
+      group_variables_vec = c("company_id", group_variables_vec),
       metrics = metrics_pd,
     )
   ) |>

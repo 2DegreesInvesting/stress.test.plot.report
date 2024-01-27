@@ -4,12 +4,16 @@
 \alias{remove_outliers_per_group}
 \title{Title}
 \usage{
-remove_outliers_per_group(multi_crispy, group_cols)
+remove_outliers_per_group(multi_crispy, group_cols, column_filtered)
 }
 \arguments{
 \item{multi_crispy}{multi_crispy}
 
 \item{group_cols}{group_cols}
+
+\item{column_filtered}{column_filtered}
+
+\item{index_column}{index_column}
 }
 \description{
 Title

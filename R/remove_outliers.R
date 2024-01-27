@@ -1,4 +1,5 @@
-remove_outliers <- function(data) {
+# DEPRECATED outlier filtering function in use in some ol plots
+remove_outliers_legacy <- function(data) {
   out <- data %>%
     group_by(.data$group_variable) %>%
     mutate(

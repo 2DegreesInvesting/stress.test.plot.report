@@ -7,7 +7,7 @@
 #'
 #' @examples
 qplot_boxplot <- function(data_exposure_plot) {
-  data_exposure_plot <- remove_outliers(data_exposure_plot)
+  data_exposure_plot <- remove_outliers_legacy(data_exposure_plot)
   plot <- ggplot(data_exposure_plot, aes(x = .data$group_variable, y = .data$value_to_plot, fill = .data$group_mean)) +
     geom_boxplot() +
     scale_y_continuous(labels = scales::unit_format(unit = "M", scale = 1e-6)) +

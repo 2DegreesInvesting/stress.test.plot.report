@@ -24,14 +24,15 @@ library(ggpubr)
 
 ```{r}
 analysis_data_full_global <-
-  load_input_plots_data(
+  load_input_plots_data_from_files(
     crispy_outputs_dir = here::here("workspace", "methodology_paper", "st_outputs"),
     granularity = c(
       "company_name",
       "company_id",
       "ald_sector",
       "ald_business_unit"
-    )
+    ),
+    filter_outliers=TRUE
   ) |>
   dplyr::filter(scenario_geography == "Global")
 

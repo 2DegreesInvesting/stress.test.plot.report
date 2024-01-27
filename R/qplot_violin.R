@@ -7,7 +7,7 @@
 #'
 #' @examples
 qplot_violin <- function(data_exposure_plot) {
-  data_exposure_plot_no_outlier <- remove_outliers(data_exposure_plot)
+  data_exposure_plot_no_outlier <- remove_outliers_legacy(data_exposure_plot)
   ggplot2::ggplot(data_exposure_plot_no_outlier, aes(x = .data$group_variable, y = .data$value_to_plot, colour = .data$value_to_plot)) +
     ggplot2::geom_violin() +
     ggplot2::geom_jitter(alpha = 0.5) +

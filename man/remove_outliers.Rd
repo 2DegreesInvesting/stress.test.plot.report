@@ -4,12 +4,18 @@
 \alias{remove_outliers}
 \title{Title}
 \usage{
-remove_outliers(data)
+remove_outliers(
+  df,
+  column_filtered,
+  index_columns,
+  max_zscore = 3,
+  min_obs = 30
+)
 }
 \arguments{
 \item{df}{df}
 
-\item{column}{column name}
+\item{column_filtered}{column name}
 
 \item{max_zscore}{max_zscore}
 }
