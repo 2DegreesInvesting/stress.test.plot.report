@@ -226,7 +226,9 @@ data_cdi_pd_plot_company <- analysis_data_company |>
 SHOCK YEAR
 
 ```{r, fig.width = 8, fig.height = 12}
-density_plot <- make_density_plots(data_cdi_pd_plot_company, density_var = "shock_year")
+density_plot <- make_density_plots(data_cdi_pd_plot_company,
+                                   numeric_values = "pd_shock",
+                                   density_var = "shock_year")
 
 print(density_plot)
 ```
@@ -234,7 +236,9 @@ print(density_plot)
 DISCOUNT RATE
 
 ```{r, fig.width = 8, fig.height = 12}
-density_plot <- make_density_plots(data_cdi_pd_plot_company, density_var = "discount_rate")
+density_plot <- make_density_plots(data_cdi_pd_plot_company, 
+                                   numeric_values = "pd_shock",
+                                   density_var = "discount_rate")
 
 print(density_plot)
 ```

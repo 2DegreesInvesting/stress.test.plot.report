@@ -72,7 +72,8 @@ load_input_plots_data_from_tibble <-
         granularity = granularity,
         filter_outliers = filter_outliers
       )
-    stopifnot(length(unique(multi_crispy_data$start_year)) == 1)
+
+    stopifnot(length(unique(multi_crispy_data$start_year)) <= 1)
     trisk_start_year <- unique(multi_crispy_data$start_year)[1]
 
     portfolio_data <-
@@ -198,6 +199,6 @@ main_data_load_trajectories_data <- function(company_trajectories_data, granular
 
   company_trajectories_data <- company_trajectories_data |>
     aggregate_trajectories_facts(group_cols = group_cols) |>
-    convert_trajectories_as_percentages(group_cols = group_cols)
+    convert_trajectories_as_percentages(group_cols = group_cols[group_cols!="year"])
   return(company_trajectories_data)
 }
