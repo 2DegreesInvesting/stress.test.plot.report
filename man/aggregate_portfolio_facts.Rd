@@ -4,7 +4,11 @@
 \alias{aggregate_portfolio_facts}
 \title{Title}
 \usage{
-aggregate_portfolio_facts(portfolio_data, group_cols)
+aggregate_portfolio_facts(
+  portfolio_data,
+  group_cols,
+  param_cols = c("portfolio_id", "term")
+)
 }
 \arguments{
 \item{group_cols}{}

@@ -4,10 +4,7 @@
 \alias{main_data_load_trajectories_data}
 \title{Title}
 \usage{
-main_data_load_trajectories_data(
-  company_trajectories_data,
-  max_trajectories_granularity
-)
+main_data_load_trajectories_data(company_trajectories_data, granularity)
 }
 \arguments{
 \item{company_trajectories_data}{company_trajectories_data}

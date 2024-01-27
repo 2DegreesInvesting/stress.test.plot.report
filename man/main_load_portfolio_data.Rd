@@ -4,11 +4,7 @@
 \alias{main_load_portfolio_data}
 \title{Title}
 \usage{
-main_load_portfolio_data(
-  portfolio_data,
-  max_portfolio_granularity,
-  trisk_start_year
-)
+main_load_portfolio_data(portfolio_data, granularity, trisk_start_year)
 }
 \arguments{
 \item{max_portfolio_granularity}{max_portfolio_granularity}

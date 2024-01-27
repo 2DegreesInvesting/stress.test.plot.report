@@ -20,8 +20,7 @@ load_input_plots_data_from_files <-
     multi_crispy_data <-
       load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
       main_load_multi_crispy_data(
-        max_crispy_granularity =
-          c("run_id", "term", "scenario_geography", granularity)
+        granularity = granularity
       )
 
     stopifnot(length(unique(multi_crispy_data$start_year)) == 1)
@@ -30,7 +29,7 @@ load_input_plots_data_from_files <-
     portfolio_data <-
       load_portfolio_data(portfolio_data_path) |>
       main_load_portfolio_data(
-        max_portfolio_granularity = c("portfolio_id", "term", granularity),
+        granularity = granularity,
         trisk_start_year = trisk_start_year
       )
 
@@ -124,14 +123,13 @@ main_load_analysis_data <-
 #' @export
 main_load_portfolio_data <-
   function(portfolio_data,
-           max_portfolio_granularity,
+           granularity,
            trisk_start_year) {
-
     portfolio_data <- portfolio_data |>
       map_portfolio_maturity_to_term(
         trisk_start_year = trisk_start_year
       ) |>
-      aggregate_portfolio_facts(group_cols = max_portfolio_granularity)
+      aggregate_portfolio_facts(group_cols = granularity)
 
     return(portfolio_data)
   }
@@ -146,10 +144,10 @@ main_load_portfolio_data <-
 #' @export
 main_load_multi_crispy_data <-
   function(multi_crispy_data,
-           max_crispy_granularity) {
+           granularity) {
     multi_crispy_data <- multi_crispy_data |>
-      aggregate_crispy_facts(group_cols = max_crispy_granularity) |>
-      remove_outliers_per_group(group_cols = max_crispy_granularity)
+      aggregate_crispy_facts(group_cols = granularity) |>
+      remove_outliers_per_group(group_cols = granularity)
     return(multi_crispy_data)
   }
 
@@ -163,9 +161,9 @@ main_load_multi_crispy_data <-
 #' @return
 #' @export
 #'
-main_data_load_trajectories_data <- function(company_trajectories_data, max_trajectories_granularity) {
+main_data_load_trajectories_data <- function(company_trajectories_data, granularity) {
   company_trajectories_data <- company_trajectories_data |>
-    aggregate_trajectories_facts(group_cols = max_trajectories_granularity) |>
-    convert_trajectories_as_percentages(group_cols = max_trajectories_granularity)
+    aggregate_trajectories_facts(group_cols = granularity) |>
+    convert_trajectories_as_percentages(group_cols = granularity)
   return(company_trajectories_data)
 }

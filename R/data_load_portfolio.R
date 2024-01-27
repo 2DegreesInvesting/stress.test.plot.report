@@ -42,14 +42,13 @@ load_portfolio_data <- function(portfolio_data_path) {
 map_portfolio_maturity_to_term <-
   function(portfolio_data,
            trisk_start_year) {
-
     start_date <- as.Date(paste0(trisk_start_year, "-01-01"))
 
     portfolio_data <- portfolio_data |>
       dplyr::mutate(
         expiration_date = as.Date(.data$expiration_date),
         portfolio_maturity_month = lubridate::interval(.env$start_date, .data$expiration_date) %/% months(1),
-        term = ceiling((.data$portfolio_maturity_month/12) * 0.4) # 1 term is equal to 2.5 years
+        term = ceiling((.data$portfolio_maturity_month / 12) * 0.4) # 1 term is equal to 2.5 years
       ) |>
       dplyr::select(-c(portfolio_maturity_month))
 
@@ -70,9 +69,9 @@ map_portfolio_maturity_to_term <-
 #' @return
 #'
 #' @examples
-aggregate_portfolio_facts <- function(portfolio_data, group_cols) {
+aggregate_portfolio_facts <- function(portfolio_data, group_cols, param_cols = c("portfolio_id", "term")) {
   portfolio_data <- portfolio_data |>
-    dplyr::group_by_at(group_cols) |>
+    dplyr::group_by_at(unique(c(group_cols, param_cols))) |>
     dplyr::summarize(
       exposure_value_usd = sum(.data$exposure_value_usd),
       loss_given_default = stats::median(loss_given_default, na.rm = T),
