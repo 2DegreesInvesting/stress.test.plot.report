@@ -192,8 +192,7 @@ main_load_multi_crispy_data <-
 #' @export
 #'
 main_data_load_trajectories_data <- function(company_trajectories_data, granularity, param_cols = c(
-                                               "run_id", "scenario_geography", "baseline_scenario",
-                                               "shock_scenario", "year"
+                                               "run_id", "year"
                                              )) {
   group_cols <- unique(c(granularity, param_cols))
 
