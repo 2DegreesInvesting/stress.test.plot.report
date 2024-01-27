@@ -17,7 +17,11 @@ remove_outliers(
 
 \item{column_filtered}{column name}
 
+\item{index_columns}{index_columns}
+
 \item{max_zscore}{max_zscore}
+
+\item{min_obs}{min_obs}
 }
 \description{
 Function to remove outliers based on z-score

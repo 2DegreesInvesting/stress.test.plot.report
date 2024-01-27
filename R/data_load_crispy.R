@@ -9,6 +9,8 @@ load_multiple_crispy <- function(crispy_outputs_dir, max_granularity) {
     full.names = TRUE
   )
 
+  stopifnot(length(files_path) > 0)
+
   # Load all files into a list and add a run_id column for each dataframe
   data_list <- purrr::map(files_path, function(fp) {
     df <- readr::read_csv(fp,
@@ -79,8 +81,8 @@ aggregate_crispy_facts <- function(multi_crispy, group_cols) {
 #'
 #' @param df df
 #' @param column_filtered column name
-#' @param index_columns
-#' @param min_obs
+#' @param index_columns index_columns
+#' @param min_obs min_obs
 #' @param max_zscore max_zscore
 #'
 remove_outliers <- function(df, column_filtered, index_columns, max_zscore = 3, min_obs = 30) {

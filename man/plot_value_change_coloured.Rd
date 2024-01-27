@@ -7,7 +7,9 @@
 plot_value_change_coloured(data, is_percentage)
 }
 \arguments{
-\item{is_percentage}{}
+\item{data}{data}
+
+\item{is_percentage}{is_percentage}
 }
 \description{
 Title

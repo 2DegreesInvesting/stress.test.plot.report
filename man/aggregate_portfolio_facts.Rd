@@ -7,7 +7,9 @@
 aggregate_portfolio_facts(portfolio_data, group_cols)
 }
 \arguments{
-\item{group_cols}{}
+\item{portfolio_data}{portfolio_data}
+
+\item{group_cols}{group_cols}
 }
 \description{
 Title

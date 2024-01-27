@@ -39,13 +39,10 @@ qplot_val_change_facet <- function(data_val_change, facet_chr) {
 
 #' Title
 #'
-#' @param data
-#' @param is_percentage
+#' @param data data
+#' @param is_percentage is_percentage
 #'
-#' @return
 #' @export
-#'
-#' @examples
 plot_value_change_coloured <- function(data, is_percentage) {
   if (is_percentage) {
     labels <- scales::percent

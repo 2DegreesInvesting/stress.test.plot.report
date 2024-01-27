@@ -7,7 +7,7 @@
 qplot_el_change_sector_abs(data_change)
 }
 \arguments{
-\item{data_change}{}
+\item{data_change}{data_change}
 }
 \description{
 Title

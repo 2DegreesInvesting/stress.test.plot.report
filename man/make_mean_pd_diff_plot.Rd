@@ -7,7 +7,9 @@
 make_mean_pd_diff_plot(data_cdi_pd_plot, scenario_name_for_title)
 }
 \arguments{
-\item{scenario_name_for_title}{}
+\item{data_cdi_pd_plot}{data_cdi_pd_plot}
+
+\item{scenario_name_for_title}{scenario_name_for_title}
 }
 \description{
 Title

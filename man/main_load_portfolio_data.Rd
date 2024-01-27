@@ -7,12 +7,18 @@
 main_load_portfolio_data(
   portfolio_data,
   granularity,
-  param_cols = c("portfolio_id", "term"),
+  param_cols = c("portfolio_id", "term", "asset_type"),
   trisk_start_year
 )
 }
 \arguments{
-\item{trisk_start_year}{}
+\item{portfolio_data}{portfolio_data}
+
+\item{granularity}{granularity}
+
+\item{param_cols}{param_cols}
+
+\item{trisk_start_year}{trisk_start_year}
 }
 \description{
 Title

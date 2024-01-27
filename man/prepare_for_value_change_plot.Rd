@@ -12,6 +12,8 @@ prepare_for_value_change_plot(
 }
 \arguments{
 \item{value_to_plot_char}{"baseline", "shock", or "portfolio"}
+
+\item{analysis_data}{analysis_data}
 }
 \description{
 Title

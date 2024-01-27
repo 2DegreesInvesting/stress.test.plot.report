@@ -1,11 +1,8 @@
 #' Title
 #'
-#' @param data_el_plot
+#' @param data_el_plot data_el_plot
 #'
-#' @return
 #' @export
-#'
-#' @examples
 qplot_el_change_sector <- function(data_el_plot) {
   data_change <- data_el_plot %>%
     filter(expected_loss_type %in% c("st_diff"))
@@ -19,12 +16,9 @@ qplot_el_change_sector <- function(data_el_plot) {
 
 #' Title
 #'
-#' @param data_change
+#' @param data_change data_change
 #'
-#' @return
 #' @export
-#'
-#' @examples
 qplot_el_change_sector_perc <- function(data_change) {
   p <- plot_el_coloured(data_change, "el_as_perc_exposure", is_percentage = TRUE) +
     facet_wrap(~group_variable, scales = "fixed") +
@@ -37,12 +31,9 @@ qplot_el_change_sector_perc <- function(data_change) {
 
 #' Title
 #'
-#' @param data_change
+#' @param data_change data_change
 #'
-#' @return
 #' @export
-#'
-#' @examples
 qplot_el_change_sector_abs <- function(data_change) {
   p <- plot_el_coloured(data_change, "expected_loss_value") +
     facet_wrap(~group_variable, scales = "fixed") +

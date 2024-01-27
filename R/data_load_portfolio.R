@@ -73,8 +73,8 @@ map_portfolio_maturity_to_term <-
 
 #' Title
 #'
-#' @param portfolio_data
-#' @param group_cols
+#' @param portfolio_data portfolio_data
+#' @param group_cols group_cols
 #'
 #' @return
 #'

@@ -20,7 +20,8 @@ create_analysis_data <-
       dplyr::inner_join(
         portfolio_data,
         multi_crispy_data,
-        by = portfolio_crispy_merge_cols
+        by = portfolio_crispy_merge_cols,
+        relationship = "many-to-many"
       )
 
     return(analysis_data)

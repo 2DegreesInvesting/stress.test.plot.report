@@ -7,7 +7,7 @@
 qplot_val_change_technology_perc(data)
 }
 \arguments{
-\item{data}{}
+\item{data}{data}
 }
 \description{
 Title

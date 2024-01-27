@@ -1,12 +1,9 @@
 #' Title
 #'
-#' @param analysis_data
+#' @param analysis_data analysis_data
 #' @param value_to_plot_char "baseline", "shock", or "portfolio"
 #'
-#' @return
 #' @export
-#'
-#' @examples
 prepare_for_value_change_plot <- function(analysis_data_single_run, group_variable_charvec, value_to_plot_char) {
   data_plt <- analysis_data_single_run |>
     dplyr::rename(

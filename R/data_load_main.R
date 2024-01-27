@@ -6,7 +6,7 @@
 #'
 #' @param crispy_outputs_dir crispy_outputs_dir
 #' @param portfolio_data_path portfolio_data_path
-#' @param filter_outliers
+#' @param filter_outliers filter_outliers
 #' @param granularity granularity
 #'
 #' @return
@@ -35,11 +35,14 @@ load_input_plots_data_from_files <-
         trisk_start_year = trisk_start_year
       )
 
+    portfolio_crispy_merge_cols <- dplyr::intersect(colnames(multi_crispy_data), colnames(portfolio_data))
+    stopifnot(length(portfolio_crispy_merge_cols) > 0)
+
     analysis_data <-
       main_load_analysis_data(
         portfolio_data = portfolio_data,
         multi_crispy_data = multi_crispy_data,
-        portfolio_crispy_merge_cols = c("term", granularity)
+        portfolio_crispy_merge_cols = portfolio_crispy_merge_cols
       )
 
     return(analysis_data)
@@ -121,10 +124,10 @@ main_load_analysis_data <-
 
 #' Title
 #'
-#' @param portfolio_data
-#' @param granularity
-#' @param param_cols
-#' @param trisk_start_year
+#' @param portfolio_data portfolio_data
+#' @param granularity granularity
+#' @param param_cols param_cols
+#' @param trisk_start_year trisk_start_year
 #'
 #' @return
 #'
@@ -132,7 +135,7 @@ main_load_analysis_data <-
 main_load_portfolio_data <-
   function(portfolio_data,
            granularity,
-           param_cols = c("portfolio_id", "term"),
+           param_cols = c("portfolio_id", "term", "asset_type"),
            trisk_start_year) {
     group_cols <- unique(c(granularity, param_cols))
 
@@ -199,6 +202,7 @@ main_data_load_trajectories_data <- function(company_trajectories_data, granular
 
   company_trajectories_data <- company_trajectories_data |>
     aggregate_trajectories_facts(group_cols = group_cols) |>
+    browser()
     convert_trajectories_as_percentages(group_cols = group_cols[group_cols!="year"])
   return(company_trajectories_data)
 }

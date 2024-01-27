@@ -11,7 +11,11 @@ prepare_for_summary_plot(
 )
 }
 \arguments{
-\item{value_to_plot_char}{}
+\item{analysis_data_single_run}{analysis_data_single_run}
+
+\item{group_variable_char}{group_variable_char}
+
+\item{value_to_plot_char}{value_to_plot_char}
 }
 \description{
 Title

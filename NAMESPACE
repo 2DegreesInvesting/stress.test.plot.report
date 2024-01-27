@@ -92,5 +92,3 @@ importFrom(stringr,str_replace)
 importFrom(tidyr,pivot_longer)
 importFrom(tidytext,reorder_within)
 importFrom(tidytext,scale_x_reordered)
-importFrom("stats", "as.formula", "density", "median", "sd",
-               "setNames")

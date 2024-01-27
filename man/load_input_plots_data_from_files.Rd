@@ -17,6 +17,8 @@ load_input_plots_data_from_files(
 \item{portfolio_data_path}{portfolio_data_path}
 
 \item{granularity}{granularity}
+
+\item{filter_outliers}{filter_outliers}
 }
 \description{
 The dataframe in output of this function should always be

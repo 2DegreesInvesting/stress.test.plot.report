@@ -60,13 +60,10 @@ make_expected_loss_plot <-
 
 #' Title
 #'
-#' @param data_cdi_pd_plot
-#' @param scenario_name_for_title
+#' @param data_cdi_pd_plot data_cdi_pd_plot
+#' @param scenario_name_for_title scenario_name_for_title
 #'
-#' @return
 #' @export
-#'
-#' @examples
 make_mean_pd_diff_plot <- function(data_cdi_pd_plot, scenario_name_for_title) {
   # Create plot
   plotsy <- ggplot(data = data_cdi_pd_plot, aes(x = factor(shock_year), group = factor(shock_year), y = pd_difference, fill = pd_difference)) +

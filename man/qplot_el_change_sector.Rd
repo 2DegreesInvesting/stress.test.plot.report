@@ -7,7 +7,7 @@
 qplot_el_change_sector(data_el_plot)
 }
 \arguments{
-\item{data_el_plot}{}
+\item{data_el_plot}{data_el_plot}
 }
 \description{
 Title

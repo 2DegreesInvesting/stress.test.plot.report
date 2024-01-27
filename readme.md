@@ -1,3 +1,11 @@
+## Workflow to add new plots 
+
+1. Create a new branch and add a new vignette that contains the raw code , and that uses the mock input data provided in data-raw
+2. merge the vignette in master branch once the build of the vignette passes
+3. refactor the vignette to isolate the data preparation and plotting functions for each plot, following the structure described further in this readme.
+4. create a pipeline function that encapsulates those 2 functions, and add it as a new script in R/
+5. rewrite the plots that have been refactored by their pipeline function in the vignette 
+
 ## Using this repo
 
 The input files for the plot are a folder of ouputs obtained from run_trisk from the r2dii.climate.stress.test package, and optionally a portfolio dataset.
@@ -8,7 +16,7 @@ Examples of those dataset can be found in
 
 The vignettes present the usage of the plots packaged in this repository, by using those synthetic datasets.
 
-Re-generate a set of synthetic inputs by using data-raw/gen_synthetic_workflow.R
+Re-generate a set of synthetic inputs by using `data-raw/gen_synthetic_workflow.R`
 
 
 ## Plots good practices
