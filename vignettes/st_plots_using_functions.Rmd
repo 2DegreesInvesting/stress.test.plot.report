@@ -39,7 +39,7 @@ analysis_data <-
     crispy_outputs_dir = crispy_outputs_dir,
     portfolio_data_path = portfolio_data_path,
     granularity = granularity,
-    filter_outliers=TRUE
+    filter_outliers = TRUE
   )
 ```
 

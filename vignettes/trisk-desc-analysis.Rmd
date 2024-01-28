@@ -26,14 +26,15 @@ library(ggpubr)
 portfolio_data_path <-
   here::here("data-raw/synthetic_portfolio.csv")
 crispy_outputs_dir <- here::here("data-raw", "mock_st_outputs")
-abcd_input_path <- here::here("data-raw", "mock_st_inputs",
-    "abcd_stress_test_input.csv"
-  )
+abcd_input_path <- here::here(
+  "data-raw", "mock_st_inputs",
+  "abcd_stress_test_input.csv"
+)
 companies_activites_rawdata_path <- here::here(
-      "data-raw",
-      "mock_rawdata",
-      "company_activities.csv"
-    )
+  "data-raw",
+  "mock_rawdata",
+  "company_activities.csv"
+)
 
 analysis_data_full_global <-
   load_input_plots_data_from_files(
@@ -44,7 +45,7 @@ analysis_data_full_global <-
       "ald_sector",
       "ald_business_unit"
     ),
-    filter_outliers=TRUE
+    filter_outliers = TRUE
   ) |>
   dplyr::filter(scenario_geography == "Global")
 
@@ -56,10 +57,9 @@ abcd_full_global <-
   )
 
 
-raw_asset_impact <-readr::read_csv(companies_activites_rawdata_path)
+raw_asset_impact <- readr::read_csv(companies_activites_rawdata_path)
 
-pick_run_ids <-  sample(unique(analysis_data_full_global$run_id), 2)
-
+pick_run_ids <- sample(unique(analysis_data_full_global$run_id), 2)
 ```
 
 
@@ -128,8 +128,6 @@ TODO why are there Inf values
 ### Heterogeneity in Transition Risk
 
 ```{r, fig.width=10}
-
-
 for (run_id in pick_run_ids) {
   analysis_data_1_run <- analysis_data_full_global_term_5 |> dplyr::filter(.data$run_id == .env$run_id)
 
@@ -189,7 +187,7 @@ for (run_id in pick_run_ids) {
   }
 
   # Bin data every 10 observations
-  binned_data <- bin_data(plot_data %>% filter(variable == "pd_difference"), round(nrow(plot_data)/100))
+  binned_data <- bin_data(plot_data %>% filter(variable == "pd_difference"), round(nrow(plot_data) / 100))
 
   # Create the plot
   p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
@@ -453,7 +451,7 @@ for (uniform_ratio in c(0.1, 0.5, 0.9)) {
   cat(uniform_ratio)
 
   # Group by ald_sector and ald_business_unit, then apply sampling
-  abcd_toydata <- sample_companies_greedy(abcd_data_no_outliers, uniform_ratio, n_sampling_attempts=1)
+  abcd_toydata <- sample_companies_greedy(abcd_data_no_outliers, uniform_ratio, n_sampling_attempts = 1)
 
   sampled_rows[[as.character(uniform_ratio)]] <- abcd_toydata %>% distinct(company_id, ald_sector, ald_business_unit)
 }
@@ -702,7 +700,7 @@ for (run_id in pick_run_ids) {
   }
 
   # Bin data every 10 observations
-  binned_data <- bin_data(plot_data %>% filter(variable == "pd_difference"), round(nrow(plot_data)/100))
+  binned_data <- bin_data(plot_data %>% filter(variable == "pd_difference"), round(nrow(plot_data) / 100))
 
   # Create the plot
   p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +

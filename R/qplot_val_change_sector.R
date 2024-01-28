@@ -1,9 +1,9 @@
 #' Title
 #'
-#' @param data_val_change
-#' @param facet_chr
+#' @param data_val_change The data frame containing the value change data.
+#' @param facet_chr The column name to be used for faceting the plots.
 #'
-#' @return
+#' @return None
 #' @export
 #'
 #' @examples
@@ -39,9 +39,10 @@ qplot_val_change_facet <- function(data_val_change, facet_chr) {
 
 #' Title
 #'
-#' @param data data
-#' @param is_percentage is_percentage
+#' @param data The data frame containing the value change data.
+#' @param is_percentage A logical value indicating whether the value change is in percentage or absolute.
 #'
+#' @return None
 #' @export
 plot_value_change_coloured <- function(data, is_percentage) {
   if (is_percentage) {

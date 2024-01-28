@@ -86,7 +86,7 @@ aggregate_crispy_facts <- function(multi_crispy, group_cols) {
 #' @param max_zscore max_zscore
 #'
 remove_outliers <- function(df, column_filtered, index_columns, max_zscore = 3, min_obs = 30) {
-  if (nrow(df) >= min_obs){
+  if (nrow(df) >= min_obs) {
     # Compute the mean and standard deviation of the column
     mean_value <- mean(df[[column_filtered]], na.rm = TRUE)
     sd_value <- sd(df[[column_filtered]], na.rm = TRUE)
@@ -102,7 +102,6 @@ remove_outliers <- function(df, column_filtered, index_columns, max_zscore = 3, 
     df <- df |>
       dplyr::anti_join(outlier_indexes, by = index_columns) |>
       dplyr::select(-c(.data$z_scores))
-
   }
   return(df)
 }
@@ -119,12 +118,14 @@ remove_outliers_per_group <- function(multi_crispy, group_cols, column_filtered)
     dplyr::group_by_at(group_cols) |>
     dplyr::group_modify(
       ~ remove_outliers(
-          df = .x,
-          column_filtered = column_filtered,
-          index_columns = group_cols) |>
+        df = .x,
+        column_filtered = column_filtered,
+        index_columns = group_cols
+      ) |>
         # must remove group columns because of .keep
-        dplyr::select(-dplyr::all_of(group_cols))
-      , .keep = TRUE) |>
+        dplyr::select(-dplyr::all_of(group_cols)),
+      .keep = TRUE
+    ) |>
     dplyr::ungroup()
   return(multi_crispy)
 }

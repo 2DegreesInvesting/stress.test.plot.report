@@ -50,3 +50,26 @@
       #   carbon_price_model <chr>, market_passthrough <dbl>,
       #   financial_stimulus <dbl>, start_year <dbl>, growth_rate <dbl>, ...
 
+# main_data_load_trajectories_data_from_file loads_properly on ald_sector and business_unit
+
+    Code
+      analysis_data
+    Output
+      # A tibble: 1,746 x 7
+         ald_sector ald_business_unit run_id               year production_baseline_~1
+         <chr>      <chr>             <chr>               <dbl>                  <dbl>
+       1 Coal       Coal              27187540-f356-48b9~  2022                  0.537
+       2 Coal       Coal              27187540-f356-48b9~  2023                  0.845
+       3 Coal       Coal              27187540-f356-48b9~  2024                  1    
+       4 Coal       Coal              27187540-f356-48b9~  2025                  0.897
+       5 Coal       Coal              27187540-f356-48b9~  2026                  0.878
+       6 Coal       Coal              27187540-f356-48b9~  2027                  0.878
+       7 Coal       Coal              27187540-f356-48b9~  2028                  0.865
+       8 Coal       Coal              27187540-f356-48b9~  2029                  0.853
+       9 Coal       Coal              27187540-f356-48b9~  2030                  0.841
+      10 Coal       Coal              27187540-f356-48b9~  2031                  0.824
+      # i 1,736 more rows
+      # i abbreviated name: 1: production_baseline_scenario
+      # i 2 more variables: production_target_scenario <dbl>,
+      #   production_shock_scenario <dbl>
+

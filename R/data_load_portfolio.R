@@ -47,7 +47,7 @@ map_portfolio_maturity_to_term <-
   function(portfolio_data,
            trisk_start_year) {
     start_year_exists <- !(is.na(trisk_start_year) | is.null(trisk_start_year))
-    if (start_year_exists){
+    if (start_year_exists) {
       start_date <- as.Date(paste0(trisk_start_year, "-01-01"))
 
       portfolio_data <- portfolio_data |>
@@ -59,13 +59,12 @@ map_portfolio_maturity_to_term <-
         dplyr::select(-c(portfolio_maturity_month))
 
       # replace term by 1 when the asset is not expected to have a term
-
-    }  else{
+    } else {
       portfolio_data <- portfolio_data |>
         dplyr::mutate(term = 1)
     }
     portfolio_data <- portfolio_data |>
-        dplyr::mutate(term = dplyr::if_else(asset_type == "fixed_income", 1, .data$term))
+      dplyr::mutate(term = dplyr::if_else(asset_type == "fixed_income", 1, .data$term))
     return(portfolio_data)
   }
 

@@ -15,15 +15,15 @@ load_multiple_trajectories <- function(crispy_outputs_dir) {
   data_list <- purrr::map(files_path, function(fp) {
     df <- readr::read_csv(fp,
       col_types = readr::cols_only(
-      run_id = "c",
-      company_id = "c",
-      company_name = "c",
-      ald_sector = "c",
-      ald_business_unit = "c",
-      year = "d",
-      production_baseline_scenario = "c",
-      production_target_scenario = "c",
-      production_shock_scenario = "c"
+        run_id = "c",
+        company_id = "c",
+        company_name = "c",
+        ald_sector = "c",
+        ald_business_unit = "c",
+        year = "d",
+        production_baseline_scenario = "d",
+        production_target_scenario = "d",
+        production_shock_scenario = "d"
       )
     )
   })
@@ -47,9 +47,9 @@ aggregate_trajectories_facts <-
     multi_trajectories <- multi_trajectories |>
       dplyr::group_by_at(group_cols) |>
       dplyr::summarise(
-        production_baseline_scenario = sum(production_baseline_scenario, na.rm = TRUE),
-        production_target_scenario = sum(production_target_scenario, na.rm = TRUE),
-        production_shock_scenario = sum(production_shock_scenario, na.rm = TRUE),
+        production_baseline_scenario = sum(.data$production_baseline_scenario, na.rm = TRUE),
+        production_target_scenario = sum(.data$production_target_scenario, na.rm = TRUE),
+        production_shock_scenario = sum(.data$production_shock_scenario, na.rm = TRUE),
         .groups = "drop"
       )
     return(multi_trajectories)
@@ -68,9 +68,13 @@ convert_trajectories_as_percentages <-
     multi_trajectories <- multi_trajectories |>
       dplyr::group_by_at(group_cols) |>
       dplyr::mutate(
-        production_baseline_scenario = production_baseline_scenario / max(production_baseline_scenario),
-        production_target_scenario = production_target_scenario / max(production_target_scenario),
-        production_shock_scenario = production_shock_scenario / max(production_shock_scenario)
+        production_baseline_scenario =
+          .data$production_baseline_scenario
+            / max(.data$production_baseline_scenario),
+        production_target_scenario = .data$production_target_scenario
+          / max(.data$production_target_scenario),
+        production_shock_scenario = .data$production_shock_scenario
+          / max(.data$production_shock_scenario)
       ) |>
       dplyr::ungroup() |>
       dplyr::filter(year < max(year))

@@ -1,10 +1,12 @@
 ## Workflow to add new plots 
 
-1. Create a new branch and add a new vignette that contains the raw code , and that uses the mock input data provided in data-raw
+1. Create a new branch and add a new Rmd file containing your raw coce in the vignettes/ directory, and that uses the mock input data provided in data-raw as input for the code.
 2. merge the vignette in master branch once the build of the vignette passes
 3. refactor the vignette to isolate the data preparation and plotting functions for each plot, following the structure described further in this readme.
 4. create a pipeline function that encapsulates those 2 functions, and add it as a new script in R/
 5. rewrite the plots that have been refactored by their pipeline function in the vignette 
+
+The vignettes act as tests for plots. All vignettes should compile when running `devtools::build()`.
 
 ## Using this repo
 

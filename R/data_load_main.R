@@ -17,7 +17,6 @@ load_input_plots_data_from_files <-
            portfolio_data_path = NULL,
            granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
            filter_outliers = FALSE) {
-
     multi_crispy_data <-
       load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
       main_load_multi_crispy_data(
@@ -202,16 +201,14 @@ main_data_load_trajectories_data <- function(company_trajectories_data, granular
 
   company_trajectories_data <- company_trajectories_data |>
     aggregate_trajectories_facts(group_cols = group_cols) |>
-    browser()
-    convert_trajectories_as_percentages(group_cols = group_cols[group_cols!="year"])
+    convert_trajectories_as_percentages(group_cols = group_cols[group_cols != "year"])
   return(company_trajectories_data)
 }
 
 main_data_load_trajectories_data_from_file <- function(
-  crispy_outputs_dir,
-  granularity, param_cols = c("run_id", "year")
-){
+    crispy_outputs_dir,
+    granularity, param_cols = c("run_id", "year")) {
   company_trajectories_data <- load_multiple_trajectories(crispy_outputs_dir) |>
-    main_data_load_trajectories_data(granularity=granularity, param_cols=param_cols)
+    main_data_load_trajectories_data(granularity = granularity, param_cols = param_cols)
   return(company_trajectories_data)
 }
