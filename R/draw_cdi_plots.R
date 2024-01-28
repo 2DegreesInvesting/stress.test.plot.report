@@ -148,7 +148,7 @@ make_density_plots <- function(data_cdi_pd_plot, numeric_values, density_var, gr
     density_data <- data.frame()
 
     # Iterate over each desired parameter and compute density values
-    for (i in 1:length(density_var_values)) {
+    for (i in seq_along(density_var_values)) {
       pm <- density_var_values[i]
       data <- data_cdi_pd_plot %>% dplyr::filter(
         !!rlang::sym(group_variable) == grouper,

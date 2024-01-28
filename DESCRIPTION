@@ -21,7 +21,8 @@ Imports:
     r2dii.plot,
     stringr,
     tidyr,
-    tidytext
+    tidytext,
+    withr
 Remotes:
     2DegreesInvesting/r2dii.climate.stress.test,
     2DegreesInvesting/STDataMGMT,

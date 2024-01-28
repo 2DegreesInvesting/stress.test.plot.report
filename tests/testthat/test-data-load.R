@@ -49,10 +49,21 @@ test_that("analysis_data loads_properly on ald_sector and business_unit", {
 
 test_that("main_data_load_trajectories_data_from_file loads_properly on ald_sector and business_unit", {
   withr::with_dir(get_path_to_root_from_test(), {
-    analysis_data <- main_data_load_trajectories_data_from_file(
+    trajectories_data <- main_data_load_trajectories_data_from_file(
+      crispy_outputs_dir = MOCK_ST_OUTPUTS_PATH,
+      granularity = c("ald_sector")
+    )
+  })
+
+  expect_snapshot(trajectories_data)
+  browser()
+
+  withr::with_dir(get_path_to_root_from_test(), {
+    trajectories_data <- main_data_load_trajectories_data_from_file(
       crispy_outputs_dir = MOCK_ST_OUTPUTS_PATH,
       granularity = c("ald_sector", "ald_business_unit")
     )
   })
-  expect_snapshot(analysis_data)
+
+  expect_snapshot(trajectories_data)
 })
