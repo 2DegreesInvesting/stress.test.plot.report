@@ -1,18 +1,6 @@
 source("constant.R")
+source("test_utils.R")
 
-
-
-get_path_to_root_from_test <- function() {
-  wd_parts <- unlist(strsplit(getwd(), "/"))
-  is_test_folder <-
-    length(wd_parts) >= 3 &&
-      all(tail(wd_parts, 2) == c("tests", "testthat"))
-  if (is_test_folder) {
-    return(file.path(getwd(), "..", ".."))
-  } else {
-    return(getwd())
-  }
-}
 
 test_that("analysis_data loads_properly on ald_sector", {
   withr::with_dir(get_path_to_root_from_test(), {
