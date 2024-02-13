@@ -1,10 +1,14 @@
 ## Quickstart
 
+This repository contains examples of visualisation that can be obtained from stress test outputs generated with the package [r2dii.climate.stress.test](https://github.com/2DegreesInvesting/r2dii.climate.stress.test)
+
 You need to have installed [R and RStudio](https://posit.co/download/rstudio-desktop/)  to use this repository.
 
 You can then download this repository by clicking `code > Download ZIP`, and unzip it. Then in RStudio, navigate to `file > Open project`, and open this folder.
 
-Still in RStudio, inside the vignettes/ folder are examples of visualisation that can be obtained from stress test outputs generated with the package [r2dii.climate.stress.test](https://github.com/2DegreesInvesting/r2dii.climate.stress.test). To run the Rmarkdown files, click on one, then at the top right of the code window, click on `Run > Run all`
+Still in RStudio, inside the vignettes/ folder are examples using mock data. To run the Rmarkdown files, click on one, then at the top right of the code window, click on `Run > Run all` 
+
+The mock data generation scripts, and precomputed mocke datasets, can be found in the data/raw folder. Their numeric values have no interpretation.
 
 ## Workflow to add new plots 
 
