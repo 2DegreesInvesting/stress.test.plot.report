@@ -38,7 +38,7 @@ load_portfolio_data <- function(portfolio_data_path) {
 }
 
 
-#' Convert column year to term
+#' Convert column year to term. 1 term is equal to 2.5 years
 #'
 #' @param trisk_start_year
 #' @param portfolio_data portfolio_data
@@ -57,14 +57,16 @@ map_portfolio_maturity_to_term <-
           term = ceiling((.data$portfolio_maturity_month / 12) * 0.4) # 1 term is equal to 2.5 years
         ) |>
         dplyr::select(-c(portfolio_maturity_month))
-
-      # replace term by 1 when the asset is not expected to have a term
     } else {
+      # replace term by 1 if there's no start year,
+      # which is a consequence of the crispy data being empty
       portfolio_data <- portfolio_data |>
         dplyr::mutate(term = 1)
     }
+
+    # replace term by 1 if asset_type is equity
     portfolio_data <- portfolio_data |>
-      dplyr::mutate(term = dplyr::if_else(asset_type == "fixed_income", 1, .data$term))
+      dplyr::mutate(term = dplyr::if_else(asset_type == "equity", 1, .data$term))
     return(portfolio_data)
   }
 
