@@ -61,7 +61,6 @@ aggregate_trajectories_facts <-
 #' @param group_cols group_cols
 #'
 #' @return
-#' @export
 #'
 convert_trajectories_as_percentages <-
   function(multi_trajectories, group_cols) {
