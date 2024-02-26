@@ -42,13 +42,15 @@ compute_analysis_metrics <- function(analysis_data) {
       # exposure_at_default_baseline = .data$net_present_value_baseline * .data$loss_given_default,
       # exposure_at_default_shock = .data$net_present_value_shock * .data$loss_given_default,
 
+      # pd_difference_portfolio = .data$pd_portfolio - .data$pd_shock,
+      pd_difference = .data$pd_shock - .data$pd_baseline,
+      # crispy_perc_pd_change = .data$pd_difference / .data$pd_baseline,
+
       expected_loss_portfolio = .data$exposure_at_default * .data$pd_portfolio,
       expected_loss_baseline = .data$exposure_at_default * .data$pd_baseline,
       expected_loss_shock = .data$exposure_at_default * .data$pd_shock,
+      expected_loss_difference = .data$exposure_at_default * .data$pd_difference
 
-      # pd_difference_portfolio = .data$pd_portfolio - .data$pd_shock,
-      pd_difference = .data$pd_shock - .data$pd_baseline,
-      crispy_perc_pd_change = .data$pd_difference / .data$pd_baseline
     )
 
 
