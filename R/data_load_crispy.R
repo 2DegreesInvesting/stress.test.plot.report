@@ -62,10 +62,10 @@ aggregate_crispy_facts <- function(multi_crispy, group_cols) {
   multi_crispy <- multi_crispy |>
     dplyr::group_by_at(group_cols) |>
     dplyr::summarise(
+      pd_baseline = stats::weighted.mean(x=pd_baseline, w=net_present_value_baseline, na.rm = T),
+      pd_shock = stats::weighted.mean(x=pd_shock, w=net_present_value_baseline, na.rm = T),
       net_present_value_baseline = sum(net_present_value_baseline, na.rm = T),
       net_present_value_shock = sum(net_present_value_shock, na.rm = T),
-      pd_baseline = stats::median(pd_baseline, na.rm = T),
-      pd_shock = stats::median(pd_shock, na.rm = T),
       .groups = "drop"
     )
   return(multi_crispy)

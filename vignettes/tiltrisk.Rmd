@@ -1,0 +1,51 @@
+---
+title: "tiltrisk"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tiltrisk}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(stress.test.plot.report)
+```
+
+```{r}
+crispy_outputs_dir <- here::here("workspace", "tiltrisk", "crispy_outputs")
+tilt_input_path <- here::here("workspace", "tiltrisk", "TILT mock data.xlsx")
+tilt_sheet <- "mock_data_sector_industry"
+```
+
+
+```{r}
+analysis_data <-
+  load_input_plots_data_from_files(
+    crispy_outputs_dir = crispy_outputs_dir,
+    portfolio_data_path = NULL,
+    granularity = c("ald_sector", "ald_business_unit"),
+    filter_outliers = FALSE
+  )
+
+tilt_data <- readxl::read_excel(tilt_input_path, sheet = tilt_sheet, skip=1)
+```
+
+```{r}
+tiltrisk_renaming <- tibble::tribble(
+  ~tilt_sector, ~tilt_subsector, ~ald_sector, ~ald_business_unit,
+  "energy", "coal energy", "Power", "CoalCap",
+  "energy", "gas energy", "Power", "GasCap",
+  "energy", "oil energy", "Power", "OilCap"
+)
+
+tilt_data <- tilt_data |> 
+  dplyr::inner_join(tiltrisk_renaming, by=c("tilt_sector", "tilt_subsector"))
+```
+
