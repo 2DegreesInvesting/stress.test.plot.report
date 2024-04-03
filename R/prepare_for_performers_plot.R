@@ -1,13 +1,11 @@
 #' Title
 #'
 #' @param group_variable_char ex: "ald_sector"
-#' @param value_to_plot_char ex:
+#' @param value_to_plot_char value_to_plot_char
 #' @param performer_variable_char ex: "company_id", "ald_business_unit"
 #'
-#' @return
 #' @export
 #'
-#' @examples
 prepare_for_performers_plot <-
   function(analysis_data,
            group_variable_vec,

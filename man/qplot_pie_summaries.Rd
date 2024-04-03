@@ -7,6 +7,8 @@
 qplot_pie_summaries(data_summary_plot, agg_sum_name_chr)
 }
 \arguments{
+\item{data_summary_plot}{data_summary_plot}
+
 \item{agg_sum_name_chr}{"group_sum" or "group_n"}
 }
 \description{

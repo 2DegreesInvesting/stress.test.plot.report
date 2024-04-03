@@ -1,11 +1,8 @@
 #' Title
 #'
-#' @param data_el_plot
+#' @param data_el_plot data_el_plot
 #'
-#' @return
 #' @export
-#'
-#' @examples
 qplot_el_sector <- function(data_el_plot, use_exp_loss_types) {
   data_losses <- data_el_plot %>%
     filter(expected_loss_type %in% use_exp_loss_types)
@@ -29,13 +26,10 @@ qplot_el_sector <- function(data_el_plot, use_exp_loss_types) {
 
 #' Title
 #'
-#' @param data
-#' @param y_val_name
-#' @param is_percentage
+#' @param data data
+#' @param y_val_name y_val_name
+#' @param is_percentage is_percentage
 #'
-#' @return
-#'
-#' @examples
 plot_el_coloured <- function(data, y_val_name, is_percentage = FALSE) {
   if (is_percentage) {
     labels <- scales::percent

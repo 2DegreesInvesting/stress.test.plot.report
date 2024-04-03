@@ -7,7 +7,11 @@
 plot_el_coloured(data, y_val_name, is_percentage = FALSE)
 }
 \arguments{
-\item{is_percentage}{}
+\item{data}{data}
+
+\item{y_val_name}{y_val_name}
+
+\item{is_percentage}{is_percentage}
 }
 \description{
 Title

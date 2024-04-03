@@ -1,11 +1,9 @@
 #' Title
 #'
-#' @param data_val_change
+#' @param data_val_change data_val_change
 #'
-#' @return
 #' @export
 #'
-#' @examples
 qplot_val_change <- function(data_val_change) {
   # prepare data for plots
   group_cols <-
@@ -40,13 +38,11 @@ qplot_val_change <- function(data_val_change) {
 
 #' Title
 #'
-#' @param data_plt
-#' @param is_percentage
+#' @param data_plt data_plt
+#' @param is_percentage is_percentage
 #'
-#' @return
 #' @export
 #'
-#' @examples
 plot_value_change <- function(data_plt, is_percentage) {
   if (is_percentage) {
     labels <- scales::percent

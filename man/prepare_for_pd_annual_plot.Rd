@@ -7,7 +7,11 @@
 prepare_for_pd_annual_plot(data, group_variable_charvec, value_to_plot_char)
 }
 \arguments{
-\item{value_to_plot_char}{}
+\item{data}{data}
+
+\item{group_variable_charvec}{group_variable_charvec}
+
+\item{value_to_plot_char}{value_to_plot_char}
 }
 \description{
 Title

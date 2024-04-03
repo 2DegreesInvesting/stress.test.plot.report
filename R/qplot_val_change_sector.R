@@ -3,10 +3,8 @@
 #' @param data_val_change The data frame containing the value change data.
 #' @param facet_chr The column name to be used for faceting the plots.
 #'
-#' @return None
 #' @export
 #'
-#' @examples
 qplot_val_change_facet <- function(data_val_change, facet_chr) {
   # prepare data for plots
   group_cols <-

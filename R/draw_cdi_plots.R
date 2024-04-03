@@ -3,18 +3,16 @@ color_gradient <- c("#FFC0C0", "#FF8888", "#FF6666", "#FF4444", "#FF2222", "#FF0
 
 #' Title
 #'
-#' @param data_cdi_el_plot
-#' @param x_var
-#' @param y_var
-#' @param fill_var
-#' @param facet_rows_var
-#' @param facet_cols_var
-#' @param title
+#' @param data_cdi_el_plot data_cdi_el_plot
+#' @param x_var x_var
+#' @param y_var y_var
+#' @param fill_var fill_var
+#' @param facet_rows_var facet_rows_var
+#' @param facet_cols_var facet_cols_var
+#' @param title title
 #'
-#' @return
 #' @export
 #'
-#' @examples
 make_expected_loss_plot <-
   function(data_cdi_el_plot,
            x_var,
@@ -94,14 +92,12 @@ make_mean_pd_diff_plot <- function(data_cdi_pd_plot, scenario_name_for_title) {
 
 #' Title
 #'
-#' @param plot_data
-#' @param scenario_name_for_title
-#' @param y_var
+#' @param plot_data plot_data
+#' @param scenario_name_for_title scenario_name_for_title
+#' @param y_var y_var
 #'
-#' @return
 #' @export
 #'
-#' @examples
 make_discount_rate_plot <- function(plot_data, scenario_name_for_title, y_var) {
   # Create plot
   plotsy <- ggplot(data = plot_data, aes(x = factor(discount_rate), group = factor(discount_rate), y = !!rlang::sym(y_var), fill = !!rlang::sym(y_var))) +
@@ -132,13 +128,11 @@ make_discount_rate_plot <- function(plot_data, scenario_name_for_title, y_var) {
 
 #' Title
 #'
-#' @param data_cdi_pd_plot
-#' @param density_var
+#' @param data_cdi_pd_plot data_cdi_pd_plot
+#' @param density_var density_var
 #'
-#' @return
 #' @export
 #'
-#' @examples
 make_density_plots <- function(data_cdi_pd_plot, numeric_values, density_var, group_variable = "ald_sector") {
   density_var_values <- unique(data_cdi_pd_plot[[density_var]])
   plots <- list()

@@ -15,6 +15,12 @@ main_load_multi_crispy_data(
 )
 }
 \arguments{
+\item{multi_crispy_data}{multi_crispy_data}
+
+\item{granularity}{granularity}
+
+\item{param_cols}{param_cols}
+
 \item{filter_outliers}{filter_outliers}
 }
 \description{

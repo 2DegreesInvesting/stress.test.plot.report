@@ -1,15 +1,13 @@
 #' Title
 #'
-#' @param data_performers_plot
-#' @param x_var
-#' @param y_var
-#' @param fill_var
-#' @param facet_var
+#' @param data_performers_plot data_performers_plot
+#' @param x_var x_var
+#' @param y_var y_var
+#' @param fill_var fill_var
+#' @param facet_var facet_var
 #'
-#' @return
 #' @export
 #'
-#' @examples
 qplot_worst_performers <-
   function(data_performers_plot, x_var, y_var, fill_var, facet_var) {
     fill_colors <- r2dii.colours::palette_1in1000_plot[-c(1:2), ][c(1:length(unique(data_performers_plot[, fill_var]))), ]$hex

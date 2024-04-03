@@ -7,7 +7,11 @@
 make_discount_rate_plot(plot_data, scenario_name_for_title, y_var)
 }
 \arguments{
-\item{y_var}{}
+\item{plot_data}{plot_data}
+
+\item{scenario_name_for_title}{scenario_name_for_title}
+
+\item{y_var}{y_var}
 }
 \description{
 Title

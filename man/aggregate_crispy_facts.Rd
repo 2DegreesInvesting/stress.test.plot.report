@@ -10,9 +10,7 @@ aggregate_crispy_facts(multi_crispy, group_cols)
 \item{multi_crispy}{multi_crispy}
 
 \item{group_cols}{group_cols}
-
-\item{param_cols}{TODO the parameters should be stored in a dataframe other than crispy and use the run_id as key to join}
 }
 \description{
-# TODO FIND CLOSEST COMPANY IF group_cols=NULL
+TODO FIND CLOSEST COMPANY IF group_cols=NULL
 }

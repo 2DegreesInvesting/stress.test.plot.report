@@ -7,7 +7,7 @@
 qplot_val_change(data_val_change)
 }
 \arguments{
-\item{data_val_change}{}
+\item{data_val_change}{data_val_change}
 }
 \description{
 Title

@@ -7,7 +7,7 @@
 qplot_boxplot(data_exposure_plot)
 }
 \arguments{
-\item{data_exposure_plot}{}
+\item{data_exposure_plot}{data_exposure_plot}
 }
 \description{
 Title

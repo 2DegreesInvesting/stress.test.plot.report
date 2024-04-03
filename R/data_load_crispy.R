@@ -52,11 +52,10 @@ load_multiple_crispy <- function(crispy_outputs_dir) {
 
 #' Title
 #'
-#' # TODO FIND CLOSEST COMPANY IF group_cols=NULL
+#' TODO FIND CLOSEST COMPANY IF group_cols=NULL
 #'
 #' @param multi_crispy multi_crispy
 #' @param group_cols group_cols
-#' @param param_cols TODO the parameters should be stored in a dataframe other than crispy and use the run_id as key to join
 #'
 aggregate_crispy_facts <- function(multi_crispy, group_cols) {
   multi_crispy <- multi_crispy |>

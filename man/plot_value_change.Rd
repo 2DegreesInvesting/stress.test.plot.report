@@ -7,7 +7,9 @@
 plot_value_change(data_plt, is_percentage)
 }
 \arguments{
-\item{is_percentage}{}
+\item{data_plt}{data_plt}
+
+\item{is_percentage}{is_percentage}
 }
 \description{
 Title

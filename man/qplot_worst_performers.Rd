@@ -7,7 +7,15 @@
 qplot_worst_performers(data_performers_plot, x_var, y_var, fill_var, facet_var)
 }
 \arguments{
-\item{facet_var}{}
+\item{data_performers_plot}{data_performers_plot}
+
+\item{x_var}{x_var}
+
+\item{y_var}{y_var}
+
+\item{fill_var}{fill_var}
+
+\item{facet_var}{facet_var}
 }
 \description{
 Title

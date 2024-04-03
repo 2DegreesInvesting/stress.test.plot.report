@@ -39,7 +39,6 @@ load_multiple_trajectories <- function(crispy_outputs_dir) {
 #' @param multi_trajectories dataframe of trajectories from 1 or multiple trisk truns
 #' @param group_cols group_cols
 #'
-#' @return
 #' @export
 #'
 aggregate_trajectories_facts <-
@@ -60,7 +59,6 @@ aggregate_trajectories_facts <-
 #' @param multi_trajectories dataframe of trajectories from 1 or multiple trisk truns
 #' @param group_cols group_cols
 #'
-#' @return
 #'
 convert_trajectories_as_percentages <-
   function(multi_trajectories, group_cols) {

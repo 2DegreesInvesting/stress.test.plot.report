@@ -1,3 +1,12 @@
+#' Visualize PD Values by Term and Business Unit
+#'
+#' Orchestrates the creation of a plot visualizing the probability of default (PD) values across different terms and sectors or business units. This function facilitates an understanding of how PD values vary by term under baseline and shock scenarios, enabling stakeholders to assess risk exposure.
+#'
+#' @param crispy_data_agg Aggregated dataset containing PD values for various terms and scenarios across different sectors or business units.
+#' @param facet_var The variable by which to facet the plot, typically representing different sectors or business units, defaulting to "ald_sector".
+#'
+#' @return A ggplot object showing PD values by term, differentiated by scenario, across the specified business units, aiding in strategic risk management.
+#' @export
 pipeline_crispy_pd_term_plot <- function(crispy_data_agg, facet_var = "ald_sector") {
   data_pd_term <- prepare_for_pd_term_plot(
     crispy_data_agg = crispy_data_agg,
@@ -13,7 +22,14 @@ pipeline_crispy_pd_term_plot <- function(crispy_data_agg, facet_var = "ald_secto
 
 
 
-
+#' Prepare Data for PD Term Visualization
+#'
+#' Prepares the aggregated crispy data for visualization, focusing on PD values by term. It transforms the dataset to a long format suitable for plotting, allowing for a comparative view of PD values under different scenarios.
+#'
+#' @param crispy_data_agg Dataset containing aggregated PD values across terms and scenarios.
+#' @param facet_var Faceting variable representing sectors or business units for detailed comparative analysis.
+#'
+#' @return A dataframe in long format, ready for plotting PD values by term and scenario.
 prepare_for_pd_term_plot <- function(crispy_data_agg, facet_var) {
   data_pd_term <- crispy_data_agg |>
     tidyr::pivot_longer(
@@ -33,6 +49,14 @@ prepare_for_pd_term_plot <- function(crispy_data_agg, facet_var) {
 
 
 
+#' Generate Plot of PD Values by Term and Scenario
+#'
+#' Creates a bar plot to visualize the variation of PD values across different terms, under baseline and shock scenarios, segmented by business unit. Utilizes a color gradient to distinguish between PD value magnitudes, facilitating a clear and intuitive comparison of risk profiles.
+#'
+#' @param data_pd_term Prepared data for plotting, containing term-wise PD values and scenarios.
+#' @param facet_var Variable used to segment data into different business units for faceted visualization.
+#'
+#' @return A ggplot object depicting the comparative analysis of PD values by term and scenario, crucial for evaluating financial risk and strategic planning.
 draw_pd_term_plot <- function(data_pd_term, facet_var) {
   red_hex_color <- r2dii.colours::palette_1in1000_plot |>
     dplyr::filter(.data$label == "red") |>
