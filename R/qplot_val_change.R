@@ -53,20 +53,20 @@ plot_value_change <- function(data_plt, is_percentage) {
   }
 
   p <-
-    ggplot(
+    ggplot2::ggplot(
       data_plt,
-      aes(x = xaxis_values, y = !!rlang::sym(y_val_name), fill = !!rlang::sym(y_val_name))
+      ggplot2::aes(x = xaxis_values, y = !!rlang::sym(y_val_name), fill = !!rlang::sym(y_val_name))
     ) +
-    geom_bar(stat = "identity") +
-    geom_hline(yintercept = 0) +
-    theme_2dii() +
-    theme(
+    ggplot2::geom_bar(stat = "identity") +
+    ggplot2::geom_hline(yintercept = 0) +
+    r2dii.plot::theme_2dii() +
+    ggplot2::theme(
       legend.position = "right",
-      axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1, size = 10),
       # axis.ticks.x = element_blank(),
-      axis.title.x = element_blank()
+      axis.title.x = ggplot2::element_blank()
     ) +
-    scale_fill_gradient(
+    ggplot2::scale_fill_gradient(
       low = r2dii.colours::palette_1in1000_plot %>%
         filter(.data$label == "red") %>%
         pull(.data$hex),
@@ -77,7 +77,7 @@ plot_value_change <- function(data_plt, is_percentage) {
       labels = labels,
       name = "Expected loss"
     ) +
-    scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = labels)
+    ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(.1, 0)), labels = labels)
 
   p
 }

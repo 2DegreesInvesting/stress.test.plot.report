@@ -67,8 +67,10 @@ draw_crispy_npv_change_plot <- function(
 
   # PLOTTING
 
-  crispy_npv_change_plot <- ggplot2::ggplot(data_crispy_npv_change_plot,
-                                            ggplot2::aes(x = !!rlang::sym(x_var), y = !!rlang::sym(y_var), fill = !!rlang::sym(y_var))) +
+  crispy_npv_change_plot <- ggplot2::ggplot(
+    data_crispy_npv_change_plot,
+    ggplot2::aes(x = !!rlang::sym(x_var), y = !!rlang::sym(y_var), fill = !!rlang::sym(y_var))
+  ) +
     ggplot2::geom_col(width = bar_width) +
     ggplot2::scale_fill_gradient2(
       low = plot_color_gradient[1],

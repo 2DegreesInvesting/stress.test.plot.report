@@ -66,7 +66,6 @@ load_input_plots_data_from_tibble <-
            granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
            trisk_start_year = NA, # TODO REMOVE THIS REDUNDANT PARAMETER
            filter_outliers = FALSE) {
-
     multi_crispy_data <-
       multi_crispy_data |>
       main_load_multi_crispy_data(
@@ -139,7 +138,7 @@ main_load_portfolio_data <-
       map_portfolio_maturity_to_term(
         trisk_start_year = trisk_start_year
       )
-      #  aggregate_portfolio_facts(group_cols = group_cols)
+    #  aggregate_portfolio_facts(group_cols = group_cols)
 
     return(portfolio_data)
   }
@@ -196,7 +195,7 @@ main_data_load_trajectories_data <- function(company_trajectories_data, granular
 
   company_trajectories_data <- company_trajectories_data |>
     aggregate_trajectories_facts(group_cols = group_cols)
-    # convert_trajectories_as_percentages(group_cols = group_cols[group_cols != "year"])
+  # convert_trajectories_as_percentages(group_cols = group_cols[group_cols != "year"])
   return(company_trajectories_data)
 }
 

@@ -86,10 +86,12 @@ draw_exposure_change_plot <- function(
 
   exposure_change_plot <- ggplot2::ggplot(data_exposure_change, ggplot2::aes(x = !!rlang::sym(x_var))) +
     ggplot2::geom_col(
-      ggplot2::aes(y = !!rlang::sym(y_exposure_var)), width = bar_width, fill = plot_bar_color) +
+      ggplot2::aes(y = !!rlang::sym(y_exposure_var)),
+      width = bar_width, fill = plot_bar_color
+    ) +
     ggplot2::geom_tile(
       ggplot2::aes(
-        y = !!rlang::sym(y_exposure_var) + (!!rlang::sym(y_value_loss_var)/2),
+        y = !!rlang::sym(y_exposure_var) + (!!rlang::sym(y_value_loss_var) / 2),
         height = abs(!!rlang::sym(y_value_loss_var)),
         fill = dplyr::if_else(!!rlang::sym(y_value_loss_var) < 0, "Loss", "Gain")
       ),

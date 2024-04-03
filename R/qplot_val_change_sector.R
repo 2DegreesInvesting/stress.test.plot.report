@@ -52,29 +52,29 @@ plot_value_change_coloured <- function(data, is_percentage) {
   }
 
 
-  p <- ggplot(
+  p <- ggplot2::ggplot(
     data,
-    aes(
+    ggplot2::aes(
       x = xaxis_values,
       y = !!rlang::sym(y_val_name),
       fill = !!rlang::sym(y_val_name)
     )
   ) +
-    geom_bar(stat = "identity") +
-    geom_hline(yintercept = 0) +
-    scale_fill_gradient(
+    ggplot2::geom_bar(stat = "identity") +
+    ggplot2::geom_hline(yintercept = 0) +
+    ggplot2::scale_fill_gradient(
       low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
       high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
       labels = labels,
       name = "Equity value change"
     ) +
-    theme_2dii() +
-    theme(
-      axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    r2dii.plot::theme_2dii() +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1, size = 10),
       # axis.ticks.x = element_blank(),
-      axis.title.x = element_blank(),
+      axis.title.x = ggplot2::element_blank(),
       # axis.line.x = element_blank(),
-      legend.title = element_text()
+      legend.title = ggplot2::element_text()
     ) +
-    scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = labels)
+    ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(.1, 0)), labels = labels)
 }

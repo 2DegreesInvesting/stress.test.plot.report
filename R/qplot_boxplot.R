@@ -5,8 +5,10 @@
 #' @export
 qplot_boxplot <- function(data_exposure_plot) {
   data_exposure_plot <- remove_outliers_legacy(data_exposure_plot)
-  plot <- ggplot2::ggplot(data_exposure_plot,
-                          ggplot2::aes(x = .data$group_variable, y = .data$value_to_plot, fill = .data$group_mean)) +
+  plot <- ggplot2::ggplot(
+    data_exposure_plot,
+    ggplot2::aes(x = .data$group_variable, y = .data$value_to_plot, fill = .data$group_mean)
+  ) +
     ggplot2::geom_boxplot() +
     ggplot2::scale_y_continuous(labels = scales::unit_format(unit = "M", scale = 1e-6)) +
     ggplot2::scale_fill_gradient(

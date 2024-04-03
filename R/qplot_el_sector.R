@@ -56,7 +56,7 @@ plot_el_coloured <- function(data, y_val_name, is_percentage = FALSE) {
       labels = labels,
       name = "Expected loss"
     ) +
-    theme_2dii() +
+    r2dii.plot::theme_2dii() +
     theme(
       legend.title = element_text(),
       axis.ticks.x = element_blank(),
