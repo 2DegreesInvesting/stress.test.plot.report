@@ -90,7 +90,7 @@ qplot_pie_summaries <-
       # r2dii.colours::scale_fill_2dii("pacta", colour_groups = data_summary_plot$group_variable) +
       r2dii.plot::theme_2dii() +
       ggrepel::geom_label_repel(
-        aes(
+        ggplot2::aes(
           y = .data$pos,
           label = scales::unit_format(unit = "M", scale = 1e-6)(.data$agg_sum_value)
         ),

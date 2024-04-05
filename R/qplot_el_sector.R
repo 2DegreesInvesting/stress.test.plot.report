@@ -38,14 +38,14 @@ plot_el_coloured <- function(data, y_val_name, is_percentage = FALSE) {
   }
 
   p <-
-    ggplot(
+    ggplot2::ggplot(
       data,
-      aes_string(x = "expected_loss_type", y = y_val_name, fill = y_val_name)
+      ggplot2::aes_string(x = "expected_loss_type", y = y_val_name, fill = y_val_name)
     ) +
-    geom_bar(stat = "identity", color = "grey") +
-    scale_x_discrete(position = "bottom", labels = r2dii.plot::to_title) +
-    scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = labels) +
-    scale_fill_gradient2(
+    ggplot2::geom_bar(stat = "identity", color = "grey") +
+    ggplot2::scale_x_discrete(position = "bottom", labels = r2dii.plot::to_title) +
+    ggplot2::scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = labels) +
+    ggplot2::scale_fill_gradient2(
       low = r2dii.colours::palette_1in1000_plot %>%
         filter(.data$label == "red") %>%
         pull(.data$hex),
@@ -57,14 +57,14 @@ plot_el_coloured <- function(data, y_val_name, is_percentage = FALSE) {
       name = "Expected loss"
     ) +
     r2dii.plot::theme_2dii() +
-    theme(
-      legend.title = element_text(),
-      axis.ticks.x = element_blank(),
-      axis.title.x = element_blank(),
+    ggplot2::theme(
+      legend.title = ggplot2::element_text(),
+      axis.ticks.x = ggplot2::element_blank(),
+      axis.title.x = ggplot2::element_blank(),
       strip.placement = "outside",
-      axis.text.x = element_text(angle = 45, hjust = 1)
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
     ) +
-    facet_wrap(~group_variable, scales = "fixed")
+    ggplot2::facet_wrap(~group_variable, scales = "fixed")
 
 
   p

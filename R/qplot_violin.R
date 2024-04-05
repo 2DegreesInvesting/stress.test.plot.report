@@ -20,8 +20,8 @@ qplot_violin <- function(data_exposure_plot) {
     ) +
     r2dii.plot::theme_2dii() +
     ggplot2::theme(
-      legend.title = element_text(),
-      strip.text = element_blank()
+      legend.title = ggplot2::element_text(),
+      strip.text = ggplot2::element_blank()
     ) +
     ggplot2::labs(
       title = "Distributions of exposures per sector",

@@ -16,7 +16,7 @@ prepare_for_performers_plot <-
       dplyr::group_by_at(c(group_variable_vec, performer_variable_char)) |>
       dplyr::summarise({{ performance_metric }} := sum(!!rlang::sym(performance_metric))) |>
       dplyr::slice_max(order_by = !!rlang::sym(performance_metric), n = n_performers) |>
-      ungroup()
+      dplyr::ungroup()
 
     return(data_performers_plot)
   }

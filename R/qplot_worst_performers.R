@@ -22,11 +22,11 @@ qplot_worst_performers <-
       )
     ) +
       ggplot2::geom_bar(stat = "identity") +
-      ggplot2::geom_text(aes(
+      ggplot2::geom_text(ggplot2::aes(
         label = scales::unit_format(unit = "M", scale = 1e-6)(.data[[y_var]]),
         hjust = -0.2
       ), stat = "identity") +
-      ggplot2::scale_x_reordered() +
+      tidytext::scale_x_reordered() +
       ggplot2::scale_y_continuous(expand = expansion(mult = c(0, .1)), label = scales::unit_format(unit = "M", scale = 1e-6)) +
       ggplot2::scale_color_manual(
         breaks = data_performers_plot[[facet_var]],
@@ -36,7 +36,7 @@ qplot_worst_performers <-
       ggplot2::coord_flip() +
       r2dii.plot::theme_2dii() +
       ggplot2::theme(
-        axis.title.y = element_blank(),
+        axis.title.y = ggplot2::element_blank(),
         legend.position = "none"
       ) +
       ggplot2::facet_wrap(

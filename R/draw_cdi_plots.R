@@ -48,7 +48,7 @@ make_expected_loss_plot <-
         title = title
       ) +
       ggplot2::theme(
-        panel.grid = element_blank(),
+        panel.grid = ggplot2::element_blank(),
         panel.grid.major = ggplot2::element_line(color = "lightgray", size = 0.2)
       )
 
@@ -166,7 +166,10 @@ make_density_plots <- function(data_cdi_pd_plot, numeric_values, density_var, gr
     }
 
     # Create the plot with lines and different colors
-    density_plot <- ggplot2::ggplot(density_data, aes(x = x, y = y, color = !!rlang::sym(density_var))) +
+    density_plot <- ggplot2::ggplot(
+        density_data,
+        ggplot2::aes(x = x, y = y, color = !!rlang::sym(density_var))
+        ) +
       ggplot2::geom_line(size = 1) +
       # scale_color_manual(values = colors) +
       ggplot2::labs(x = numeric_values, y = "Density") +
