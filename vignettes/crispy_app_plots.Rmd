@@ -19,3 +19,88 @@ library(stress.test.plot.report)
 ```
 
 
+
+```{r}
+granularity <-
+  c("ald_sector", "ald_business_unit")
+
+portfolio_data_path <-
+  here::here("data-raw", "synthetic_portfolio.csv")
+crispy_outputs_dir <- here::here("data-raw", "mock_st_outputs")
+```
+
+Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
+
+```{r}
+analysis_data <-
+  load_input_plots_data_from_files(
+    crispy_outputs_dir = crispy_outputs_dir,
+    portfolio_data_path = portfolio_data_path,
+    granularity = granularity,
+    filter_outliers = TRUE
+  )
+
+trajectories_data <- main_data_load_trajectories_data_from_file(
+  crispy_outputs_dir = crispy_outputs_dir,
+  granularity = granularity
+  )
+```
+
+
+
+# Plots Equities
+
+
+```{r}
+crispy_npv_change_plot <- pipeline_crispy_npv_change_plot(
+  analysis_data,
+  x_var = granularity[-1])
+crispy_npv_change_plot
+```
+
+
+
+```{r}
+
+crispy_exposure_change_plot <- pipeline_crispy_exposure_change_plot(
+  analysis_data,
+  x_var = granularity[-1])
+crispy_exposure_change_plot
+```
+
+
+
+# Plots Loans
+
+```{r}
+
+expected_loss_plot <- stress.test.plot.report::pipeline_crispy_expected_loss_plot(
+  analysis_data = analysis_data,
+  facet_var = granularity[-1]
+)
+expected_loss_plot
+
+```
+
+
+```{r}
+  pd_term_plot <- pipeline_crispy_pd_term_plot(
+    crispy_data_agg = analysis_data,
+    facet_var = granularity[-1]
+  )
+pd_term_plot
+```
+
+
+# Plots Trajectories
+
+```{r}
+
+trisk_line_plot <- pipeline_crispy_trisk_line_plot(
+  trajectories_data = trajectories_data,
+  facet_var = granularity[-1]
+)
+trisk_line_plot
+
+```
+

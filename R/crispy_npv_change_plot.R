@@ -85,7 +85,7 @@ draw_crispy_npv_change_plot <- function(
     r2dii.plot::theme_2dii() +
     ggplot2::theme(
       legend.position = "none",
-      axis.text.x = element_text(angle = 45, hjust = 1)
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
     )
 
 
