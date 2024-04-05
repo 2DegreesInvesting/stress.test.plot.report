@@ -8,14 +8,14 @@ qplot_el_sector <- function(data_el_plot, use_exp_loss_types) {
     filter(expected_loss_type %in% use_exp_loss_types)
 
   p_abs <- plot_el_coloured(data_losses, "expected_loss_value") +
-    labs(
+    ggplot2::labs(
       title = "Expected loss per sector",
       subtitle = "For baseline and shock scenarios",
       y = "Expected Loss (currency)"
     )
 
   p_perc <- plot_el_coloured(data_losses, "el_as_perc_exposure", is_percentage = TRUE) +
-    labs(
+    ggplot2::labs(
       title = "Expected Loss as percentage of exposure per sector",
       subtitle = "For baseline and shock scenarios",
       y = "Expected Loss (% exposure)"
@@ -44,7 +44,7 @@ plot_el_coloured <- function(data, y_val_name, is_percentage = FALSE) {
     ) +
     ggplot2::geom_bar(stat = "identity", color = "grey") +
     ggplot2::scale_x_discrete(position = "bottom", labels = r2dii.plot::to_title) +
-    ggplot2::scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = labels) +
+    ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(.1, 0)), labels = labels) +
     ggplot2::scale_fill_gradient2(
       low = r2dii.colours::palette_1in1000_plot %>%
         filter(.data$label == "red") %>%

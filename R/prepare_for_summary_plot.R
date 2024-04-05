@@ -26,7 +26,7 @@ prepare_for_summary_plot <-
         values_to = "agg_sum_value"
       ) |>
       dplyr::mutate(
-        label = case_when(
+        label = dplyr::case_when(
           .data$agg_sum_name == "group_sum" ~ paste0("Total ", value_to_plot_char, " per ", group_variable_char),
           .data$agg_sum_name == "group_n" ~ "Number of companies per sector"
         )

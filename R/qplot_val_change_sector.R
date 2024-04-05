@@ -19,15 +19,15 @@ qplot_val_change_facet <- function(data_val_change, facet_chr) {
 
   # do plots
   p_perc <- plot_value_change_coloured(data_plt, is_percentage = TRUE) +
-    facet_wrap(as.formula(paste("~", facet_chr))) +
-    labs(
+    ggplot2::facet_wrap(as.formula(paste("~", facet_chr))) +
+    ggplot2::labs(
       title = "Percentage value change per sector",
       y = "Value change\n(% points)"
     )
 
   p_abs <- plot_value_change_coloured(data_plt, is_percentage = FALSE) +
-    facet_wrap(as.formula(paste("~", facet_chr))) +
-    labs(
+    ggplot2::facet_wrap(as.formula(paste("~", facet_chr))) +
+    ggplot2::labs(
       title = "Absolute value change per sector",
       y = "Value change\n(currency)"
     )

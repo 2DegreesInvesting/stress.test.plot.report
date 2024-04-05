@@ -20,7 +20,7 @@ qplot_val_change <- function(data_val_change) {
     plot_value_change(data_plt,
       is_percentage = TRUE
     ) +
-    labs(
+    ggplot2::labs(
       title = "Analysed portfolio percentage value change",
       y = "Value change (% points)"
     )
@@ -28,7 +28,7 @@ qplot_val_change <- function(data_val_change) {
   p_abs <- plot_value_change(data_plt,
     is_percentage = FALSE
   ) +
-    labs(
+    ggplot2::labs(
       title = "Analysed portfolio absolute value change",
       y = "Value change (currency)"
     )

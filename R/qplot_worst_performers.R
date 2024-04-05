@@ -27,7 +27,7 @@ qplot_worst_performers <-
         hjust = -0.2
       ), stat = "identity") +
       tidytext::scale_x_reordered() +
-      ggplot2::scale_y_continuous(expand = expansion(mult = c(0, .1)), label = scales::unit_format(unit = "M", scale = 1e-6)) +
+      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0, .1)), label = scales::unit_format(unit = "M", scale = 1e-6)) +
       ggplot2::scale_color_manual(
         breaks = data_performers_plot[[facet_var]],
         values = fill_colors
@@ -40,7 +40,7 @@ qplot_worst_performers <-
         legend.position = "none"
       ) +
       ggplot2::facet_wrap(
-        ~ fct_reorder(
+        ~ forcats::fct_reorder(
           .data[[x_var]],
           .data[[y_var]],
           .fun = max,
