@@ -9,7 +9,6 @@
 #' @param filter_outliers filter_outliers
 #' @param granularity granularity
 #'
-#' @return
 #' @export
 #'
 load_input_plots_data_from_files <-
@@ -55,11 +54,10 @@ load_input_plots_data_from_files <-
 #'
 #' @param granularity granularity
 #' @param trisk_start_year (default) sets to the earliest year of multi_cripy_data
-#' @param multi_crispy_data
-#' @param portfolio_data
-#' @param filter_outliers
+#' @param multi_crispy_data multi_crispy_data
+#' @param portfolio_data portfolio_data
+#' @param filter_outliers filter_outliers
 #'
-#' @return
 #' @export
 #'
 load_input_plots_data_from_tibble <-
@@ -68,7 +66,6 @@ load_input_plots_data_from_tibble <-
            granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
            trisk_start_year = NA, # TODO REMOVE THIS REDUNDANT PARAMETER
            filter_outliers = FALSE) {
-
     multi_crispy_data <-
       multi_crispy_data |>
       main_load_multi_crispy_data(
@@ -97,15 +94,14 @@ load_input_plots_data_from_tibble <-
   }
 
 
-#' Title
+#' main load analysis data
 #'
 #'
 #'
 #' @param portfolio_data portfolio_data
 #' @param portfolio_crispy_merge_cols portfolio_crispy_merge_cols
-#' @param multi_crispy_data
+#' @param multi_crispy_data multi_crispy_data
 #'
-#' @return
 #'
 #' @export
 main_load_analysis_data <-
@@ -129,7 +125,6 @@ main_load_analysis_data <-
 #' @param param_cols param_cols
 #' @param trisk_start_year trisk_start_year
 #'
-#' @return
 #'
 #' @export
 main_load_portfolio_data <-
@@ -142,20 +137,19 @@ main_load_portfolio_data <-
     portfolio_data <- portfolio_data |>
       map_portfolio_maturity_to_term(
         trisk_start_year = trisk_start_year
-      )
-      #  aggregate_portfolio_facts(group_cols = group_cols)
+      ) |>
+    aggregate_portfolio_facts(group_cols = group_cols)
 
     return(portfolio_data)
   }
 
 #' Title
 #'
-#' @param multi_crispy_data
-#' @param granularity
-#' @param param_cols
+#' @param multi_crispy_data multi_crispy_data
+#' @param granularity granularity
+#' @param param_cols param_cols
 #' @param filter_outliers filter_outliers
 #'
-#' @return
 #'
 #' @export
 main_load_multi_crispy_data <-
@@ -192,7 +186,6 @@ main_load_multi_crispy_data <-
 #' @param company_trajectories_data company_trajectories_data
 #' @param max_trajectories_granularity max_trajectories_granularity
 #'
-#' @return
 #' @export
 #'
 main_data_load_trajectories_data <- function(company_trajectories_data, granularity, param_cols = c(
@@ -201,11 +194,19 @@ main_data_load_trajectories_data <- function(company_trajectories_data, granular
   group_cols <- unique(c(granularity, param_cols))
 
   company_trajectories_data <- company_trajectories_data |>
-    aggregate_trajectories_facts(group_cols = group_cols)
-    # convert_trajectories_as_percentages(group_cols = group_cols[group_cols != "year"])
+    aggregate_trajectories_facts(group_cols = group_cols)  |>
+    dplyr::filter(year < max(year)) # remove last year bc it is NA from trisk
   return(company_trajectories_data)
 }
 
+#' Title
+#'
+#' @param crispy_outputs_dir crispy_outputs_dir
+#' @param granularity granularity
+#' @param param_cols param_cols
+#'
+#' @export
+#'
 main_data_load_trajectories_data_from_file <- function(
     crispy_outputs_dir,
     granularity, param_cols = c("run_id", "year")) {

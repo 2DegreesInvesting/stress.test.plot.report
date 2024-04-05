@@ -18,22 +18,22 @@ prepare_for_el_plots <-
       )
 
     data_exp_per_sector <- data_summary_plot |>
-      dplyr::select(-c(perc_of_total)) |>
-      dplyr::filter(agg_sum_name == "group_sum")
+      dplyr::select(-c(.data$perc_of_total)) |>
+      dplyr::filter(.data$agg_sum_name == "group_sum")
 
     st_expected_loss <- analysis_data_single_run |>
       dplyr::rename(group_variable = !!rlang::sym(group_variable_char)) |>
       dplyr::group_by(group_variable) |>
       dplyr::summarise(
-        expected_loss_baseline = sum(expected_loss_baseline, na.rm = TRUE),
-        expected_loss_shock = sum(expected_loss_shock, na.rm = TRUE),
-        expected_loss_st_diff = expected_loss_baseline - expected_loss_shock
+        expected_loss_baseline = sum(.data$expected_loss_baseline, na.rm = TRUE),
+        expected_loss_shock = sum(.data$expected_loss_shock, na.rm = TRUE),
+        expected_loss_st_diff = .data$expected_loss_baseline - .data$expected_loss_shock
       ) |>
       tidyr::pivot_longer(
         cols = c(
-          expected_loss_baseline,
-          expected_loss_shock,
-          expected_loss_st_diff
+          .data$expected_loss_baseline,
+          .data$expected_loss_shock,
+          .data$expected_loss_st_diff
         ),
         names_to = "expected_loss_type",
         values_to = "expected_loss_value"

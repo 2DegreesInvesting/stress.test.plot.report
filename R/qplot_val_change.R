@@ -1,11 +1,9 @@
 #' Title
 #'
-#' @param data_val_change
+#' @param data_val_change data_val_change
 #'
-#' @return
 #' @export
 #'
-#' @examples
 qplot_val_change <- function(data_val_change) {
   # prepare data for plots
   group_cols <-
@@ -22,7 +20,7 @@ qplot_val_change <- function(data_val_change) {
     plot_value_change(data_plt,
       is_percentage = TRUE
     ) +
-    labs(
+    ggplot2::labs(
       title = "Analysed portfolio percentage value change",
       y = "Value change (% points)"
     )
@@ -30,7 +28,7 @@ qplot_val_change <- function(data_val_change) {
   p_abs <- plot_value_change(data_plt,
     is_percentage = FALSE
   ) +
-    labs(
+    ggplot2::labs(
       title = "Analysed portfolio absolute value change",
       y = "Value change (currency)"
     )
@@ -40,13 +38,11 @@ qplot_val_change <- function(data_val_change) {
 
 #' Title
 #'
-#' @param data_plt
-#' @param is_percentage
+#' @param data_plt data_plt
+#' @param is_percentage is_percentage
 #'
-#' @return
 #' @export
 #'
-#' @examples
 plot_value_change <- function(data_plt, is_percentage) {
   if (is_percentage) {
     labels <- scales::percent
@@ -57,20 +53,20 @@ plot_value_change <- function(data_plt, is_percentage) {
   }
 
   p <-
-    ggplot(
+    ggplot2::ggplot(
       data_plt,
-      aes(x = xaxis_values, y = !!rlang::sym(y_val_name), fill = !!rlang::sym(y_val_name))
+      ggplot2::aes(x = xaxis_values, y = !!rlang::sym(y_val_name), fill = !!rlang::sym(y_val_name))
     ) +
-    geom_bar(stat = "identity") +
-    geom_hline(yintercept = 0) +
-    theme_2dii() +
-    theme(
+    ggplot2::geom_bar(stat = "identity") +
+    ggplot2::geom_hline(yintercept = 0) +
+    r2dii.plot::theme_2dii() +
+    ggplot2::theme(
       legend.position = "right",
-      axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1, size = 10),
       # axis.ticks.x = element_blank(),
-      axis.title.x = element_blank()
+      axis.title.x = ggplot2::element_blank()
     ) +
-    scale_fill_gradient(
+    ggplot2::scale_fill_gradient(
       low = r2dii.colours::palette_1in1000_plot %>%
         filter(.data$label == "red") %>%
         pull(.data$hex),
@@ -81,7 +77,7 @@ plot_value_change <- function(data_plt, is_percentage) {
       labels = labels,
       name = "Expected loss"
     ) +
-    scale_y_continuous(expand = expansion(mult = c(.1, 0)), labels = labels)
+    ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(.1, 0)), labels = labels)
 
   p
 }

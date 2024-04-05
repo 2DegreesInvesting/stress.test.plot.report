@@ -40,7 +40,7 @@ load_portfolio_data <- function(portfolio_data_path) {
 
 #' Convert column year to term. 1 term is equal to 2.5 years
 #'
-#' @param trisk_start_year
+#' @param trisk_start_year trisk_start_year
 #' @param portfolio_data portfolio_data
 #'
 map_portfolio_maturity_to_term <-
@@ -77,9 +77,7 @@ map_portfolio_maturity_to_term <-
 #' @param portfolio_data portfolio_data
 #' @param group_cols group_cols
 #'
-#' @return
 #'
-#' @examples
 aggregate_portfolio_facts <- function(portfolio_data, group_cols) {
   portfolio_data <- portfolio_data |>
     dplyr::group_by_at(group_cols) |>

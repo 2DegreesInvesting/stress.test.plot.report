@@ -1,14 +1,15 @@
 #' Title
 #'
-#' @param data_exposure_plot
+#' @param data_exposure_plot data_exposure_plot
 #'
-#' @return
 #' @export
 #'
-#' @examples
 qplot_violin <- function(data_exposure_plot) {
   data_exposure_plot_no_outlier <- remove_outliers_legacy(data_exposure_plot)
-  ggplot2::ggplot(data_exposure_plot_no_outlier, aes(x = .data$group_variable, y = .data$value_to_plot, colour = .data$value_to_plot)) +
+  ggplot2::ggplot(
+    data_exposure_plot_no_outlier,
+    ggplot2::aes(x = .data$group_variable, y = .data$value_to_plot, colour = .data$value_to_plot)
+  ) +
     ggplot2::geom_violin() +
     ggplot2::geom_jitter(alpha = 0.5) +
     ggplot2::scale_y_continuous(labels = scales::unit_format(unit = "M", scale = 1e-6)) +
@@ -19,8 +20,8 @@ qplot_violin <- function(data_exposure_plot) {
     ) +
     r2dii.plot::theme_2dii() +
     ggplot2::theme(
-      legend.title = element_text(),
-      strip.text = element_blank()
+      legend.title = ggplot2::element_text(),
+      strip.text = ggplot2::element_blank()
     ) +
     ggplot2::labs(
       title = "Distributions of exposures per sector",

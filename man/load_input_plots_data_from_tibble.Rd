@@ -13,11 +13,15 @@ load_input_plots_data_from_tibble(
 )
 }
 \arguments{
+\item{multi_crispy_data}{multi_crispy_data}
+
+\item{portfolio_data}{portfolio_data}
+
 \item{granularity}{granularity}
 
 \item{trisk_start_year}{(default) sets to the earliest year of multi_cripy_data}
 
-\item{filter_outliers}{}
+\item{filter_outliers}{filter_outliers}
 }
 \description{
 The dataframe in output of this function should always be

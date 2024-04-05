@@ -186,7 +186,7 @@ generate_company_emissions <- function(company_activities) {
       mean_production = 1e5
     )
   company_emissions <- company_emissions |>
-    ungroup()
+    dplyr::ungroup()
   return(company_emissions)
 }
 

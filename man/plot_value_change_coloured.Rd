@@ -7,9 +7,12 @@
 plot_value_change_coloured(data, is_percentage)
 }
 \arguments{
-\item{data}{data}
+\item{data}{The data frame containing the value change data.}
 
-\item{is_percentage}{is_percentage}
+\item{is_percentage}{A logical value indicating whether the value change is in percentage or absolute.}
+}
+\value{
+None
 }
 \description{
 Title

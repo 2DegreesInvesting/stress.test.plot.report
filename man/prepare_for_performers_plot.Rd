@@ -17,7 +17,7 @@ prepare_for_performers_plot(
 
 \item{group_variable_char}{ex: "ald_sector"}
 
-\item{value_to_plot_char}{ex:}
+\item{value_to_plot_char}{value_to_plot_char}
 }
 \description{
 Title

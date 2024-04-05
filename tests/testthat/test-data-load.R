@@ -1,5 +1,5 @@
-source("constant.R")
-source("test_utils.R")
+source("./constant.R")
+source("./utils.R")
 
 
 test_that("analysis_data loads_properly on ald_sector", {

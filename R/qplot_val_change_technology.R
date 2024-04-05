@@ -18,8 +18,8 @@ qplot_val_change_technology <- function(data) {
 #' @export
 qplot_val_change_technology_perc <- function(data) {
   p <- plot_value_change_coloured(data, "technology_percent_value_change") +
-    facet_wrap(ald_sector ~ technology) +
-    labs(
+    ggplot2::facet_wrap(ald_sector ~ technology) +
+    ggplot2::labs(
       title = "Percentage value change per technology",
       y = "Value change\n(% points)"
     )
@@ -33,9 +33,9 @@ qplot_val_change_technology_perc <- function(data) {
 #' @export
 qplot_val_change_technology_abs <- function(data) {
   p <- plot_value_change_coloured(data, "technology_absolute_value_change") +
-    scale_y_continuous(labels = scales::comma) +
-    facet_wrap(ald_sector ~ technology) +
-    labs(
+    ggplot2::scale_y_continuous(labels = scales::comma) +
+    ggplot2::facet_wrap(ald_sector ~ technology) +
+    ggplot2::labs(
       title = "Absolute value change per technology",
       y = "Value change\n(currency)"
     )

@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_load_main.R
 \name{main_load_analysis_data}
 \alias{main_load_analysis_data}
-\title{Title}
+\title{main load analysis data}
 \usage{
 main_load_analysis_data(
   multi_crispy_data,
@@ -11,12 +11,12 @@ main_load_analysis_data(
 )
 }
 \arguments{
-\item{multi_crispy_data}{}
+\item{multi_crispy_data}{multi_crispy_data}
 
 \item{portfolio_data}{portfolio_data}
 
 \item{portfolio_crispy_merge_cols}{portfolio_crispy_merge_cols}
 }
 \description{
-Title
+main load analysis data
 }

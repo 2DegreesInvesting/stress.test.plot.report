@@ -7,7 +7,7 @@
 qplot_el_sector(data_el_plot, use_exp_loss_types)
 }
 \arguments{
-\item{data_el_plot}{}
+\item{data_el_plot}{data_el_plot}
 }
 \description{
 Title

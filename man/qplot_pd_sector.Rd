@@ -7,7 +7,11 @@
 qplot_pd_sector(data_pd, common_y_axis = FALSE, annual_pds = FALSE)
 }
 \arguments{
-\item{annual_pds}{}
+\item{data_pd}{data_pd}
+
+\item{common_y_axis}{common_y_axis}
+
+\item{annual_pds}{annual_pds}
 }
 \description{
 Title

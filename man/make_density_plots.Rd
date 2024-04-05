@@ -12,7 +12,9 @@ make_density_plots(
 )
 }
 \arguments{
-\item{density_var}{}
+\item{data_cdi_pd_plot}{data_cdi_pd_plot}
+
+\item{density_var}{density_var}
 }
 \description{
 Title

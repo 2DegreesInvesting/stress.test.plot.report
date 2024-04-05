@@ -21,8 +21,8 @@ qplot_el_change_sector <- function(data_el_plot) {
 #' @export
 qplot_el_change_sector_perc <- function(data_change) {
   p <- plot_el_coloured(data_change, "el_as_perc_exposure", is_percentage = TRUE) +
-    facet_wrap(~group_variable, scales = "fixed") +
-    labs(
+    ggplot2::facet_wrap(~group_variable, scales = "fixed") +
+    ggplot2::labs(
       title = "Expected loss shock as percentage of exposure per sector",
       y = "Expected Loss\n(% exposure)"
     )
@@ -36,8 +36,8 @@ qplot_el_change_sector_perc <- function(data_change) {
 #' @export
 qplot_el_change_sector_abs <- function(data_change) {
   p <- plot_el_coloured(data_change, "expected_loss_value") +
-    facet_wrap(~group_variable, scales = "fixed") +
-    labs(
+    ggplot2::facet_wrap(~group_variable, scales = "fixed") +
+    ggplot2::labs(
       title = "Expected loss shock per sector",
       y = "Expected Loss\n(currency)"
     )

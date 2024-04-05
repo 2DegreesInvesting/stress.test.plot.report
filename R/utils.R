@@ -7,15 +7,14 @@ repeat_plot_in_a_grid <- function(data, plot_fun, title = "", row_layout = TRUE)
 
     cdi_plot <- make_expected_loss_plot(
       data_cdi_el_plot = data_cdi_el_plot %>%
-        filter(run_id == run_id_name),
+        dplyr::filter(run_id == run_id_name),
       x_var = "shock_year",
       y_var = metric_el_name,
       fill_var = metric_el_name,
-      facet_rows_var = NULL,
-      facet_cols_var = "ald_business_unit"
+      facet_var = "ald_business_unit"
     ) +
-      labs(title = plot_title) +
-      theme(plot.title = element_text(size = 12, face = "bold"))
+      ggplot2::labs(title = plot_title) +
+      ggplot2::theme(plot.title = ggplot2::element_text(size = 12, face = "bold"))
 
     plist[[plot_i]] <- cdi_plot
     plot_i <- plot_i + 1

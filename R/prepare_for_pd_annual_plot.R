@@ -1,13 +1,11 @@
 #' Title
 #'
-#' @param data
-#' @param group_variable_charvec
-#' @param value_to_plot_char
+#' @param data data
+#' @param group_variable_charvec group_variable_charvec
+#' @param value_to_plot_char value_to_plot_char
 #'
-#' @return
 #' @export
 #'
-#' @examples
 prepare_for_pd_annual_plot <- function(data,
                                        group_variable_charvec,
                                        value_to_plot_char) {

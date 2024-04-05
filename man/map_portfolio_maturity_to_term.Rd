@@ -2,13 +2,15 @@
 % Please edit documentation in R/data_load_portfolio.R
 \name{map_portfolio_maturity_to_term}
 \alias{map_portfolio_maturity_to_term}
-\title{Convert column year to term}
+\title{Convert column year to term. 1 term is equal to 2.5 years}
 \usage{
 map_portfolio_maturity_to_term(portfolio_data, trisk_start_year)
 }
 \arguments{
 \item{portfolio_data}{portfolio_data}
+
+\item{trisk_start_year}{trisk_start_year}
 }
 \description{
-Convert column year to term
+Convert column year to term. 1 term is equal to 2.5 years
 }

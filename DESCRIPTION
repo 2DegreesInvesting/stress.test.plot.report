@@ -11,7 +11,6 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
-    box,
     dplyr,
     forcats,
     ggplot2,
@@ -22,7 +21,16 @@ Imports:
     stringr,
     tidyr,
     tidytext,
-    withr
+    magrittr,
+    rlang,
+    ggpubr,
+    ggrepel,
+    glue,
+    gridExtra,
+    purrr,
+    readr,
+    scales,
+    tibble
 Remotes:
     2DegreesInvesting/r2dii.climate.stress.test,
     2DegreesInvesting/STDataMGMT,

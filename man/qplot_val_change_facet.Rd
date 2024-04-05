@@ -7,7 +7,9 @@
 qplot_val_change_facet(data_val_change, facet_chr)
 }
 \arguments{
-\item{facet_chr}{}
+\item{data_val_change}{The data frame containing the value change data.}
+
+\item{facet_chr}{The column name to be used for faceting the plots.}
 }
 \description{
 Title

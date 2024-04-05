@@ -50,7 +50,6 @@ compute_analysis_metrics <- function(analysis_data) {
       expected_loss_baseline = .data$exposure_at_default * .data$pd_baseline,
       expected_loss_shock = .data$exposure_at_default * .data$pd_shock,
       expected_loss_difference = .data$exposure_at_default * .data$pd_difference
-
     )
 
 
