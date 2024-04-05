@@ -38,12 +38,19 @@ analysis_data <-
     portfolio_data_path = portfolio_data_path,
     granularity = granularity,
     filter_outliers = TRUE
-  )
+  ) |>
+  dplyr::filter(
+    portfolio_id == "portfolio_A",
+    run_id == "27187540-f356-48b9-bf48-5b2347576a5d"
+    )
 
 trajectories_data <- main_data_load_trajectories_data_from_file(
   crispy_outputs_dir = crispy_outputs_dir,
   granularity = granularity
-  )
+  )|>
+  dplyr::filter(
+    run_id == "27187540-f356-48b9-bf48-5b2347576a5d"
+    )
 ```
 
 
@@ -53,7 +60,7 @@ trajectories_data <- main_data_load_trajectories_data_from_file(
 
 ```{r}
 crispy_npv_change_plot <- pipeline_crispy_npv_change_plot(
-  analysis_data,
+  analysis_data |> dplyr::filter(term==1),
   x_var = granularity[-1])
 crispy_npv_change_plot
 ```
@@ -63,7 +70,7 @@ crispy_npv_change_plot
 ```{r}
 
 crispy_exposure_change_plot <- pipeline_crispy_exposure_change_plot(
-  analysis_data,
+  analysis_data |> dplyr::filter(term==1),
   x_var = granularity[-1])
 crispy_exposure_change_plot
 ```
@@ -72,9 +79,9 @@ crispy_exposure_change_plot
 
 # Plots Loans
 
-```{r}
+```{r, fig.width=8, fig.height=15}
 
-expected_loss_plot <- stress.test.plot.report::pipeline_crispy_expected_loss_plot(
+expected_loss_plot <- pipeline_crispy_expected_loss_plot(
   analysis_data = analysis_data,
   facet_var = granularity[-1]
 )
@@ -83,7 +90,7 @@ expected_loss_plot
 ```
 
 
-```{r}
+```{r, fig.width=8, fig.height=15}
   pd_term_plot <- pipeline_crispy_pd_term_plot(
     crispy_data_agg = analysis_data,
     facet_var = granularity[-1]
@@ -94,7 +101,7 @@ pd_term_plot
 
 # Plots Trajectories
 
-```{r}
+```{r, fig.width=7, fig.height=18}
 
 trisk_line_plot <- pipeline_crispy_trisk_line_plot(
   trajectories_data = trajectories_data,

@@ -137,8 +137,8 @@ main_load_portfolio_data <-
     portfolio_data <- portfolio_data |>
       map_portfolio_maturity_to_term(
         trisk_start_year = trisk_start_year
-      )
-    #  aggregate_portfolio_facts(group_cols = group_cols)
+      ) |>
+    aggregate_portfolio_facts(group_cols = group_cols)
 
     return(portfolio_data)
   }
@@ -194,8 +194,8 @@ main_data_load_trajectories_data <- function(company_trajectories_data, granular
   group_cols <- unique(c(granularity, param_cols))
 
   company_trajectories_data <- company_trajectories_data |>
-    aggregate_trajectories_facts(group_cols = group_cols)
-  # convert_trajectories_as_percentages(group_cols = group_cols[group_cols != "year"])
+    aggregate_trajectories_facts(group_cols = group_cols)  |>
+    dplyr::filter(year < max(year)) # remove last year bc it is NA from trisk
   return(company_trajectories_data)
 }
 

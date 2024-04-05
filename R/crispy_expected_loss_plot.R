@@ -44,7 +44,7 @@ prepare_for_expected_loss_plot <- function(analysis_data, facet_var) {
     dplyr::filter(!.data$el_type %in% c("difference", "portfolio")) |>
     dplyr::group_by_at(c(facet_var, "el_type")) |>
     dplyr::summarise(
-      el_value = sum(.data$el_value, na.rm = T),
+      el_value = -sum(.data$el_value, na.rm = T),
       exposure_value_usd = sum(.data$exposure_value_usd, na.rm = T)
     ) |>
     dplyr::select_at(c(facet_var, "exposure_value_usd", "el_type", "el_value"))
