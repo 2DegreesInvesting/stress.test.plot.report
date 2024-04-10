@@ -13,20 +13,22 @@ pipeline_crispy_trisk_line_plot <- function(
     trajectories_data,
     x_var = "year",
     facet_var = "ald_business_unit",
-    linecolor = "ald_sector") {
+    linecolor = "ald_sector",
+    y_in_percent=TRUE) {
   linecolor <- dplyr::intersect(colnames(trajectories_data), linecolor)
 
   data_trisk_line_plot <- prepare_for_trisk_line_plot(
     trajectories_data = trajectories_data,
     facet_var = facet_var,
     linecolor = linecolor
-  )
+    )
 
   trisk_line_plot <- draw_trisk_line_plot(
     data_trisk_line_plot,
     x_var = x_var,
     facet_var = facet_var,
-    linecolor = linecolor
+    linecolor = linecolor,
+    y_in_percent=y_in_percent
   )
 
   return(trisk_line_plot)
@@ -75,20 +77,44 @@ draw_trisk_line_plot <- function(
     data_trisk_line_plot,
     x_var,
     facet_var,
-    linecolor) {
+    linecolor,
+    y_in_percent) {
+
+  if (y_in_percent){
+    trisk_line_plot <- ggplot2::ggplot(
+      data_trisk_line_plot,
+      ggplot2::aes(
+        x = !!rlang::sym(x_var),
+        y = production_pct,
+        color = !!rlang::sym(linecolor),
+        linetype = scenario
+      )
+    ) +
+    ggplot2::scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+      ggplot2::labs(
+        y = "Production as a percentage of the maximum"
+      )
+  } else {
+    trisk_line_plot <- ggplot2::ggplot(
+      data_trisk_line_plot,
+      ggplot2::aes(
+        x = !!rlang::sym(x_var),
+        y = production,
+        color = !!rlang::sym(linecolor),
+        linetype = scenario
+      )
+    ) +
+    ggplot2::scale_y_continuous(labels = function(x) scales::scientific(x)) +
+    ggplot2::labs(
+      y = "Production in raw unit"
+      )
+  }
+
+
   facets_colors <- r2dii.colours::palette_2dii_plot[seq_along(unique(data_trisk_line_plot[[linecolor]])), ]$hex
-  trisk_line_plot <- ggplot2::ggplot(
-    data_trisk_line_plot,
-    ggplot2::aes(
-      x = !!rlang::sym(x_var),
-      y = production_pct,
-      color = !!rlang::sym(linecolor),
-      linetype = scenario
-    )
-  ) +
+  trisk_line_plot <- trisk_line_plot +
     ggplot2::geom_line() +
     # ggplot2::geom_point(size = 0.1) +
-    ggplot2::scale_y_continuous(labels = scales::percent_format(scale = 1)) +
     ggplot2::scale_linetype_manual(values = c(
       "production_baseline_scenario" = "dotted",
       "production_target_scenario" = "dashed",
@@ -96,7 +122,6 @@ draw_trisk_line_plot <- function(
     )) +
     ggplot2::labs(
       x = "Year",
-      y = "Production as a percentage of the maximum",
       linetype = "Scenario"
     ) +
     ggplot2::scale_color_manual(values = facets_colors) +

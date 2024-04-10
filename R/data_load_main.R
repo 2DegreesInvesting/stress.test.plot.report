@@ -130,7 +130,7 @@ main_load_analysis_data <-
 main_load_portfolio_data <-
   function(portfolio_data,
            granularity,
-           param_cols = c("portfolio_id", "term", "asset_type"),
+           param_cols = c("portfolio_id", "term"),
            trisk_start_year) {
     group_cols <- unique(c(granularity, param_cols))
 
