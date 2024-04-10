@@ -65,8 +65,8 @@ map_portfolio_maturity_to_term <-
     # replace term by 1 if asset type is equity
     portfolio_data <- portfolio_data |>
       dplyr::mutate(
-        term = dplyr::if_else(is.na(.data$term), 1, .data$term)
-        portfolio_id=dplyr::if_else(is.na(.data$portfolio_id), 1, .data$portfolio_id))
+        term = dplyr::if_else(is.na(.data$term), 1, .data$term),
+        portfolio_id=dplyr::if_else(is.na(.data$portfolio_id), "1", .data$portfolio_id))
     return(portfolio_data)
   }
 
