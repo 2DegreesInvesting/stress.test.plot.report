@@ -21,9 +21,17 @@ load_multiple_trajectories <- function(crispy_outputs_dir) {
         ald_sector = "c",
         ald_business_unit = "c",
         year = "d",
+        phase_out = "b",
+        production_plan_company_technology = "d",
         production_baseline_scenario = "d",
         production_target_scenario = "d",
-        production_shock_scenario = "d"
+        production_shock_scenario = "d",
+        price_baseline_scenario = "d",
+        price_shock_scenario = "d",
+        net_profits_baseline_scenario = "d",
+        net_profits_shock_scenario = "d",
+        discounted_net_profits_baseline_scenario = "d",
+        discounted_net_profits_shock_scenario = "d"
       )
     )
   })
@@ -32,7 +40,6 @@ load_multiple_trajectories <- function(crispy_outputs_dir) {
 
   return(multi_trajectories_data)
 }
-
 
 #' Aggregate numerical trajectories columns
 #'
