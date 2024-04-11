@@ -76,7 +76,7 @@ aggregate_equities <- function(analysis_data) {
       "exposure_value_usd", "loss_given_default", "pd_portfolio")
 
     analysis_data <- analysis_data |>
-        dplyr::filter(asset_type != "equities")|>
+        dplyr::filter((asset_type != "equities") | is.na(asset_type))|>
         dplyr::bind_rows(
           analysis_data |> 
             dplyr::filter(asset_type=="equities") |>
