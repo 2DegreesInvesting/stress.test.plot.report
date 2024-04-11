@@ -21,7 +21,7 @@ load_multiple_trajectories <- function(crispy_outputs_dir) {
         ald_sector = "c",
         ald_business_unit = "c",
         year = "d",
-        phase_out = "b",
+        phase_out = "d",
         production_plan_company_technology = "d",
         production_baseline_scenario = "d",
         production_target_scenario = "d",
