@@ -6,42 +6,20 @@
 #'
 #' @param crispy_outputs_dir crispy_outputs_dir
 #' @param portfolio_data_path portfolio_data_path
-#' @param filter_outliers filter_outliers
-#' @param granularity granularity
 #'
 #' @export
 #'
 load_input_plots_data_from_files <-
-  function(crispy_outputs_dir,
-           portfolio_data_path = NULL,
-           granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
-           filter_outliers = FALSE) {
+  function(crispy_outputs_dir, portfolio_data_path = NULL,...) {
+
     multi_crispy_data <-
-      load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir) |>
-      main_load_multi_crispy_data(
-        granularity = granularity,
-        filter_outliers = filter_outliers
-      )
+      load_multiple_crispy(crispy_outputs_dir = crispy_outputs_dir)
 
-    stopifnot(length(unique(multi_crispy_data$start_year)) == 1)
-    trisk_start_year <- unique(multi_crispy_data$start_year)[1]
+    portfolio_data <- load_portfolio_data(portfolio_data_path=portfolio_data_path)
 
-    portfolio_data <-
-      load_portfolio_data(portfolio_data_path) |>
-      main_load_portfolio_data(
-        granularity = granularity,
-        trisk_start_year = trisk_start_year
-      )
-
-    portfolio_crispy_merge_cols <- dplyr::intersect(colnames(multi_crispy_data), colnames(portfolio_data))
-    stopifnot(length(portfolio_crispy_merge_cols) > 0)
-
-    analysis_data <-
-      main_load_analysis_data(
-        portfolio_data = portfolio_data,
-        multi_crispy_data = multi_crispy_data,
-        portfolio_crispy_merge_cols = portfolio_crispy_merge_cols
-      )
+    analysis_data <- load_input_plots_data_from_tibble(
+      multi_crispy_data=multi_crispy_data,
+      portfolio_data=portfolio_data, ...)
 
     return(analysis_data)
   }
@@ -62,32 +40,37 @@ load_input_plots_data_from_files <-
 #'
 load_input_plots_data_from_tibble <-
   function(multi_crispy_data,
-           portfolio_data = tibble::tibble(),
+           portfolio_data = NULL,
            granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
            trisk_start_year = NA, # TODO REMOVE THIS REDUNDANT PARAMETER
            filter_outliers = FALSE) {
-    multi_crispy_data <-
-      multi_crispy_data |>
+
+    multi_crispy_data <- multi_crispy_data |>
       main_load_multi_crispy_data(
         granularity = granularity,
         filter_outliers = filter_outliers
-      )
+              )
 
     stopifnot(length(unique(multi_crispy_data$start_year)) <= 1)
     trisk_start_year <- unique(multi_crispy_data$start_year)[1]
 
-    portfolio_data <-
-      portfolio_data |>
-      main_load_portfolio_data(
-        granularity = granularity,
-        trisk_start_year = trisk_start_year
-      )
+    if (!is.null(portfolio_data)){
+      portfolio_data <- portfolio_data |>
+        main_load_portfolio_data(
+          granularity = granularity,
+          trisk_start_year = trisk_start_year)
+    } else{
+      portfolio_data <- load_portfolio_data(portfolio_data_path=NULL)
+    }
+
+    portfolio_crispy_merge_cols <- dplyr::intersect(colnames(multi_crispy_data), colnames(portfolio_data))
+    stopifnot(length(portfolio_crispy_merge_cols) > 0)
 
     analysis_data <-
       main_load_analysis_data(
         portfolio_data = portfolio_data,
         multi_crispy_data = multi_crispy_data,
-        portfolio_crispy_merge_cols = c("term", granularity)
+        portfolio_crispy_merge_cols = portfolio_crispy_merge_cols
       )
 
     return(analysis_data)
@@ -109,9 +92,9 @@ main_load_analysis_data <-
            portfolio_data,
            portfolio_crispy_merge_cols) {
     analysis_data <-
-      create_analysis_data(portfolio_data, multi_crispy_data, portfolio_crispy_merge_cols)
-
-    analysis_data <- compute_analysis_metrics(analysis_data)
+      create_analysis_data(portfolio_data, multi_crispy_data, portfolio_crispy_merge_cols) |>
+        compute_analysis_metrics() |>
+        aggregate_equities()
 
     return(analysis_data)
   }
@@ -130,18 +113,31 @@ main_load_analysis_data <-
 main_load_portfolio_data <-
   function(portfolio_data,
            granularity,
-           param_cols = c("portfolio_id", "term"),
-           trisk_start_year) {
+           trisk_start_year,
+           param_cols = c("portfolio_id", "term", "asset_type")
+           ) {
     group_cols <- unique(c(granularity, param_cols))
 
     portfolio_data <- portfolio_data |>
       map_portfolio_maturity_to_term(
         trisk_start_year = trisk_start_year
       ) |>
-    aggregate_portfolio_facts(group_cols = group_cols)
+      aggregate_portfolio_facts(group_cols = group_cols)
 
     return(portfolio_data)
   }
+
+
+#' Title
+#'
+#' @param portfolio_data portfolio_data
+#' @param group_cols group_cols
+#'
+#'
+aggregate_portfolio_terms <- function(portfolio_data, group_cols){
+  portfolio_data |>
+    dplyr::group_by_at(group_cols[group_cols != "term"])
+}
 
 #' Title
 #'

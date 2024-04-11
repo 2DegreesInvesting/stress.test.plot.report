@@ -17,6 +17,7 @@ portfolio_values <- abcd_stress_test_input |>
 companies_fixed_income <-
   portfolio_values |>
   sample_n(200) |>
+  mutate(asset_type = "fixed_income") |>
   left_join(eikon_data |> select(company_id, isin) |> sample_frac(0.3),
     by = "company_id",
     relationship = "many-to-many"
@@ -26,7 +27,8 @@ companies_equities <-
   portfolio_values |>
   sample_n(200) |>
   mutate(
-    expiration_date = NA
+    asset_type = "equity",
+    expiration_date = as.Date("2030/01/01")
   )
 
 # companies_id <-

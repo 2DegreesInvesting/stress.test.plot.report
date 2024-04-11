@@ -10,6 +10,7 @@ load_portfolio_data <- function(portfolio_data_path) {
         portfolio_id = "c",
         company_id = "c",
         company_name = "c",
+        asset_type = "c",
         ald_sector = "c",
         ald_business_unit = "c",
         ald_location = "c",
@@ -22,6 +23,7 @@ load_portfolio_data <- function(portfolio_data_path) {
   } else {
     portfolio_data <- tibble::tibble(
       portfolio_id = character(),
+      asset_type = character(),
       company_id = character(),
       company_name = character(),
       ald_sector = character(),
@@ -45,6 +47,7 @@ map_portfolio_maturity_to_term <-
   function(portfolio_data,
            trisk_start_year) {
     start_year_exists <- !(is.na(trisk_start_year) | is.null(trisk_start_year))
+
     if (start_year_exists) {
       start_date <- as.Date(paste0(trisk_start_year, "-01-01"))
 
@@ -67,6 +70,7 @@ map_portfolio_maturity_to_term <-
       dplyr::mutate(
         term = dplyr::if_else(is.na(.data$term), 1, .data$term),
         portfolio_id=dplyr::if_else(is.na(.data$portfolio_id), "1", .data$portfolio_id))
+
     return(portfolio_data)
   }
 

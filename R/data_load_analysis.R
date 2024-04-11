@@ -24,6 +24,13 @@ create_analysis_data <-
         relationship = "many-to-many"
       )
 
+    facts <- c(
+      "net_present_value_baseline",  "net_present_value_shock", "pd_baseline", "pd_shock",
+      "exposure_value_usd", "loss_given_default", "pd_portfolio")
+
+
+    stopifnot(all(facts %in% names(analysis_data))) 
+
     return(analysis_data)
   }
 
@@ -55,4 +62,34 @@ compute_analysis_metrics <- function(analysis_data) {
 
 
   return(analysis_data)
+}
+
+
+#' Compute Analysis Metrics
+#'
+#' @description will 
+#' @param analysis_data analysis_data
+#'
+aggregate_equities <- function(analysis_data) {
+    facts <- c(
+      "net_present_value_baseline",  "net_present_value_shock", "pd_baseline", "pd_shock",
+      "exposure_value_usd", "loss_given_default", "pd_portfolio")
+
+    analysis_data <- analysis_data |>
+        dplyr::filter(asset_type != "equities")|>
+        dplyr::bind_rows(
+          analysis_data |> 
+            dplyr::filter(asset_type=="equities") |>
+            dplyr::group_by_at(colnames(analysis_data)[!colnames(analysis_data) %in% c(facts, "term")]) |>
+            dplyr::summarise(
+              exposure_value_usd=median(.data$exposure_value_usd),
+              net_present_value_baseline=median(.data$net_present_value_baseline),
+              net_present_value_shock=median(.data$net_present_value_shock),
+              pd_baseline=median(.data$pd_baseline),
+              pd_shock=median(.data$pd_shock),
+              loss_given_default=median(.data$loss_given_default),
+              pd_portfolio=median(.data$pd_portfolio)
+            )
+      )
+      return(analysis_data)
 }
