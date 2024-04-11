@@ -63,7 +63,10 @@ load_input_plots_data_from_tibble <-
       portfolio_data <- load_portfolio_data(portfolio_data_path=NULL)
     }
 
-    portfolio_crispy_merge_cols <- dplyr::intersect(colnames(multi_crispy_data), colnames(portfolio_data))
+    portfolio_crispy_merge_cols <- dplyr::intersect(
+      granularity, 
+      dplyr::intersect(
+        colnames(multi_crispy_data), colnames(portfolio_data)))
     stopifnot(length(portfolio_crispy_merge_cols) > 0)
 
     analysis_data <-
