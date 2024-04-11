@@ -33,7 +33,8 @@ load_multiple_trajectories <- function(crispy_outputs_dir) {
         discounted_net_profits_baseline_scenario = "d",
         discounted_net_profits_shock_scenario = "d"
       )
-    )
+    ) |>
+    dplyr::filter(.data$year < max(.data$year)) # removes last year that is NA
   })
 
   multi_trajectories_data <- dplyr::bind_rows(data_list)
