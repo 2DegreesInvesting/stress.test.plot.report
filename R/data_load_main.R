@@ -64,12 +64,11 @@ load_input_plots_data_from_tibble <-
     } else{
       portfolio_data <- load_portfolio_data(portfolio_data_path=NULL)
 
-      shared_index  <-  dplyr::intersect(colnames(raw_crispy_columns), colnames(portfolio_data))
+      shared_index  <-  dplyr::intersect(raw_crispy_columns, colnames(portfolio_data))
       drop_cols <- dplyr::setdiff(shared_index, granularity)
 
       portfolio_data <- portfolio_data |>
-        dplyr::select_at(-drop_cols)
-
+        dplyr::select_at(colnames(portfolio_data)[!colnames(portfolio_data) %in% drop_cols])
     }
 
     portfolio_crispy_merge_cols <- dplyr::intersect(
