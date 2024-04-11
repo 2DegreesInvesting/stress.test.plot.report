@@ -45,6 +45,8 @@ load_input_plots_data_from_tibble <-
            trisk_start_year = NA, # TODO REMOVE THIS REDUNDANT PARAMETER
            filter_outliers = FALSE) {
 
+    raw_crispy_columns <- colnames(multi_crispy_data)
+
     multi_crispy_data <- multi_crispy_data |>
       main_load_multi_crispy_data(
         granularity = granularity,
@@ -61,6 +63,13 @@ load_input_plots_data_from_tibble <-
           trisk_start_year = trisk_start_year)
     } else{
       portfolio_data <- load_portfolio_data(portfolio_data_path=NULL)
+
+      shared_index  <-  dplyr::intersect(colnames(raw_crispy_columns), colnames(portfolio_data))
+      drop_cols <- dplyr::setdiff(shared_index)
+
+      portfolio_data <- portfolio_data |>
+        dplyr::select_at(-drop_cols)
+
     }
 
     portfolio_crispy_merge_cols <- dplyr::intersect(

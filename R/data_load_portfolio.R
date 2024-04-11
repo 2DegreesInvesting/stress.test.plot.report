@@ -2,7 +2,7 @@
 #'
 #' @param portfolio_data_path
 #'
-load_portfolio_data <- function(portfolio_data_path) {
+load_portfolio_data <- function(portfolio_data_path=NULL) {
   if (!is.null(portfolio_data_path)) {
     portfolio_data <- readr::read_csv(
       portfolio_data_path,
