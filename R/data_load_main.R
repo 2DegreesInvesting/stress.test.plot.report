@@ -65,7 +65,7 @@ load_input_plots_data_from_tibble <-
       portfolio_data <- load_portfolio_data(portfolio_data_path=NULL)
 
       shared_index  <-  dplyr::intersect(colnames(raw_crispy_columns), colnames(portfolio_data))
-      drop_cols <- dplyr::setdiff(shared_index)
+      drop_cols <- dplyr::setdiff(shared_index, granularity)
 
       portfolio_data <- portfolio_data |>
         dplyr::select_at(-drop_cols)
