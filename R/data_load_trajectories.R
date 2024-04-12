@@ -1,3 +1,40 @@
+
+#' Title
+#'
+#' @param crispy_outputs_dir crispy_outputs_dir
+#' @param granularity granularity
+#' @param param_cols param_cols
+#'
+#' @export
+#'
+main_data_load_trajectories_data_from_file <- function(
+    crispy_outputs_dir,
+    granularity, param_cols = c("run_id", "year")) {
+  company_trajectories_data <- load_multiple_trajectories(crispy_outputs_dir) |>
+    main_data_load_trajectories_data(granularity = granularity, param_cols = param_cols)
+  return(company_trajectories_data)
+}
+
+
+#' Title
+#'
+#' @param company_trajectories_data company_trajectories_data
+#' @param max_trajectories_granularity max_trajectories_granularity
+#'
+#' @export
+#'
+main_data_load_trajectories_data <- function(company_trajectories_data, granularity, param_cols = c(
+                                               "run_id", "year"
+                                             )) {
+  group_cols <- unique(c(granularity, param_cols))
+
+  company_trajectories_data <- company_trajectories_data |>
+    aggregate_trajectories_facts(group_cols = group_cols)  |>
+    dplyr::filter(year < max(year)) # remove last year bc it is NA from trisk
+  return(company_trajectories_data)
+}
+
+
 load_multiple_trajectories <- function(crispy_outputs_dir) {
   # Required Libraries
 

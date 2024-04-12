@@ -1,3 +1,43 @@
+
+
+#' Title
+#'
+#' @param multi_crispy_data multi_crispy_data
+#' @param granularity granularity
+#' @param param_cols param_cols
+#' @param filter_outliers filter_outliers
+#'
+#'
+#' @export
+main_load_multi_crispy_data <-
+  function(multi_crispy_data,
+           granularity, param_cols = c(
+             "term", "run_id", "roll_up_type", "scenario_geography", "baseline_scenario",
+             "shock_scenario", "risk_free_rate", "discount_rate", "div_netprofit_prop_coef",
+             "carbon_price_model", "market_passthrough", "financial_stimulus", "start_year",
+             "growth_rate", "shock_year"
+           ),
+           filter_outliers = FALSE) {
+    group_cols <- unique(c(granularity, param_cols))
+
+    multi_crispy_data <- multi_crispy_data |>
+      aggregate_crispy_facts(group_cols = group_cols)
+
+    # Conditionally apply remove_outliers_per_group based on the filter_outliers parameter
+    multi_crispy_data <- if (filter_outliers) {
+      multi_crispy_data |>
+        remove_outliers_per_group(
+          group_cols = group_cols,
+          column_filtered = "crispy_perc_value_change"
+        )
+    } else {
+      multi_crispy_data
+    }
+    return(multi_crispy_data)
+  }
+
+
+
 load_multiple_crispy <- function(crispy_outputs_dir) {
   # Required Libraries
 

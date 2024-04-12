@@ -1,3 +1,32 @@
+
+#' Title
+#'
+#' @param portfolio_data portfolio_data
+#' @param granularity granularity
+#' @param param_cols param_cols
+#' @param trisk_start_year trisk_start_year
+#'
+#'
+#' @export
+main_load_portfolio_data <-
+  function(portfolio_data,
+           granularity,
+           trisk_start_year,
+           param_cols = c("portfolio_id", "term", "asset_type")
+           ) {
+    group_cols <- unique(c(granularity, param_cols))
+
+    portfolio_data <- portfolio_data |>
+      map_portfolio_maturity_to_term(
+        trisk_start_year = trisk_start_year
+      ) |>
+      aggregate_portfolio_facts(group_cols = group_cols)
+
+    return(portfolio_data)
+  }
+
+
+
 #' Title
 #'
 #' @param portfolio_data_path

@@ -1,3 +1,26 @@
+#' main load analysis data
+#'
+#'
+#'
+#' @param portfolio_data portfolio_data
+#' @param portfolio_crispy_merge_cols portfolio_crispy_merge_cols
+#' @param multi_crispy_data multi_crispy_data
+#'
+#'
+#' @export
+main_load_analysis_data <-
+  function(multi_crispy_data,
+           portfolio_data,
+           portfolio_crispy_merge_cols) {
+    analysis_data <-
+      create_analysis_data(portfolio_data, multi_crispy_data, portfolio_crispy_merge_cols) |>
+        aggregate_equities() |>
+        compute_analysis_metrics() 
+
+    return(analysis_data)
+  }
+
+
 #' Title
 #'
 #' @param portfolio_data portfolio_data
