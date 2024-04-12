@@ -65,9 +65,9 @@ compute_analysis_metrics <- function(analysis_data) {
 }
 
 
-#' Compute Analysis Metrics
+#' 
 #'
-#' @description will 
+#' @description This will do the average of all values of equities over the terms (ie the term disappears and value was just dupicated)
 #' @param analysis_data analysis_data
 #'
 aggregate_equities <- function(analysis_data) {
@@ -80,7 +80,7 @@ aggregate_equities <- function(analysis_data) {
         dplyr::bind_rows(
           analysis_data |> 
             dplyr::filter(asset_type=="equities") |>
-            dplyr::group_by_at(colnames(analysis_data)[!colnames(analysis_data) %in% c(facts, "term")]) |>
+            dplyr::group_by_at(colnames(analysis_data)[!colnames(analysis_data) %in% c(facts)]) |>
             dplyr::summarise(
               exposure_value_usd=median(.data$exposure_value_usd),
               net_present_value_baseline=median(.data$net_present_value_baseline),
