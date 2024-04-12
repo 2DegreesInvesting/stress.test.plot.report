@@ -104,8 +104,8 @@ main_load_analysis_data <-
            portfolio_crispy_merge_cols) {
     analysis_data <-
       create_analysis_data(portfolio_data, multi_crispy_data, portfolio_crispy_merge_cols) |>
-        compute_analysis_metrics() |>
-        aggregate_equities()
+        aggregate_equities() |>
+        compute_analysis_metrics() 
 
     return(analysis_data)
   }
