@@ -12,6 +12,9 @@ main_load_analysis_data <-
   function(multi_crispy_data,
            portfolio_data,
            portfolio_crispy_merge_cols) {
+
+    stopifnot(unique(portfolio_data$asset_type) %in% c("equity", "fixed_income"))
+
     analysis_data <-
       create_analysis_data(portfolio_data, multi_crispy_data, portfolio_crispy_merge_cols) |>
         aggregate_equities() |>
@@ -99,7 +102,7 @@ aggregate_equities <- function(analysis_data) {
       "exposure_value_usd", "loss_given_default", "pd_portfolio")
 
     equities_subgroup_analysis <- analysis_data |> 
-            dplyr::filter(asset_type=="equities") |>
+            dplyr::filter(asset_type=="equity") |>
             dplyr::group_by_at(colnames(analysis_data)[!colnames(analysis_data) %in% c(facts, "term")]) |>
             dplyr::summarise(
               exposure_value_usd=stats::median(.data$exposure_value_usd),

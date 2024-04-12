@@ -42,7 +42,6 @@ load_input_plots_data_from_tibble <-
   function(multi_crispy_data,
            portfolio_data = NULL,
            granularity = c("company_id", "company_name", "ald_sector", "ald_business_unit"),
-           trisk_start_year = NA, # TODO REMOVE THIS REDUNDANT PARAMETER
            filter_outliers = FALSE) {
 
     raw_crispy_columns <- colnames(multi_crispy_data)
@@ -53,7 +52,8 @@ load_input_plots_data_from_tibble <-
         filter_outliers = filter_outliers
               )
 
-    stopifnot(length(unique(multi_crispy_data$start_year)) <= 1)
+    # start year must be unique
+    stopifnot(length(unique(multi_crispy_data$start_year)) <= 1) 
     trisk_start_year <- unique(multi_crispy_data$start_year)[1]
 
     if (!is.null(portfolio_data)){
@@ -64,9 +64,10 @@ load_input_plots_data_from_tibble <-
     } else{
       portfolio_data <- load_portfolio_data(portfolio_data_path=NULL)
 
+      # drop_cols contains column that could be used as granularity but are dropped
+      # TODO TEST columns that could be used as granularity are columns who are shared between dataframse
       shared_index  <-  dplyr::intersect(raw_crispy_columns, colnames(portfolio_data))
       drop_cols <- dplyr::setdiff(shared_index, granularity)
-
       portfolio_data <- portfolio_data |>
         dplyr::select_at(colnames(portfolio_data)[!colnames(portfolio_data) %in% drop_cols])
     }
