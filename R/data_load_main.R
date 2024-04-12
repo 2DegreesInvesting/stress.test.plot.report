@@ -72,7 +72,7 @@ load_input_plots_data_from_tibble <-
     }
 
     portfolio_crispy_merge_cols <- dplyr::intersect(
-      granularity, 
+      c(granularity, "term"), 
       dplyr::intersect(
         colnames(multi_crispy_data), colnames(portfolio_data)))
     stopifnot(length(portfolio_crispy_merge_cols) > 0)

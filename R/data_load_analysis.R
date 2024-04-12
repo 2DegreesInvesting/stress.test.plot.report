@@ -75,12 +75,9 @@ aggregate_equities <- function(analysis_data) {
       "net_present_value_baseline",  "net_present_value_shock", "pd_baseline", "pd_shock",
       "exposure_value_usd", "loss_given_default", "pd_portfolio")
 
-    analysis_data <- analysis_data |>
-        dplyr::filter((asset_type != "equities") | is.na(asset_type))|>
-        dplyr::bind_rows(
-          analysis_data |> 
+    equities_subgroup_analysis <- analysis_data |> 
             dplyr::filter(asset_type=="equities") |>
-            dplyr::group_by_at(colnames(analysis_data)[!colnames(analysis_data) %in% c(facts)]) |>
+            dplyr::group_by_at(colnames(analysis_data)[!colnames(analysis_data) %in% c(facts, "term")]) |>
             dplyr::summarise(
               exposure_value_usd=median(.data$exposure_value_usd),
               net_present_value_baseline=median(.data$net_present_value_baseline),
@@ -88,9 +85,16 @@ aggregate_equities <- function(analysis_data) {
               pd_baseline=median(.data$pd_baseline),
               pd_shock=median(.data$pd_shock),
               loss_given_default=median(.data$loss_given_default),
-              pd_portfolio=median(.data$pd_portfolio),
-              term=NA
+              pd_portfolio=median(.data$pd_portfolio)
+            ) |>
+            dplyr::ungroup() |>
+            dplyr::mutate(
+              term=NA,
+              loss_given_default=NA
             )
-      )
-      return(analysis_data)
+    non_equities_subgroup_analysis  <- analysis_data |>
+    dplyr::filter((asset_type != "equities") | is.na(asset_type))
+
+    analysis_data <- dplyr::bind_rows(equities_subgroup_analysis,non_equities_subgroup_analysis  )
+    return(analysis_data)
 }
