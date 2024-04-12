@@ -119,7 +119,7 @@ aggregate_equities <- function(analysis_data) {
               loss_given_default=NA
             )
     non_equities_subgroup_analysis  <- analysis_data |>
-    dplyr::filter((asset_type != "equities") | is.na(asset_type))
+    dplyr::filter((asset_type != "equity") | is.na(asset_type))
 
     analysis_data <- dplyr::bind_rows(equities_subgroup_analysis,non_equities_subgroup_analysis)
     return(analysis_data)
