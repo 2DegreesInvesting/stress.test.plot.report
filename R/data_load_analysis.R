@@ -88,7 +88,8 @@ aggregate_equities <- function(analysis_data) {
               pd_baseline=median(.data$pd_baseline),
               pd_shock=median(.data$pd_shock),
               loss_given_default=median(.data$loss_given_default),
-              pd_portfolio=median(.data$pd_portfolio)
+              pd_portfolio=median(.data$pd_portfolio),
+              term=NA
             )
       )
       return(analysis_data)
