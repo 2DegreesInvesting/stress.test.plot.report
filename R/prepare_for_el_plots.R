@@ -41,7 +41,7 @@ prepare_for_el_plots <-
       dplyr::mutate(expected_loss_type = stringr::str_remove(.data$expected_loss_type, "expected_loss_"))
 
     data_el <-
-      inner_join(st_expected_loss, data_exp_per_sector, by = "group_variable") |>
+      dplyr::inner_join(st_expected_loss, data_exp_per_sector, by = "group_variable") |>
       dplyr::mutate(el_as_perc_exposure = .data$expected_loss_value / .data$agg_sum_value)
 
     return(data_el)

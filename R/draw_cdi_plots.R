@@ -34,8 +34,8 @@ make_expected_loss_plot <-
       r2dii.plot::theme_2dii() +
       ggplot2::scale_y_continuous(labels = scales::unit_format(unit = "M", scale = 1e-6)) +
       ggplot2::scale_fill_gradient(
-        low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
-        high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+        low = r2dii.colours::palette_1in1000_plot %>% dplyr::filter(.data$label == "grey") %>% dplyr::pull(.data$hex),
+        high = r2dii.colours::palette_1in1000_plot %>% dplyr::filter(.data$label == "red") %>% dplyr::pull(.data$hex),
         labels = scales::unit_format(unit = "M", scale = 1e-6)
       ) +
       ggplot2::facet_wrap(

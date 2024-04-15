@@ -12,8 +12,8 @@ qplot_boxplot <- function(data_exposure_plot) {
     ggplot2::geom_boxplot() +
     ggplot2::scale_y_continuous(labels = scales::unit_format(unit = "M", scale = 1e-6)) +
     ggplot2::scale_fill_gradient(
-      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
-      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
+      low = r2dii.colours::palette_1in1000_plot %>% dplyr::filter(.data$label == "grey") %>% dplyr::pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% dplyr::filter(.data$label == "red") %>% dplyr::pull(.data$hex),
       name = "Average exposure\n per sector (millions)"
     ) +
     r2dii.plot::theme_2dii() +

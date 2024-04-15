@@ -16,8 +16,8 @@ qplot_pd_sector <- function(data_pd, common_y_axis = FALSE, annual_pds = FALSE) 
     ggplot2::geom_bar(stat = "identity") +
     ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0, .1))) +
     ggplot2::scale_fill_gradient(
-      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
-      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "grey") %>% pull(.data$hex),
+      low = r2dii.colours::palette_1in1000_plot %>% dplyr::filter(.data$label == "red") %>% dplyr::pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% dplyr::filter(.data$label == "grey") %>% dplyr::pull(.data$hex),
       name = "PD change (% points)"
     ) +
     r2dii.plot::theme_2dii() +

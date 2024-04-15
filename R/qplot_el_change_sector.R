@@ -5,7 +5,7 @@
 #' @export
 qplot_el_change_sector <- function(data_el_plot) {
   data_change <- data_el_plot %>%
-    filter(expected_loss_type %in% c("st_diff"))
+    dplyr::filter(expected_loss_type %in% c("st_diff"))
 
   p_abs <- qplot_el_change_sector_abs(data_change)
 

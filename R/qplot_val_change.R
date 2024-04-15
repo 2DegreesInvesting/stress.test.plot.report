@@ -68,11 +68,11 @@ plot_value_change <- function(data_plt, is_percentage) {
     ) +
     ggplot2::scale_fill_gradient(
       low = r2dii.colours::palette_1in1000_plot %>%
-        filter(.data$label == "red") %>%
-        pull(.data$hex),
+        dplyr::filter(.data$label == "red") %>%
+        dplyr::pull(.data$hex),
       high = r2dii.colours::palette_1in1000_plot %>%
-        filter(.data$label == "green") %>%
-        pull(.data$hex),
+        dplyr::filter(.data$label == "green") %>%
+        dplyr::pull(.data$hex),
       # midpoint = min(data_plt[,y_val_name]),
       labels = labels,
       name = "Expected loss"

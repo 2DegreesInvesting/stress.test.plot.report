@@ -5,7 +5,7 @@
 #' @export
 qplot_el_sector <- function(data_el_plot, use_exp_loss_types) {
   data_losses <- data_el_plot %>%
-    filter(expected_loss_type %in% use_exp_loss_types)
+    dplyr::filter(.data$expected_loss_type %in% use_exp_loss_types)
 
   p_abs <- plot_el_coloured(data_losses, "expected_loss_value") +
     ggplot2::labs(
@@ -47,11 +47,11 @@ plot_el_coloured <- function(data, y_val_name, is_percentage = FALSE) {
     ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(.1, 0)), labels = labels) +
     ggplot2::scale_fill_gradient2(
       low = r2dii.colours::palette_1in1000_plot %>%
-        filter(.data$label == "red") %>%
-        pull(.data$hex),
+        dplyr::filter(.data$label == "red") %>%
+        dplyr::pull(.data$hex),
       high = r2dii.colours::palette_1in1000_plot %>%
-        filter(.data$label == "green") %>%
-        pull(.data$hex),
+        dplyr::filter(.data$label == "green") %>%
+        dplyr::pull(.data$hex),
       midpoint = 0,
       labels = labels,
       name = "Expected loss"

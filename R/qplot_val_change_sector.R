@@ -63,8 +63,8 @@ plot_value_change_coloured <- function(data, is_percentage) {
     ggplot2::geom_bar(stat = "identity") +
     ggplot2::geom_hline(yintercept = 0) +
     ggplot2::scale_fill_gradient(
-      low = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "red") %>% pull(.data$hex),
-      high = r2dii.colours::palette_1in1000_plot %>% filter(.data$label == "green") %>% pull(.data$hex),
+      low = r2dii.colours::palette_1in1000_plot %>% dplyr::filter(.data$label == "red") %>% dplyr::pull(.data$hex),
+      high = r2dii.colours::palette_1in1000_plot %>% dplyr::filter(.data$label == "green") %>% dplyr::pull(.data$hex),
       labels = labels,
       name = "Equity value change"
     ) +
