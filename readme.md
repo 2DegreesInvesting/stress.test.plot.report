@@ -1,4 +1,14 @@
-## Quickstart
+<h1>
+  Quick Start
+  <span style="float: left;">
+    <a href='https://github.com/2DegreesInvesting/r2dii.climate.stress.test'>
+      <img src='https://cinea.ec.europa.eu/sites/default/files/styles/oe_theme_medium_no_crop/public/2021-01/life_1.jpg?itok=J1KQ12Nw' align='right' style="height: 43px; padding-right: 10px;" />
+      <img src='https://imgur.com/A5ASZPE.png' align='right' style="height: 43px;" />
+    </a>
+  </span>
+</h1>
+
+The repository forms part of the LIFE STRESS project. The LIFE STRESS project has received funding from the LIFE Programme of the European Union. The contents of this publication are the sole responsibility of Theia Finance Labs and  do  not necessarily reflect  the  opinion  of the European Union. Project: 101074271 — LIFE21-GIC-DE-Stress. 
 
 This repository contains examples of visualisation that can be obtained from stress test outputs generated with the package [r2dii.climate.stress.test](https://github.com/2DegreesInvesting/r2dii.climate.stress.test)
 
