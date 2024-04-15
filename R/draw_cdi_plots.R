@@ -155,14 +155,15 @@ make_density_plots <- function(data_cdi_pd_plot, numeric_values, density_var, gr
         !!rlang::sym(density_var) == pm
       )
       label <- paste(pm)
+      tryCatch({
+        density_values <- density(data[[numeric_values]])
 
-      density_values <- density(data[[numeric_values]])
+        density_values$y <- density_values$y * diff(density_values$x[1:2]) # scale to area under the curve = 1
 
-      density_values$y <- density_values$y * diff(density_values$x[1:2]) # scale to area under the curve = 1
+        density_df <- data.frame(x = density_values$x, y = density_values$y, setNames(list(label), density_var))
 
-      density_df <- data.frame(x = density_values$x, y = density_values$y, setNames(list(label), density_var))
-
-      density_data <- rbind(density_data, density_df)
+        density_data <- rbind(density_data, density_df)
+        },  error = function(e) e)
     }
 
     # Create the plot with lines and different colors
