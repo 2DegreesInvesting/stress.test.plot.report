@@ -105,13 +105,13 @@ aggregate_equities <- function(analysis_data) {
             dplyr::filter(asset_type=="equity") |>
             dplyr::group_by_at(colnames(analysis_data)[!colnames(analysis_data) %in% c(facts, "term")]) |>
             dplyr::summarise(
-              exposure_value_usd=stats::median(.data$exposure_value_usd),
-              net_present_value_baseline=stats::median(.data$net_present_value_baseline),
-              net_present_value_shock=stats::median(.data$net_present_value_shock),
-              pd_baseline=stats::median(.data$pd_baseline),
-              pd_shock=stats::median(.data$pd_shock),
-              loss_given_default=stats::median(.data$loss_given_default),
-              pd_portfolio=stats::median(.data$pd_portfolio)
+              exposure_value_usd=stats::median(.data$exposure_value_usd, na.rm=T),
+              net_present_value_baseline=stats::median(.data$net_present_value_baseline, na.rm=T),
+              net_present_value_shock=stats::median(.data$net_present_value_shock, na.rm=T),
+              pd_baseline=stats::median(.data$pd_baseline, na.rm=T),
+              pd_shock=stats::median(.data$pd_shock, na.rm=T),
+              loss_given_default=stats::median(.data$loss_given_default, na.rm=T),
+              pd_portfolio=stats::median(.data$pd_portfolio, na.rm=T)
             ) |>
             dplyr::ungroup() |>
             dplyr::mutate(
