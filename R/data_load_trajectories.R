@@ -23,11 +23,14 @@ main_data_load_trajectories_data_from_file <- function(
 #'
 #' @export
 #'
-main_data_load_trajectories_data <- function(company_trajectories_data, granularity, param_cols = c(
-  "run_id", "year","scenario_geography", "baseline_scenario",
-  "shock_scenario", "risk_free_rate", "discount_rate", "div_netprofit_prop_coef",
-  "carbon_price_model", "market_passthrough", "financial_stimulus",
-  "growth_rate", "shock_year"
+main_data_load_trajectories_data <- function(
+    company_trajectories_data,
+    granularity=c("company_id", "company_name", "ald_sector", "ald_business_unit"),
+    param_cols = c(
+      "run_id", "year","scenario_geography", "baseline_scenario",
+      "shock_scenario", "risk_free_rate", "discount_rate", "div_netprofit_prop_coef",
+      "carbon_price_model", "market_passthrough", "financial_stimulus",
+      "growth_rate", "shock_year"
 )) {
   group_cols <- unique(c(granularity, param_cols))
 
