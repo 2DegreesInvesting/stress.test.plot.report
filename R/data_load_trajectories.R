@@ -31,6 +31,7 @@ main_data_load_trajectories_data <- function(company_trajectories_data, granular
   company_trajectories_data <- company_trajectories_data |>
     aggregate_trajectories_facts(group_cols = group_cols)  |>
     dplyr::filter(year < max(year)) # remove last year bc it is NA from trisk
+
   return(company_trajectories_data)
 }
 
@@ -94,6 +95,12 @@ aggregate_trajectories_facts <-
         production_baseline_scenario = sum(.data$production_baseline_scenario, na.rm = TRUE),
         production_target_scenario = sum(.data$production_target_scenario, na.rm = TRUE),
         production_shock_scenario = sum(.data$production_shock_scenario, na.rm = TRUE),
+        price_baseline_scenario= median(.data$price_baseline_scenario, na.rm = TRUE),
+        price_shock_scenario = median(.data$price_shock_scenario, na.rm = TRUE),
+        net_profits_baseline_scenario = sum(.data$net_profits_baseline_scenario, na.rm = TRUE),
+        net_profits_shock_scenario = sum(.data$net_profits_shock_scenario, na.rm = TRUE),
+        discounted_net_profits_baseline_scenario = sum(.data$discounted_net_profits_baseline_scenario, na.rm = TRUE),
+        discounted_net_profits_shock_scenario = sum(.data$discounted_net_profits_shock_scenario, na.rm = TRUE),
         .groups = "drop"
       )
     return(multi_trajectories)
