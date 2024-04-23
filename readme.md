@@ -79,3 +79,13 @@ prepare_plot_data <- function(analysis_data, group_variable_vec, variable_to_tra
 -   aesthetics : `aes(x = !!rlang::sym(x_var), y = !!rlang::sym(y_var))`
 -   facetting : `facet_wrap(as.formula(paste("~", facet_var)))`
 -   All plots should be presented with examples in a .Rmd vignette
+
+## Funding
+
+EU LIFE Project Grant
+
+Co-funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or CINEA. Neither the European Union nor the granting authority can be held responsible for them.
+
+Scientific Transition Risk Exercises for Stress tests & Scenario Analysis has received funding from the European Union’s Life programme under Grant No. LIFE21-GIC-DE-Stress under the LIFE-2021-SAP-CLIMA funding call.
+
+![](data-raw/LifeLogo2.jpg)
