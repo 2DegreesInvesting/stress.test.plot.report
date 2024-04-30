@@ -13,7 +13,7 @@ company_emissions <- readr::read_csv(mock_filepaths$company_emissions)
 start_year <- 2020
 time_horizon <- 10
 additional_year <- NULL
-sector_list <- c("Automotive", "Power", "Oil&Gas", "Coal")
+sector_list <- c("Automotive", "Power", "Oil&Gas", "Coal", "Steel")
 km_per_vehicle <- 15000
 
 abcd_stress_test_input <-

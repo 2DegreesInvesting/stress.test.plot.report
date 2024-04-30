@@ -54,8 +54,17 @@ production_types <- tibble::tribble(
   "Automotive", "Electric", "# vehicles", "tCO2",
   "Automotive", "Hybrid", "# vehicles", "tCO2",
   "Automotive", "ICE", "# vehicles", "tCO2",
-  "Steel", "Basic Oxygen Furnace", "t steel", "tCO2e",
-  "Steel", "Electric Arc Furnace", "t steel", "tCO2e",
+  "Steel", 'BOF-BF', "t steel", "tCO2e",
+  "Steel", 'BOF-DRI', "t steel", "tCO2e",
+  "Steel", 'EAF-DRI', "t steel", "tCO2e",
+  "Steel", 'EAF-OHF', "t steel", "tCO2e",
+  "Steel", 'EAF-MM', "t steel", "tCO2e",
   "Automotive", "FuelCell", "# vehicles", "tCO2",
   "Steel", "Open Hearth Furnace", "t steel", "tCO2e"
 )
+        
+        
+        
+        
+        
+        

@@ -1,0 +1,28 @@
+Starting analysis.
+Starting analysis.
+
+
+Iteration with parameter settings:
+input_path: /Users/bertrandgallice/2° Investing Dropbox/code/stress.test.plot.report/data-raw/mock_st_inputs
+output_path: /Users/bertrandgallice/2° Investing Dropbox/code/stress.test.plot.report/data-raw/mock_st_outputs/2024_04_18_09_04_35_standard_NGFS2023REMIND_NZ2050_Global_no_carbon_tax
+baseline_scenario: NGFS2023REMIND_NDC
+shock_scenario: NGFS2023REMIND_NZ2050
+lgd: 0.45
+risk_free_rate: 0.02
+discount_rate: 0.07
+growth_rate: 0.03
+div_netprofit_prop_coef: 1
+shock_year: 2033
+scenario_geography: Global
+start_year: 2022
+carbon_price_model: no_carbon_tax
+market_passthrough: 0
+financial_stimulus: 1
+iter_var: standard
+
+
+>> When filtering out holdings with 0 production in
+      relevant sector in the start year of the analysis, dropped rows for 1 out of 88 companies
+  >> percent loss: 1.13636363636364
+  >> affected companies:
+  >> company-96

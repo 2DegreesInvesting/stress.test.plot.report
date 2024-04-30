@@ -35,9 +35,7 @@ main_data_load_trajectories_data <- function(
   group_cols <- unique(c(granularity, param_cols))
 
   company_trajectories_data <- company_trajectories_data |>
-    aggregate_trajectories_facts(group_cols = group_cols)  |>
-    dplyr::filter(year < max(year)) # remove last year bc it is NA from trisk
-
+    aggregate_trajectories_facts(group_cols = group_cols)  
   return(company_trajectories_data)
 }
 
@@ -117,16 +115,15 @@ load_multiple_trajectories <- function(crispy_outputs_dir) {
 #'
 #' @export
 #'
-aggregate_trajectories_facts <-
-  function(multi_trajectories, group_cols) {
+aggregate_trajectories_facts <- function(multi_trajectories, group_cols) {
     multi_trajectories <- multi_trajectories |>
       dplyr::group_by_at(group_cols) |>
       dplyr::summarise(
         production_baseline_scenario = sum(.data$production_baseline_scenario, na.rm = TRUE),
         production_target_scenario = sum(.data$production_target_scenario, na.rm = TRUE),
         production_shock_scenario = sum(.data$production_shock_scenario, na.rm = TRUE),
-        price_baseline_scenario= median(.data$price_baseline_scenario, na.rm = TRUE),
-        price_shock_scenario = median(.data$price_shock_scenario, na.rm = TRUE),
+        price_baseline_scenario= mean(.data$price_baseline_scenario, na.rm = TRUE),
+        price_shock_scenario = mean(.data$price_shock_scenario, na.rm = TRUE),
         net_profits_baseline_scenario = sum(.data$net_profits_baseline_scenario, na.rm = TRUE),
         net_profits_shock_scenario = sum(.data$net_profits_shock_scenario, na.rm = TRUE),
         discounted_net_profits_baseline_scenario = sum(.data$discounted_net_profits_baseline_scenario, na.rm = TRUE),
