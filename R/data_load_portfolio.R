@@ -44,11 +44,13 @@ load_portfolio_data <- function(portfolio_data_path=NULL) {
         ald_business_unit = "c",
         ald_location = "c",
         exposure_value_usd = "d",
-        expiration_date = readr::col_date(format = "%Y-%m-%d"),
+        expiration_date = "c",
         loss_given_default = "d",
         pd_portfolio = "d"
       )
-    )
+    ) %>%
+      convert_date_column(colname="expiration_date")
+
   } else {
     portfolio_data <- tibble::tibble(
       portfolio_id = character(),
@@ -63,6 +65,7 @@ load_portfolio_data <- function(portfolio_data_path=NULL) {
       pd_portfolio = double()
     )
   }
+
   return(portfolio_data)
 }
 
@@ -80,6 +83,7 @@ map_portfolio_maturity_to_term <-
     if (start_year_exists) {
       start_date <- as.Date(paste0(trisk_start_year, "-01-01"))
 
+      #.TODO ADD A CHECK VALIDATING THE CONVERSION TO DATE WITH NO NAs
       portfolio_data <- portfolio_data |>
         dplyr::mutate(
           expiration_date = as.Date(.data$expiration_date),
@@ -122,4 +126,29 @@ aggregate_portfolio_facts <- function(portfolio_data, group_cols) {
     )
 
   return(portfolio_data)
+}
+
+
+#' Validate and conversion to date
+#'
+#' Define a function to check date format and convert
+#'
+#' @param data data
+#' @param date_col_name date_col_name
+#'
+convert_date_column <- function(data_frame, colname) {
+  # Check if the column exists in the dataframe
+  if (!colname %in% names(data_frame)) {
+    stop("Column not found in the dataframe")
+  }
+
+  # Use lubridate::ymd() to parse dates; invalid dates become NA
+  data_frame[[colname]] <- lubridate::ymd(data_frame[[colname]], quiet = TRUE)
+
+  # Check if there were any parsing failures (i.e., NAs introduced)
+  if (any(is.na(data_frame[[colname]]))) {
+    warning("Some dates were not in the correct 'YYYY-mm-dd' format and have been converted to NA")
+  }
+
+  return(data_frame)
 }

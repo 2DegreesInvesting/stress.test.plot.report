@@ -127,7 +127,7 @@ for (run_id_name in unique(data_cdi_el_plot$run_id)) {
   for (metric_el_name in metrics_el) {
     cdi_plot <- make_expected_loss_plot(
       data_cdi_el_plot = data_cdi_el_plot_filtered,
-      x_var = "shock_year",
+      x_var = "ald_sector",
       y_var = metric_el_name,
       fill_var = metric_el_name,
       facet_var = "ald_sector",
@@ -160,7 +160,7 @@ for (run_id_name in unique(data_cdi_el_plot$run_id)) {
 
 MEAN PD DIFF PLOTS
 
-```{r, fig.width = 8, fig.height = 12}
+```{r, fig.width = 6, fig.height = 4}
 for (scenario_name in unique(data_cdi_pd_plot$shock_scenario)) {
   plot_data <- data_cdi_pd_plot |> dplyr::filter(shock_scenario == scenario_name)
 

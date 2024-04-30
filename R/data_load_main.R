@@ -3,6 +3,7 @@
 #' @description
 #'  The dataframe in output of this function should always be
 #'  the one used as input for the plots preprocessing functions
+#'  Dates should match the format YYYY-mm-dd
 #'
 #' @param crispy_outputs_dir crispy_outputs_dir
 #' @param portfolio_data_path portfolio_data_path
@@ -53,7 +54,7 @@ load_input_plots_data_from_tibble <-
               )
 
     # start year must be unique
-    stopifnot(length(unique(multi_crispy_data$start_year)) <= 1) 
+    stopifnot(length(unique(multi_crispy_data$start_year)) <= 1)
     trisk_start_year <- unique(multi_crispy_data$start_year)[1]
 
     if (!is.null(portfolio_data)){
@@ -73,7 +74,7 @@ load_input_plots_data_from_tibble <-
     }
 
     portfolio_crispy_merge_cols <- dplyr::intersect(
-      c(granularity, "term"), 
+      c(granularity, "term"),
       dplyr::intersect(
         colnames(multi_crispy_data), colnames(portfolio_data)))
     stopifnot(length(portfolio_crispy_merge_cols) > 0)

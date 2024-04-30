@@ -1,0 +1,308 @@
+---
+title: "accessbank"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{accessbank}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup}
+library(stress.test.plot.report)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+```
+
+
+```{r}
+granularity <- c("ald_sector", "ald_business_unit", "company_id", "company_name")
+
+portfolio_data_path <-
+  here::here("data-raw", "accessbank_data",  "access_portfolio.csv")
+
+crispy_outputs_dir <- here::here("data-raw", "accessbank_data","st_outputs")
+```
+
+Read in the data. Put the outputs of a stress test run into 'data' folder of this project to run the code successfully.
+
+```{r}
+analysis_data <-
+  load_input_plots_data_from_files(
+    crispy_outputs_dir = crispy_outputs_dir,
+    portfolio_data_path = portfolio_data_path,
+    granularity = granularity,
+    filter_outliers = FALSE
+  ) 
+
+trajectories_data <- main_data_load_trajectories_data_from_file(
+  crispy_outputs_dir = crispy_outputs_dir,
+  granularity = granularity
+  )
+```
+
+# Available run ids : 
+
+```{r}
+print(unique(analysis_data$run_id))
+```
+
+
+```{r}
+run_id <- "fc6f2719-2c51-404d-8f04-62d475867731"
+  
+analysis_data_single_run <- analysis_data %>%
+    filter(.data$run_id == run_id)  
+
+trajectories_data_single_run <- trajectories_data %>%
+    filter(.data$run_id == run_id)  
+```
+
+
+# PD PLOTS
+
+```{r, fig.width=8, fig.height=6}
+pd_term_plot <- pipeline_crispy_pd_term_plot(
+    crispy_data_agg = analysis_data_single_run,
+    facet_var = "ald_sector"
+  ) + ggplot2::ggtitle("Median PD values")
+pd_term_plot
+```
+
+
+EL PLOTS
+
+```{r, fig.width=8, fig.height=6}
+expected_loss_plot <- pipeline_crispy_expected_loss_plot(
+  analysis_data = analysis_data_single_run,
+  facet_var = "ald_sector"
+) + ggplot2::ggtitle("Expected Losses")
+expected_loss_plot
+```
+
+
+```{r, fig.width=8, fig.height=6}
+
+data_el_plot <-
+  prepare_for_el_plots(
+    analysis_data_single_run,
+    group_variable_char = "ald_sector",
+    value_to_plot_char = "exposure_at_default"
+  )
+
+qplot_el_sector(data_el_plot, use_exp_loss_types = c("baseline", "shock", "st_diff"))
+```
+
+# NPV Changes & PD
+
+
+```{r echo=FALSE, fig.width=8, fig.height=6}
+# Calculate the average ROC per company for the second plot
+df_averages <- analysis_data |>
+  dplyr::group_by(
+    company_name,
+    run_id,
+    ald_business_unit,
+    shock_scenario,
+    shock_year
+  ) |>
+  dplyr::summarise(
+    average_roc = mean(crispy_perc_value_change),
+    average_pd_diff = mean(pd_difference)
+  ) %>%
+  rename(
+    `Average PD Difference` = average_pd_diff,
+    `Average NPV Rate of change` = average_roc
+  )
+
+# Reshape data to long format
+long_data <- df_averages %>%
+  tidyr::pivot_longer(
+    cols = c(`Average PD Difference`, `Average NPV Rate of change`),
+    names_to = "metric",
+    values_to = "value"
+  )
+
+# Calculate means and confidence intervals
+data_summary <- long_data %>%
+  group_by(
+    run_id,
+    shock_scenario,
+    shock_year,
+    ald_business_unit,
+    metric
+  ) %>%
+  summarise(
+    mean = mean(value),
+    se = sd(value) / sqrt(n()),
+    ci_upper = mean + qt(0.975, df = n() - 1) * se,
+    ci_lower = mean - qt(0.975, df = n() - 1) * se
+  ) %>%
+  ungroup()
+
+
+for (run_id in unique(data_summary$run_id)) {
+  plot_data <- data_summary %>% dplyr::filter(.data$run_id == .env$run_id)
+
+  p1 <-
+    ggplot(
+      plot_data,
+      aes(x = ald_business_unit, y = mean, fill = metric)
+    ) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),
+      width = 0.2,
+      position = position_dodge(0.9)
+    ) +
+    facet_wrap(~metric, scales = "free_y") +
+    scale_fill_manual(values = c(
+      "Average NPV Rate of change" = "#5D9324",
+      "Average PD Difference" = "#BAB6B5"
+    )) +
+    scale_y_continuous(labels = scales::label_percent(accuracy = 1)) +
+    r2dii.plot::theme_2dii() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      legend.position = "none"
+    ) +
+    labs(y = "Average Value", x = "Business Unit") +
+    ggtitle(paste(
+      plot_data[1, "shock_scenario"] %>% pull(),
+      " - shock year :",
+      plot_data[1, "shock_year"] %>% pull()
+    ))
+
+  print(p1)
+}
+```
+
+
+
+```{r echo=FALSE, fig.width=8, fig.height=6}
+for (run_id in unique(analysis_data$run_id)) {
+  analysis_data_1_run <- analysis_data |> dplyr::filter(.data$run_id == .env$run_id)
+
+  agg_analysis_data <- analysis_data_1_run |>
+    # dplyr::filter(.data$net_present_value_difference != 0) |>
+    dplyr::select(.data$company_name, .data$crispy_perc_value_change, .data$pd_difference) |>
+    dplyr::group_by(.data$company_name) |>
+    dplyr::summarise(
+      crispy_perc_value_change = mean(crispy_perc_value_change),
+      pd_difference = mean(pd_difference),
+      .groups = "drop"
+    )
+
+  # Sorting categories based on value1 in descending order
+  plot_data <- agg_analysis_data |>
+    # sample_frac(0.1) |>
+    dplyr::arrange(dplyr::desc(.data$crispy_perc_value_change)) |>
+    dplyr::mutate(company_name = factor(.data$company_name, levels = .data$company_name)) |>
+    tidyr::pivot_longer(cols = c("crispy_perc_value_change", "pd_difference"), names_to = "variable", values_to = "value")
+
+
+
+  # Plotting
+  p1 <- ggplot(plot_data %>% filter(variable == "crispy_perc_value_change"), aes(x = factor(company_name), y = value, group = variable)) +
+    geom_step(color = "#5D9324", size = 1) +
+    scale_y_continuous(
+      labels = scales::percent_format(accuracy = 1),
+      breaks = scales::pretty_breaks(n = 5)
+    ) +
+    geom_hline(yintercept = 0, color = "lightgray", linetype = "dashed", size = 0.5) +
+    r2dii.plot::theme_2dii() +
+    theme(
+      axis.text.x = element_blank(), # element_text(angle = 90, vjust = 0.5),
+      axis.ticks.x = element_blank(),
+      axis.title.y = element_text(size = 11),
+      strip.background = element_blank(),
+      strip.placement = "outside",
+      legend.position = "none"
+    ) +
+    labs(x = NULL, y = NULL) +
+    guides(fill = NULL) +
+    ylab("Mean company percent value change")
+
+
+  # Function to create bins every 10 observations
+  bin_data <- function(data, bin_size) {
+    data <- data %>%
+      mutate(bin = (as.numeric(row_number()) - 1) %/% bin_size) %>%
+      group_by(bin) %>%
+      summarise(
+        avg = mean(value),
+        min = min(value),
+        max = max(value)
+      ) %>%
+      ungroup()
+    return(data)
+  }
+
+  # Bin data every 10 observations
+  binned_data <- bin_data(plot_data %>% filter(variable == "pd_difference"), round(nrow(plot_data) / nrow(plot_data)))
+
+  # Create the plot
+  p2 <- ggplot(binned_data, aes(x = factor(bin), y = avg)) +
+    geom_col(fill = "#BAB6B5") +
+    geom_errorbar(aes(ymin = min, ymax = max), width = 0.2) +
+    scale_y_continuous(
+      labels = scales::percent_format(accuracy = 1),
+      breaks = scales::pretty_breaks(n = 5)
+    ) +
+    r2dii.plot::theme_2dii() +
+    theme(
+      axis.text.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      axis.title.y = element_text(size = 11),
+      strip.background = element_blank(),
+      strip.placement = "outside"
+    ) +
+    labs(x = NULL, y = NULL) +
+    guides(fill = NULL) +
+    ylab("Mean climate Transition-related PD difference")
+
+  le_plot <- cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
+
+  title <- cowplot::ggdraw() +
+    cowplot::draw_label(
+      paste(
+        analysis_data_1_run[1, "shock_scenario"] %>% pull(),
+        " - shock year :",
+        analysis_data_1_run[1, "shock_year"] %>% pull()
+      ),
+      fontface = "bold",
+      x = 0.5,
+      hjust = 0.5
+    ) +
+    theme(
+      # add margin on the left of the drawing canvas,
+      # so title is aligned with left edge of first plot
+      plot.margin = margin(0, 0, 0, 7)
+    )
+
+  le_plot <- cowplot::plot_grid(
+    title, le_plot,
+    ncol = 1,
+    # rel_heights values control vertical title margins
+    rel_heights = c(0.1, 1)
+  )
+  print(le_plot)
+}
+```
+
+
+
+# Plots Trajectories
+
+```{r, fig.width=8, fig.height=10}
+
+trisk_line_plot <- pipeline_crispy_trisk_line_plot(
+  trajectories_data = trajectories_data_single_run,
+  facet_var = "ald_business_unit",
+  linecolor = "ald_sector"
+)
+trisk_line_plot
+
+```
+
+
+
