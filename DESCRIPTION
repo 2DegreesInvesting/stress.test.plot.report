@@ -30,7 +30,8 @@ Imports:
     purrr,
     readr,
     scales,
-    tibble
+    tibble,
+    assertr
 Remotes:
     2DegreesInvesting/r2dii.climate.stress.test,
     2DegreesInvesting/STDataMGMT,
