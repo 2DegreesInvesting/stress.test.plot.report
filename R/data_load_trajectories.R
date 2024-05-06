@@ -27,11 +27,11 @@ main_data_load_trajectories_data <- function(
     company_trajectories_data,
     granularity=c("company_id", "company_name", "ald_sector", "ald_business_unit"),
     param_cols = c(
-      "run_id", "year","scenario_geography", "baseline_scenario",
-      "shock_scenario", "risk_free_rate", "discount_rate", "div_netprofit_prop_coef",
-      "carbon_price_model", "market_passthrough", "financial_stimulus",
-      "growth_rate", "shock_year"
-)) {
+      "run_id", "year","scenario_geography_arg", "baseline_scenario_arg",
+      "shock_scenario_arg", "risk_free_rate_arg", "discount_rate_arg", "div_netprofit_prop_coef_arg",
+      "carbon_price_model_arg", "market_passthrough_arg", "financial_stimulus_arg",
+      "growth_rate_arg", "shock_year_arg")
+      ) {
   group_cols <- unique(c(granularity, param_cols))
 
   company_trajectories_data <- company_trajectories_data |>
