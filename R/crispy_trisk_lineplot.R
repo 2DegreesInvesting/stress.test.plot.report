@@ -56,11 +56,13 @@ prepare_for_trisk_line_plot <- function(trajectories_data, facet_var, linecolor)
     dplyr::summarise(
       production = sum(production)
     ) |>
+    dplyr::ungroup() |>
+    dplyr::group_by_at(c(facet_var, linecolor, "scenario")) |>
     dplyr::mutate(
-      max_production = max(production, na.rm = TRUE),
-      production_pct = (production / max_production) * 100
+      base_year_production = dplyr::first(production),
+      production_pct = production / base_year_production
     ) |>
-    dplyr::ungroup()
+    dplyr::select(-base_year_production)
 
   return(data_trisk_line_plot)
 }
