@@ -62,6 +62,9 @@ prepare_for_trisk_line_plot <- function(trajectories_data, facet_var, linecolor)
       base_year_production = dplyr::first(production),
       production_pct = production / base_year_production
     ) |>
+    # Filter to remove last year of each group
+    dplyr::group_by_at(c(facet_var, linecolor, "scenario")) |>
+    dplyr::filter(year != max(year)) |>
     dplyr::select(-base_year_production)
 
   return(data_trisk_line_plot)
