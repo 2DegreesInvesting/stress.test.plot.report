@@ -60,7 +60,7 @@ prepare_for_trisk_line_plot <- function(trajectories_data, facet_var, linecolor)
     dplyr::group_by_at(c(facet_var, linecolor, "scenario")) |>
     dplyr::mutate(
       base_year_production = dplyr::first(production),
-      production_pct = production / base_year_production
+      production_pct = (production / base_year_production) * 100
     ) |>
     # Filter to remove last year of each group
     dplyr::group_by_at(c(facet_var, linecolor, "scenario")) |>
@@ -100,7 +100,7 @@ draw_trisk_line_plot <- function(
     ) +
     ggplot2::scale_y_continuous(labels = scales::percent_format(scale = 1)) +
       ggplot2::labs(
-        y = "Production as a percentage of the maximum"
+        y = "Percentage of today's production "
       )
   } else {
     trisk_line_plot <- ggplot2::ggplot(
